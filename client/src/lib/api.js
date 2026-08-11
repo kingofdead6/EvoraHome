@@ -7,7 +7,7 @@
  * `err.message` directly to the customer without checking shapes.
  */
 
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const BASE = "https://furniture-ecomm-xcel.onrender.com/api";
 
 export class ApiError extends Error {
   constructor(message, status) {
