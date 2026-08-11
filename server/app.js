@@ -25,7 +25,7 @@ export function createApp({ rateLimits = true } = {}) {
    */
   const allowedOrigins = [
     'http://localhost:5173',
-    'https://evora-home-jade.vercel.app',
+    'https://evora-home.vercel.app',
   ];
 
   app.use(
