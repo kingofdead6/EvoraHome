@@ -29,14 +29,6 @@ function App() {
     <Router>
       <ScrollToTop />
 
-      {/* Aurora background — fixed, behind everything */}
-      <div className="nv-aurora-bg">
-        <div className="nv-aurora-a" />
-        <div className="nv-aurora-b" />
-        <div className="nv-aurora-c" />
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% -10%,rgba(255,255,255,.05),transparent 55%)" }} />
-      </div>
-
       <div style={{ position: "relative", zIndex: 1, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
         <Navbar />
 

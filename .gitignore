@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+
+# Design skills installed by `npx skills add` / `npx impeccable install`.
+# The payloads are third-party and large; skills-lock.json pins them so a
+# fresh checkout can restore with `npx skills install`.
+.agents/
+.claude/skills/

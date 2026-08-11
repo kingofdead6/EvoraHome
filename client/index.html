@@ -1,14 +1,33 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="./src/assets/Logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Title/description/favicon are set from src/store.config.js at runtime (see applyStoreConfig.js). -->
-    <title>Store</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <title>Evora Home | Meuble et décoration - El Khroub, Constantine</title>
+    <meta
+      name="description"
+      content="Salons, chambres, tables et décoration à El Khroub, Constantine. Livraison dans les 58 wilayas, paiement à la livraison."
+    />
+    <meta name="theme-color" content="#3E4638" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Both faces are self-hosted from /public/fonts. Preloading the two latin
+         subsets removes the swap flash on the hero wordmark, which is the LCP
+         element on every page. -->
+    <link rel="preload" href="/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jost-latin.woff2" as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Evora Home" />
+    <meta property="og:title" content="Evora Home | Meuble et décoration" />
+    <meta
+      property="og:description"
+      content="L'élégance prend forme chez vous. Salons, chambres, tables et décoration à El Khroub, Constantine."
+    />
+    <meta property="og:locale" content="fr_DZ" />
   </head>
   <body>
     <div id="root"></div>
