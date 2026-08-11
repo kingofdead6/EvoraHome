@@ -93,6 +93,7 @@ export default function EvoraTree({
   className = '',
   title,
   pathRef,
+  windowStyle,
   ...rest
 }) {
   const compact = variant === 'compact' || (variant === 'auto' && size < 64);
@@ -120,7 +121,10 @@ export default function EvoraTree({
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <g fill="currentColor">
+      {/* The window panes are fills, so a stroke-dashoffset draw does not touch
+          them. The Intro passes windowStyle to fade them in after the strokes
+          finish, otherwise the window pops in before its house exists. */}
+      <g fill="currentColor" style={windowStyle}>
         {WINDOW_PANES.map((p) => (
           <rect key={`${p.x}-${p.y}`} x={p.x} y={p.y} width="10.5" height="10.5" rx="1.8" />
         ))}

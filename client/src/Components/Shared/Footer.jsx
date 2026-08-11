@@ -1,126 +1,166 @@
-import { Link } from "react-router-dom";
-import { store } from "../../store.config.js";
+import { Link } from 'react-router-dom';
+import { Instagram, Facebook, Phone, MapPin } from 'lucide-react';
 
-const linkStyle = {
-  fontSize: 14, color: "#94A3B8", textDecoration: "none", transition: "color .2s",
-};
+import EvoraTree from '../Brand/EvoraTree';
+import { useSettings } from '../../lib/settings';
+import { formatPhone, toInternational } from '../../lib/format';
+import { brand } from '../../brand';
 
-function FooterLink({ to, children }) {
+/**
+ * The footer.
+ *
+ * Carries the fourth and last sanctioned use of the tree mark: an oversized,
+ * very low opacity watermark behind the content. It is decorative, so it is
+ * aria-hidden and sits behind a stacking context that keeps it off the links.
+ */
+
+const CATEGORIES = [
+  { slug: 'salons', nom: 'Salons' },
+  { slug: 'chambres', nom: 'Chambres' },
+  { slug: 'tables-et-chaises', nom: 'Tables & Chaises' },
+  { slug: 'meubles-tv', nom: 'Meubles TV' },
+  { slug: 'consoles-et-miroirs', nom: 'Consoles & Miroirs' },
+  { slug: 'salon-de-jardin', nom: 'Salon de Jardin' },
+  { slug: 'decoration', nom: 'Décoration' },
+];
+
+function FooterHeading({ children }) {
   return (
-    <Link
-      to={to}
-      style={linkStyle}
-      onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
-      onMouseLeave={e => (e.currentTarget.style.color = "#94A3B8")}
-    >
-      {children}
-    </Link>
+    <h2 className="mb-4 font-sans text-[11px] uppercase tracking-[0.2em] text-gold">{children}</h2>
   );
 }
 
 export default function Footer() {
-  return (
-    <footer style={{ background: "rgba(15,23,42,.97)", borderTop: "1px solid rgba(255,255,255,.08)", padding: "64px 26px 32px", marginTop: 40 }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 44, marginBottom: 56 }}>
+  const settings = useSettings();
+  const year = new Date().getFullYear();
 
+  return (
+    <footer className="relative isolate mt-auto overflow-hidden border-t border-gold/25 bg-olive text-cream">
+      {/* Watermark. Cropped by the footer, bleeding off the right edge. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-16 -top-24 -z-10 select-none text-sand/[0.06] sm:-right-8"
+      >
+        <EvoraTree size={520} />
+      </div>
+
+      <div className="mx-auto max-w-[1400px] px-4 py-14 sm:px-6 lg:px-10 lg:py-20">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {/* Brand */}
-          <div style={{ gridColumn: "span 1" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 16 }}>
-              <span style={{ width: 34, height: 34, borderRadius: 11, background: "linear-gradient(135deg,var(--secondary),var(--primary))", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px -6px rgb(var(--primary-rgb) / .8)", flexShrink: 0 }}>
-                <span style={{ width: 13, height: 13, borderRadius: 4, background: "#fff", transform: "rotate(45deg)", display: "block" }} />
-              </span>
-              <span style={{ fontFamily: "'Space Grotesk',sans-serif", fontWeight: 700, fontSize: 20, letterSpacing: "-.02em", color: "#fff" }}>
-                {store.brand.name}<span style={{ color: "var(--accent)" }}>.</span>
-              </span>
-            </div>
-            <p style={{ fontSize: 14, lineHeight: 1.65, color: "#64748B", margin: "0 0 18px" }}>
-              {store.brand.tagline}
-            </p>
-            <div style={{ display: "flex", gap: 10 }}>
-              {["📘", "📸", "🐦"].map((icon, i) => (
-                <div key={i} style={{ width: 34, height: 34, borderRadius: 10, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, cursor: "pointer" }}>
-                  {icon}
-                </div>
-              ))}
-            </div>
+          <div className="lg:pr-8">
+            <p className="font-display text-lg tracking-[0.18em] text-cream">Evora Home</p>
+            <p className="mt-3 text-sm leading-relaxed text-sand">{brand.tagline}</p>
+            <p className="mt-1 text-[13px] text-sand/75">{brand.descriptor}</p>
           </div>
+
+          {/* Catalogue */}
+          <nav aria-labelledby="footer-catalogue">
+            <FooterHeading id="footer-catalogue">Catalogue</FooterHeading>
+            <ul className="flex flex-col gap-2.5">
+              {CATEGORIES.map((c) => (
+                <li key={c.slug}>
+                  <Link
+                    to={`/catalogue/${c.slug}`}
+                    className="inline-flex min-h-[28px] items-center text-sm text-sand transition-colors duration-200 hover:text-cream"
+                  >
+                    {c.nom}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
           {/* Shop */}
-          <div>
-            <h3 style={{ fontFamily: "'Space Grotesk'", fontWeight: 700, fontSize: 13, letterSpacing: ".08em", color: "#fff", margin: "0 0 18px", textTransform: "uppercase" }}>Shop</h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-              <FooterLink to="/">Home</FooterLink>
-              <FooterLink to="/products">Products</FooterLink>
-            </div>
-          </div>
-
-          {/* Services */}
-          <div>
-            <h3 style={{ fontFamily: "'Space Grotesk'", fontWeight: 700, fontSize: 13, letterSpacing: ".08em", color: "#fff", margin: "0 0 18px", textTransform: "uppercase" }}>Services</h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-              <FooterLink to="/contact">Contact Us</FooterLink>
-            </div>
-          </div>
+          <nav aria-labelledby="footer-maison">
+            <FooterHeading id="footer-maison">La maison</FooterHeading>
+            <ul className="flex flex-col gap-2.5">
+              {[
+                { to: '/showroom', label: 'Notre showroom' },
+                { to: '/contact', label: 'Nous contacter' },
+                { to: '/compte/commandes', label: 'Suivre ma commande' },
+                { to: '/livraison', label: 'Livraison et paiement' },
+              ].map((l) => (
+                <li key={l.to}>
+                  <Link
+                    to={l.to}
+                    className="inline-flex min-h-[28px] items-center text-sm text-sand transition-colors duration-200 hover:text-cream"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
           {/* Contact */}
           <div>
-            <h3 style={{ fontFamily: "'Space Grotesk'", fontWeight: 700, fontSize: 13, letterSpacing: ".08em", color: "#fff", margin: "0 0 18px", textTransform: "uppercase" }}>Contact</h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: 11, fontSize: 14, color: "#64748B" }}>
-              <a href={`tel:${store.contact.phoneHref}`} style={{ color: "#64748B", textDecoration: "none", transition: "color .2s" }}
-                onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
-                onMouseLeave={e => (e.currentTarget.style.color = "#64748B")}
-              >
-                📞 {store.contact.phone}
-              </a>
-              <a href={`mailto:${store.contact.email}`} style={{ color: "#64748B", textDecoration: "none", transition: "color .2s" }}
-                onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
-                onMouseLeave={e => (e.currentTarget.style.color = "#64748B")}
-              >
-                ✉️ {store.contact.email}
-              </a>
-              <span>📍 {store.contact.address}</span>
-            </div>
-          </div>
+            <FooterHeading>Nous joindre</FooterHeading>
+            <ul className="flex flex-col gap-3.5">
+              <li>
+                <a
+                  href={`tel:+${toInternational(settings.telephone)}`}
+                  className="inline-flex min-h-[28px] items-center gap-2.5 text-sm text-sand transition-colors duration-200 hover:text-cream"
+                >
+                  <Phone size={15} strokeWidth={1.5} className="shrink-0 text-gold" />
+                  <span className="tabular-nums">{formatPhone(settings.telephone)}</span>
+                </a>
+              </li>
 
-          {/* CTA Card */}
-          <div style={{ background: "linear-gradient(135deg,rgb(var(--primary-rgb) / .18),rgb(var(--secondary-rgb) / .1))", border: "1px solid rgb(var(--secondary-rgb) / .25)", borderRadius: 20, padding: "26px 24px" }}>
-            <p style={{ fontFamily: "'Space Grotesk'", fontWeight: 700, fontSize: 16, margin: "0 0 8px" }}>
-              Need help choosing?
-            </p>
-            <p style={{ fontSize: 13, color: "#94A3B8", margin: "0 0 18px", lineHeight: 1.5 }}>
-              Get in touch and we'll help you find the right product.
-            </p>
-            <Link
-              to="/contact"
-              style={{
-                display: "inline-block", padding: "11px 22px", borderRadius: 12,
-                background: "linear-gradient(135deg,var(--secondary),var(--primary))", color: "#fff",
-                fontFamily: "'Space Grotesk'", fontWeight: 700, fontSize: 14,
-                textDecoration: "none", boxShadow: "0 8px 20px -6px rgb(var(--primary-rgb) / .7)",
-              }}
-            >
-              Get an Offer →
-            </Link>
+              {settings.telephone2 ? (
+                <li>
+                  <a
+                    href={`tel:+${toInternational(settings.telephone2)}`}
+                    className="inline-flex min-h-[28px] items-center gap-2.5 text-sm text-sand transition-colors duration-200 hover:text-cream"
+                  >
+                    <Phone size={15} strokeWidth={1.5} className="shrink-0 text-gold" />
+                    <span className="tabular-nums">{formatPhone(settings.telephone2)}</span>
+                  </a>
+                </li>
+              ) : null}
+
+              <li className="flex items-start gap-2.5 text-sm text-sand">
+                <MapPin size={15} strokeWidth={1.5} className="mt-1 shrink-0 text-gold" />
+                <span>{settings.adresse}</span>
+              </li>
+
+              {settings.horaires ? (
+                <li className="text-[13px] leading-relaxed text-sand/75">{settings.horaires}</li>
+              ) : null}
+            </ul>
+
+            <div className="mt-5 flex items-center gap-2">
+              {settings.instagram ? (
+                <a
+                  href={`https://instagram.com/${settings.instagram}`}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="Instagram"
+                  className="flex h-11 w-11 items-center justify-center rounded-sm border border-sand/25 text-sand transition-colors duration-200 hover:border-gold hover:text-cream"
+                >
+                  <Instagram size={17} strokeWidth={1.5} />
+                </a>
+              ) : null}
+
+              {settings.facebook ? (
+                <a
+                  href={settings.facebook}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="Facebook"
+                  className="flex h-11 w-11 items-center justify-center rounded-sm border border-sand/25 text-sand transition-colors duration-200 hover:border-gold hover:text-cream"
+                >
+                  <Facebook size={17} strokeWidth={1.5} />
+                </a>
+              ) : null}
+            </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div style={{ paddingTop: 24, borderTop: "1px solid rgba(255,255,255,.07)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-          <p style={{ fontFamily: "'JetBrains Mono'", fontSize: 12, color: "#334155", margin: 0 }}>
-            © {new Date().getFullYear()} {store.brand.fullName}. All rights reserved.
+        <div className="mt-12 flex flex-col gap-3 border-t border-sand/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-[13px] text-sand/70">
+            {year} Evora Home. El Khroub, Constantine.
           </p>
-          <div style={{ display: "flex", gap: 20 }}>
-            {[["Privacy Policy","#"],["Terms","#"]].map(([lbl, href]) => (
-              <a key={lbl} href={href} style={{ fontFamily: "'JetBrains Mono'", fontSize: 12, color: "#334155", textDecoration: "none", transition: "color .2s" }}
-                onMouseEnter={e => (e.currentTarget.style.color = "#94A3B8")}
-                onMouseLeave={e => (e.currentTarget.style.color = "#334155")}
-              >{lbl}</a>
-            ))}
-          </div>
-          <p style={{ fontFamily: "'JetBrains Mono'", fontSize: 12, color: "#334155", margin: 0 }}>
-            Made with 💜 in Algeria
-          </p>
+          <p className="text-[13px] text-sand/70">Paiement à la livraison dans les 58 wilayas.</p>
         </div>
       </div>
     </footer>

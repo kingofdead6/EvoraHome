@@ -137,19 +137,23 @@
     overflow-x: hidden;
   }
 
+  /* Headings reset only. Casing and family are opt-in via `.font-display`,
+     because plenty of headings here are not display type: a product name is an
+     h3 and must stay in sentence case, and every small tracked label is a real
+     heading too. Baking uppercase into the element leaked into all of them. */
   h1,
   h2,
-  h3 {
-    font-family: var(--font-display);
+  h3,
+  h4 {
     font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    font-size: inherit;
     line-height: 1.15;
     margin: 0;
   }
 
-  /* Cinzel has short descenders and reads as a smear below 16px. Anything
-     smaller falls back to Jost even if a component asks for the display face. */
+  /* Cinzel. Uppercase and open tracking are part of the face's identity here,
+     so they travel with it. Never use this below 16px: Cinzel has short
+     descenders and turns to a smear. */
   .font-display {
     letter-spacing: 0.08em;
     text-transform: uppercase;
