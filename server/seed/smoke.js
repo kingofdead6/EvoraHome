@@ -11,7 +11,7 @@
  */
 
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'smoke-test-secret';
-process.env.CLIENT_ORIGINS = 'http://localhost:5173';
+process.env.CLIENT_ORIGINS = 'https://evora-home-jade.vercel.app';
 
 const { createApp } = await import('../app.js');
 

@@ -23,7 +23,7 @@ export function createApp({ rateLimits = true } = {}) {
    * Credentialed CORS cannot use a wildcard origin, and the session cookie is
    * useless without credentials, so the allowed origins are explicit.
    */
-  const allowedOrigins = (process.env.CLIENT_ORIGINS || 'http://localhost:5173')
+  const allowedOrigins = (process.env.CLIENT_ORIGINS || 'https://evora-home-jade.vercel.app')
     .split(',')
     .map((o) => o.trim())
     .filter(Boolean);
