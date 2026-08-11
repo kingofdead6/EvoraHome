@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+/*
+  Brand theme tokens. These three values are the single look-and-feel knob.
+  They are seeded here as defaults and overwritten at runtime from
+  src/store.config.js (see applyTheme() wired in main.jsx) so the config file
+  remains the single source of truth.
+*/
+:root {
+  --primary: #6C2BD9;
+  --secondary: #8B5CF6;
+  --accent: #22D3EE;
+  /* Space-separated RGB channels of the three brand colors, used for alpha
+     glows/shadows via rgb(var(--primary-rgb) / .8). Derived from the hex
+     theme at runtime by applyStoreConfig.js so config stays the single knob. */
+  --primary-rgb: 108 43 217;
+  --secondary-rgb: 139 92 246;
+  --accent-rgb: 34 211 238;
+  --bg: #050816;
+  --surface: #0F172A;
+  --muted: #94A3B8;
+  --line: rgba(255,255,255,0.08);
+}
+
+/*
+  Tailwind v4 (CSS-first config): expose the brand variables as semantic color
+  tokens so utilities like `bg-primary`, `text-accent`, `border-secondary`
+  resolve to the brand theme. Components must use these instead of raw hex.
+*/
+@theme inline {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: #fff;
+  font-family: 'Manrope', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--secondary); color: #fff; }
+
+* { scrollbar-width: thin; scrollbar-color: rgba(139,92,246,.5) transparent; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-thumb { background: rgba(139,92,246,.45); border-radius: 9px; }
+
+/* ── Keyframes ── */
+@keyframes auroraA {
+  0%   { transform: translate(0,0) scale(1); }
+  50%  { transform: translate(8vw,6vh) scale(1.25); }
+  100% { transform: translate(0,0) scale(1); }
+}
+@keyframes auroraB {
+  0%   { transform: translate(0,0) scale(1.1); }
+  50%  { transform: translate(-10vw,-4vh) scale(.85); }
+  100% { transform: translate(0,0) scale(1.1); }
+}
+@keyframes auroraC {
+  0%   { transform: translate(0,0) scale(1); }
+  50%  { transform: translate(-6vw,8vh) scale(1.2); }
+  100% { transform: translate(0,0) scale(1); }
+}
+@keyframes blob {
+  0%,100% { border-radius: 42% 58% 60% 40% / 48% 42% 58% 52%; }
+  33%      { border-radius: 62% 38% 42% 58% / 56% 60% 40% 44%; }
+  66%      { border-radius: 40% 60% 56% 44% / 38% 50% 50% 62%; }
+}
+@keyframes floaty {
+  0%,100% { transform: translateY(0) rotate(-2deg); }
+  50%      { transform: translateY(-26px) rotate(2deg); }
+}
+@keyframes floatySlow {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-16px); }
+}
+@keyframes glowPulse {
+  0%,100% { opacity: .55; transform: scale(1); }
+  50%      { opacity: .9; transform: scale(1.08); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(34px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes spinSlow {
+  to { transform: rotate(360deg); }
+}
+@keyframes spin3d {
+  from { transform: rotateX(-6deg) rotateY(0deg); }
+  to   { transform: rotateX(-6deg) rotateY(360deg); }
+}
+@keyframes ringPulse {
+  0%  { box-shadow: 0 0 0 0 rgba(34,211,238,.45); }
+  70% { box-shadow: 0 0 0 16px rgba(34,211,238,0); }
+  100%{ box-shadow: 0 0 0 0 rgba(34,211,238,0); }
+}
+@keyframes drawerIn {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes progressBar {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ── Utility classes ── */
+.nv-fade-up  { animation: fadeUp .7s both; }
+.nv-fade-in  { animation: fadeIn .5s both; }
+.nv-scale-in { animation: scaleIn .6s both; }
+
+.nv-aurora-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+.nv-aurora-a {
+  position: absolute; top: -10%; left: -6%; width: 46vw; height: 46vw;
+  background: radial-gradient(circle,rgba(108,43,217,.55),transparent 65%);
+  filter: blur(70px);
+  animation: auroraA 22s ease-in-out infinite;
+}
+.nv-aurora-b {
+  position: absolute; top: 24%; right: -12%; width: 52vw; height: 52vw;
+  background: radial-gradient(circle,rgba(34,211,238,.34),transparent 65%);
+  filter: blur(80px);
+  animation: auroraB 26s ease-in-out infinite;
+}
+.nv-aurora-c {
+  position: absolute; bottom: -18%; left: 24%; width: 48vw; height: 48vw;
+  background: radial-gradient(circle,rgba(139,92,246,.4),transparent 64%);
+  filter: blur(75px);
+  animation: auroraC 30s ease-in-out infinite;
+}
+
+/* ── Tilt cards ── */
+.nv-tilt-card {
+  transform-style: preserve-3d;
+  transition: transform .25s cubic-bezier(.2,.9,.3,1), box-shadow .3s;
+}
+.nv-tilt-card:hover {
+  box-shadow: 0 34px 60px -22px rgba(108,43,217,.6);
+}
+
+/* ── Magnetic button ── */
+.nv-mag-btn {
+  transition: transform .2s;
+}
+.nv-mag-btn:hover {
+  transform: scale(1.04);
+}
+
+/* ── Brand row ── */
+.nv-brand-row {
+  display: flex;
+  gap: 14px;
+  height: 330px;
+  /* allow logo images to overflow upward out of cards */
+  overflow: visible;
+}
+.nv-brand-card {
+  flex: 1;
+  min-width: 64px;
+  transition: flex .6s cubic-bezier(.2,.9,.3,1), box-shadow .4s, border-color .4s;
+  /* stacking context so z-index on logo works per-card */
+  isolation: isolate;
+}
+.nv-brand-card:hover {
+  flex: 2.6;
+  box-shadow: 0 30px 60px -20px rgba(108,43,217,.6);
+  border-color: rgba(139,92,246,.5);
+}
+
+/* Brand logo — sits centered, rises above the card on hover */
+.nv-brand-logo {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.85);
+  width: 80%;
+  max-width: 180px;
+  height: 55%;
+  object-fit: contain;
+  opacity: 0.18;
+  z-index: 1;
+  pointer-events: none;
+  transition: transform .5s cubic-bezier(.2,.9,.3,1), opacity .4s, filter .4s, bottom .5s cubic-bezier(.2,.9,.3,1);
+  filter: drop-shadow(0 0 0px transparent);
+}
+.nv-brand-card:hover .nv-brand-logo {
+  transform: translateX(-50%) scale(1.15);
+  bottom: 60%;
+  opacity: 1;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,.6));
+  z-index: 10;
+}
+
+/* ── Progress bar ── */
+.nv-progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; width: 100%;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  z-index: 120;
+  box-shadow: 0 0 14px rgba(34,211,238,.6);
+}
+
+/* ── Mobile responsive ── */
+@media (max-width: 860px) {
+  .nv-hero-row { flex-direction: column !important; }
+  .nv-brand-row { height: auto !important; flex-wrap: wrap; }
+  .nv-brand-card { flex: unset !important; width: calc(50% - 7px) !important; height: 160px; }
+}
+@media (max-width: 640px) {
+  .nv-brand-card { width: 100% !important; }
+}
