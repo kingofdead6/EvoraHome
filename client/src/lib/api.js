@@ -6,8 +6,7 @@
  * carrying the French message the server sent, so components can render
  * `err.message` directly to the customer without checking shapes.
  */
-
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = "https://evorahome.onrender.com/api";
 
 export class ApiError extends Error {
   constructor(message, status) {
