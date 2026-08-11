@@ -48,7 +48,7 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
     <div className="flex flex-col gap-8">
       {/* Price */}
       <fieldset className="border-0 p-0">
-        <legend className="mb-3 text-[11px] uppercase tracking-[0.18em] text-ink-muted">Prix</legend>
+        <legend className="mb-3 text-[12px] uppercase tracking-[0.18em] text-ink-muted">Prix</legend>
 
         <div className="flex items-center gap-3">
           <label className="flex-1">
@@ -83,7 +83,7 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
         </div>
 
         {options.prixMin || options.prixMax ? (
-          <p className="mt-2 text-[13px] text-ink-muted">
+          <p className="mt-2 text-sm text-ink-muted">
             De {formatPrice(options.prixMin)} à {formatPrice(options.prixMax)}
           </p>
         ) : null}
@@ -91,7 +91,7 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
 
       {/* Availability */}
       <fieldset className="border-0 p-0">
-        <legend className="mb-3 text-[11px] uppercase tracking-[0.18em] text-ink-muted">
+        <legend className="mb-3 text-[12px] uppercase tracking-[0.18em] text-ink-muted">
           Disponibilité
         </legend>
 
@@ -112,10 +112,10 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
                   checked={checked}
                   disabled={count === 0}
                   onChange={() => setParam('disponibilite', toggleInList(selectedDispo, value))}
-                  className="h-4 w-4 accent-[#3E4638]"
+                  className="h-5 w-5 accent-[#3E4638]"
                 />
                 <span className="flex-1 text-base text-ink">{DISPONIBILITE_LABEL[value]}</span>
-                <span className="text-[13px] tabular-nums text-ink-muted">{count}</span>
+                <span className="text-sm tabular-nums text-ink-muted">{count}</span>
               </label>
             );
           })}
@@ -125,7 +125,7 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
       {/* Colours */}
       {options.couleurs?.length ? (
         <fieldset className="border-0 p-0">
-          <legend className="mb-3 text-[11px] uppercase tracking-[0.18em] text-ink-muted">Couleur</legend>
+          <legend className="mb-3 text-[12px] uppercase tracking-[0.18em] text-ink-muted">Couleur</legend>
 
           <div className="flex flex-col gap-1">
             {options.couleurs.map((couleur) => {
@@ -136,7 +136,7 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
                     type="checkbox"
                     checked={checked}
                     onChange={() => setParam('couleur', toggleInList(selectedCouleurs, couleur.nom))}
-                    className="h-4 w-4 accent-[#3E4638]"
+                    className="h-5 w-5 accent-[#3E4638]"
                   />
                   <span
                     aria-hidden="true"
@@ -144,7 +144,7 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
                     style={{ backgroundColor: couleur.hex }}
                   />
                   <span className="flex-1 text-base text-ink">{couleur.nom}</span>
-                  <span className="text-[13px] tabular-nums text-ink-muted">{couleur.count}</span>
+                  <span className="text-sm tabular-nums text-ink-muted">{couleur.count}</span>
                 </label>
               );
             })}
@@ -260,7 +260,7 @@ export default function Catalogue() {
           <li>
             <Link
               to="/catalogue"
-              className={`flex min-h-[44px] items-center rounded-sm border px-4 text-[13px] uppercase tracking-[0.1em] transition-colors duration-200 ${
+              className={`flex min-h-[44px] items-center rounded-sm border px-4 text-sm uppercase tracking-[0.1em] transition-colors duration-200 ${
                 !slug ? 'border-gold bg-olive text-cream' : 'border-greige text-ink hover:border-sand'
               }`}
             >
@@ -272,7 +272,7 @@ export default function Catalogue() {
             <li key={c._id}>
               <Link
                 to={`/catalogue/${c.slug}`}
-                className={`flex min-h-[44px] items-center rounded-sm border px-4 text-[13px] uppercase tracking-[0.1em] whitespace-nowrap transition-colors duration-200 ${
+                className={`flex min-h-[44px] items-center rounded-sm border px-4 text-sm uppercase tracking-[0.1em] whitespace-nowrap transition-colors duration-200 ${
                   slug === c.slug ? 'border-gold bg-olive text-cream' : 'border-greige text-ink hover:border-sand'
                 }`}
               >
@@ -288,18 +288,18 @@ export default function Catalogue() {
         <button
           type="button"
           onClick={() => setSheetOpen(true)}
-          className="flex min-h-[44px] items-center gap-2 text-[13px] uppercase tracking-[0.1em] text-ink lg:hidden"
+          className="flex min-h-[44px] items-center gap-2 text-sm uppercase tracking-[0.1em] text-ink lg:hidden"
         >
           <SlidersHorizontal size={16} strokeWidth={1.5} />
           Filtrer
           {activeCount > 0 ? (
-            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-olive px-1 text-[11px] text-cream">
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-olive px-1 text-[12px] text-cream">
               {activeCount}
             </span>
           ) : null}
         </button>
 
-        <p className="hidden text-[13px] tabular-nums text-ink-muted lg:block" aria-live="polite">
+        <p className="hidden text-sm tabular-nums text-ink-muted lg:block" aria-live="polite">
           {loading ? 'Chargement' : `${data.total} pièce${data.total > 1 ? 's' : ''}`}
         </p>
 
@@ -308,7 +308,7 @@ export default function Catalogue() {
           <select
             value={params.get('sort') || 'recent'}
             onChange={(e) => setParam('sort', e.target.value === 'recent' ? '' : e.target.value)}
-            className="min-h-[44px] rounded-sm border border-greige bg-cream px-3 text-[13px] text-ink focus:border-gold focus:outline-none"
+            className="min-h-[44px] rounded-sm border border-greige bg-cream px-3 text-sm text-ink focus:border-gold focus:outline-none"
           >
             {SORTS.map((s) => (
               <option key={s.value} value={s.value}>
@@ -333,7 +333,7 @@ export default function Catalogue() {
 
         {/* Results */}
         <div className="min-w-0 flex-1">
-          <p className="mb-4 text-[13px] tabular-nums text-ink-muted lg:hidden" aria-live="polite">
+          <p className="mb-4 text-sm tabular-nums text-ink-muted lg:hidden" aria-live="polite">
             {loading ? 'Chargement' : `${data.total} pièce${data.total > 1 ? 's' : ''}`}
           </p>
 
@@ -368,7 +368,7 @@ export default function Catalogue() {
                     Précédent
                   </Button>
 
-                  <span className="px-3 text-[13px] tabular-nums text-ink-muted">
+                  <span className="px-3 text-sm tabular-nums text-ink-muted">
                     {data.page} / {data.pages}
                   </span>
 

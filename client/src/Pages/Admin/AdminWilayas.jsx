@@ -114,7 +114,7 @@ export default function AdminWilayas() {
                   </span>{' '}
                   {wilaya.nom}
                   {isDirty(wilaya) ? (
-                    <span className="ml-2 text-[11px] uppercase tracking-[0.1em] text-gold-deep">
+                    <span className="ml-2 text-[12px] uppercase tracking-[0.1em] text-gold-deep">
                       modifiée
                     </span>
                   ) : null}
@@ -165,7 +165,7 @@ export default function AdminWilayas() {
         </TableWrap>
       </Panel>
 
-      <p className="mt-4 max-w-prose text-[13px] leading-relaxed text-ink-muted">
+      <p className="mt-4 max-w-prose text-sm leading-relaxed text-ink-muted">
         Décocher une wilaya la laisse visible au moment de la commande, avec un message invitant le
         client à vous appeler. C&apos;est volontaire : retirer sa wilaya de la liste donne au client
         l&apos;impression que le site est cassé.

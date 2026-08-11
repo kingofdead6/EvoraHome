@@ -84,7 +84,7 @@ export default function AdminMessages() {
                     {message.nom}
                     <a
                       href={`tel:${message.telephone}`}
-                      className="ml-3 tabular-nums text-[13px] underline decoration-gold underline-offset-4"
+                      className="ml-3 tabular-nums text-sm underline decoration-gold underline-offset-4"
                     >
                       {formatPhone(message.telephone)}
                     </a>
@@ -101,7 +101,7 @@ export default function AdminMessages() {
               </div>
 
               {message.sujet ? (
-                <p className="mt-3 text-[13px] uppercase tracking-[0.1em] text-ink-muted">{message.sujet}</p>
+                <p className="mt-3 text-sm uppercase tracking-[0.1em] text-ink-muted">{message.sujet}</p>
               ) : null}
 
               <p className="mt-2 whitespace-pre-wrap text-base leading-relaxed text-ink">{message.message}</p>

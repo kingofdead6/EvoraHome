@@ -45,9 +45,9 @@ function OrderSummary({ order, settings, justPlaced }) {
 
       {/* The number. Deliberately the loudest thing here. */}
       <div className="mt-8 rounded-sm border border-gold/50 px-5 py-6 text-center">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-ink-muted">Numéro de commande</p>
+        <p className="text-[12px] uppercase tracking-[0.2em] text-ink-muted">Numéro de commande</p>
         <p className="mt-2 font-display text-2xl tracking-[0.14em] text-ink sm:text-3xl">{order.numero}</p>
-        <p className="mt-3 text-[13px] leading-relaxed text-ink-muted">
+        <p className="mt-3 text-sm leading-relaxed text-ink-muted">
           Notez-le. Il nous permet de retrouver votre commande immédiatement au téléphone.
         </p>
       </div>
@@ -60,7 +60,7 @@ function OrderSummary({ order, settings, justPlaced }) {
             <li key={`${item.ref}-${item.couleur}`} className="flex justify-between gap-4">
               <span className="min-w-0 flex-1">
                 <span className="block text-base leading-snug text-ink">{item.nom}</span>
-                <span className="text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                <span className="text-[12px] uppercase tracking-[0.12em] text-ink-muted">
                   Réf {item.ref} · {item.quantite} x {formatPrice(item.prix)}
                   {item.couleur ? ` · ${item.couleur}` : ''}
                 </span>

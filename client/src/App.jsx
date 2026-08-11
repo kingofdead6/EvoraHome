@@ -135,6 +135,8 @@ function AnimatedRoutes({ onOpenCart }) {
             path="*"
             element={
               <StorefrontLayout onOpenCart={onOpenCart}>
+                {/* Loading reserves a viewport by default, which keeps the
+                    footer just below the fold until the route chunk lands. */}
                 <Suspense fallback={<Loading />}>
                   <Routes>
                   <Route path="/" element={<Home />} />

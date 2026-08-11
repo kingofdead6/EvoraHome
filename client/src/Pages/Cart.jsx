@@ -48,7 +48,7 @@ export default function Cart() {
                 </Link>
 
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                  <span className="text-[11px] uppercase tracking-[0.18em] text-ink-muted">
+                  <span className="text-[12px] uppercase tracking-[0.18em] text-ink-muted">
                     Réf {line.ref}
                     {line.couleur ? ` · ${line.couleur}` : ''}
                   </span>
@@ -123,11 +123,11 @@ export default function Cart() {
 
               <div className="flex items-baseline justify-between">
                 <dt className="text-base text-ink-muted">Livraison</dt>
-                <dd className="text-[13px] text-ink-muted">Selon votre wilaya</dd>
+                <dd className="text-sm text-ink-muted">Selon votre wilaya</dd>
               </div>
             </dl>
 
-            <p className="mt-4 border-t border-greige pt-4 text-[13px] leading-relaxed text-ink-muted">
+            <p className="mt-4 border-t border-greige pt-4 text-sm leading-relaxed text-ink-muted">
               Les frais de livraison sont calculés à l&apos;étape suivante, une fois votre wilaya
               choisie. Vous voyez le total avant de confirmer.
             </p>
@@ -141,7 +141,7 @@ export default function Cart() {
               </Button>
             </div>
 
-            <p className="mt-4 text-center text-[13px] text-ink-muted">
+            <p className="mt-4 text-center text-sm text-ink-muted">
               Paiement à la livraison. Aucun compte requis.
             </p>
           </div>

@@ -13,8 +13,13 @@ import { EASE_OUT, useReducedMotion } from '../../lib/motion';
 /**
  * Loading. The mark breathes on opacity only, at 2s, which reads as waiting
  * rather than as a spinner demanding attention. No rotation.
+ *
+ * It reserves a viewport by default. Almost every use is a whole-page state,
+ * and a short loader lets the footer render on screen and then drop a full
+ * screen when the content arrives. That single shift was worth 0.92 CLS on the
+ * product page. Pass a className to opt out where the loader is inline.
  */
-export function Loading({ label = 'Chargement', className = '' }) {
+export function Loading({ label = 'Chargement', className = 'min-h-[calc(100dvh-4rem)]' }) {
   const reduced = useReducedMotion();
 
   return (
@@ -26,7 +31,7 @@ export function Loading({ label = 'Chargement', className = '' }) {
       >
         <EvoraTree size={64} />
       </motion.div>
-      <span className="text-[13px] uppercase tracking-[0.15em] text-ink-muted">{label}</span>
+      <span className="text-sm uppercase tracking-[0.15em] text-ink-muted">{label}</span>
     </div>
   );
 }

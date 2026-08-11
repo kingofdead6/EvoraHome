@@ -58,7 +58,7 @@ export default function ProductCard({ product, priority = false, className = '' 
         <div className="flex flex-1 flex-col gap-1.5">
           {/* The reference code, always. It is how the client and their
               customers already talk about a piece on Instagram. */}
-          <span className="font-sans text-[11px] uppercase tracking-[0.18em] text-ink-muted">
+          <span className="font-sans text-[12px] uppercase tracking-[0.18em] text-ink-muted">
             Réf {product.ref}
           </span>
 

@@ -214,7 +214,7 @@ function OrderDetail({ order, onClose, onStatusChange, settings }) {
 
           {/* Client */}
           <section>
-            <h3 className="text-[11px] uppercase tracking-[0.15em] text-ink-muted">Client</h3>
+            <h3 className="text-[12px] uppercase tracking-[0.15em] text-ink-muted">Client</h3>
             <p className="mt-2 text-base leading-relaxed text-ink">
               {order.clientNom}
               <br />
@@ -243,25 +243,25 @@ function OrderDetail({ order, onClose, onStatusChange, settings }) {
 
           {/* Items */}
           <section>
-            <h3 className="text-[11px] uppercase tracking-[0.15em] text-ink-muted">Articles</h3>
+            <h3 className="text-[12px] uppercase tracking-[0.15em] text-ink-muted">Articles</h3>
             <ul className="mt-2 divide-y divide-greige border-y border-greige">
               {order.items.map((item) => (
                 <li key={`${item.ref}-${item.couleur}`} className="flex justify-between gap-3 py-2.5">
-                  <span className="min-w-0 flex-1 text-[13px] text-ink">
+                  <span className="min-w-0 flex-1 text-sm text-ink">
                     {item.quantite} x {item.nom}
-                    <span className="mt-0.5 block text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                    <span className="mt-0.5 block text-[12px] uppercase tracking-[0.12em] text-ink-muted">
                       Réf {item.ref}
                       {item.couleur ? ` · ${item.couleur}` : ''}
                     </span>
                   </span>
-                  <span className="shrink-0 whitespace-nowrap text-[13px] tabular-nums text-ink">
+                  <span className="shrink-0 whitespace-nowrap text-sm tabular-nums text-ink">
                     {formatPrice(item.prix * item.quantite)}
                   </span>
                 </li>
               ))}
             </ul>
 
-            <dl className="mt-3 flex flex-col gap-1.5 text-[13px]">
+            <dl className="mt-3 flex flex-col gap-1.5 text-sm">
               <div className="flex justify-between">
                 <dt className="text-ink-muted">Sous-total</dt>
                 <dd className="tabular-nums text-ink">{formatPrice(order.sousTotal)}</dd>
@@ -279,8 +279,8 @@ function OrderDetail({ order, onClose, onStatusChange, settings }) {
 
           {order.noteClient ? (
             <section>
-              <h3 className="text-[11px] uppercase tracking-[0.15em] text-ink-muted">Note du client</h3>
-              <p className="mt-2 rounded-sm border border-greige bg-greige/25 px-3 py-2 text-[13px] text-ink">
+              <h3 className="text-[12px] uppercase tracking-[0.15em] text-ink-muted">Note du client</h3>
+              <p className="mt-2 rounded-sm border border-greige bg-greige/25 px-3 py-2 text-sm text-ink">
                 {order.noteClient}
               </p>
             </section>
@@ -288,10 +288,10 @@ function OrderDetail({ order, onClose, onStatusChange, settings }) {
 
           {/* Status transitions */}
           <section>
-            <h3 className="text-[11px] uppercase tracking-[0.15em] text-ink-muted">Statut</h3>
+            <h3 className="text-[12px] uppercase tracking-[0.15em] text-ink-muted">Statut</h3>
 
             {transitions.length === 0 ? (
-              <p className="mt-2 text-[13px] text-ink-muted">
+              <p className="mt-2 text-sm text-ink-muted">
                 Cette commande est {STATUT_LABEL[order.statut].toLowerCase()}. Aucun changement possible.
               </p>
             ) : (
@@ -482,7 +482,7 @@ export default function AdminOrders() {
                     <button
                       type="button"
                       onClick={() => setSelected(order)}
-                      className="min-h-[36px] whitespace-nowrap text-[13px] underline decoration-gold underline-offset-4"
+                      className="min-h-[36px] whitespace-nowrap text-sm underline decoration-gold underline-offset-4"
                     >
                       Ouvrir
                     </button>

@@ -101,7 +101,7 @@ export function Login() {
         </Button>
       </form>
 
-      <p className="mt-6 rounded-sm border border-greige bg-greige/25 px-4 py-3 text-[13px] leading-relaxed text-ink-muted">
+      <p className="mt-6 rounded-sm border border-greige bg-greige/25 px-4 py-3 text-sm leading-relaxed text-ink-muted">
         Vous n&apos;avez pas besoin de compte pour commander.{' '}
         <Link to="/catalogue" className="text-ink underline decoration-gold underline-offset-4">
           Voir le catalogue

@@ -53,22 +53,22 @@ export default function Showroom() {
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="rounded-sm border border-greige p-5">
             <MapPin size={18} strokeWidth={1.5} className="text-gold" />
-            <h2 className="mt-3 text-[11px] uppercase tracking-[0.18em] text-ink-muted">Adresse</h2>
+            <h2 className="mt-3 text-[12px] uppercase tracking-[0.18em] text-ink-muted">Adresse</h2>
             <p className="mt-2 text-base leading-relaxed text-ink">{settings.adresse}</p>
           </div>
 
           <div className="rounded-sm border border-greige p-5">
             <Clock size={18} strokeWidth={1.5} className="text-gold" />
-            <h2 className="mt-3 text-[11px] uppercase tracking-[0.18em] text-ink-muted">Horaires</h2>
+            <h2 className="mt-3 text-[12px] uppercase tracking-[0.18em] text-ink-muted">Horaires</h2>
             <p className="mt-2 text-base leading-relaxed text-ink">{settings.horaires}</p>
           </div>
 
           <div className="rounded-sm border border-greige p-5">
             <Phone size={18} strokeWidth={1.5} className="text-gold" />
-            <h2 className="mt-3 text-[11px] uppercase tracking-[0.18em] text-ink-muted">Téléphone</h2>
+            <h2 className="mt-3 text-[12px] uppercase tracking-[0.18em] text-ink-muted">Téléphone</h2>
             <a
               href={`tel:+${toInternational(settings.telephone)}`}
-              className="mt-2 block text-base tabular-nums text-ink underline decoration-gold underline-offset-4"
+              className="mt-2 inline-flex min-h-[44px] items-center text-base tabular-nums text-ink underline decoration-gold underline-offset-4"
             >
               {formatPhone(settings.telephone)}
             </a>
@@ -144,7 +144,7 @@ export default function Showroom() {
 
           <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:gap-16">
             <div className="max-w-prose">
-              <h3 className="text-[11px] uppercase tracking-[0.18em] text-gold">Livraison</h3>
+              <h3 className="text-[12px] uppercase tracking-[0.18em] text-sand">Livraison</h3>
               <p className="mt-3 text-base leading-relaxed text-sand">
                 Nous livrons dans les 58 wilayas, à domicile ou en point de retrait. Les frais
                 dépendent de votre wilaya et du mode choisi, et ils sont affichés avant que vous
@@ -153,7 +153,7 @@ export default function Showroom() {
             </div>
 
             <div className="max-w-prose">
-              <h3 className="text-[11px] uppercase tracking-[0.18em] text-gold">Paiement</h3>
+              <h3 className="text-[12px] uppercase tracking-[0.18em] text-sand">Paiement</h3>
               <p className="mt-3 text-base leading-relaxed text-sand">
                 Paiement à la livraison, en espèces. Rien n&apos;est prélevé au moment de la
                 commande et le site ne demande aucune donnée bancaire. Nous vous appelons pour

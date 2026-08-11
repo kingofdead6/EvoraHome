@@ -9,7 +9,7 @@ export function PageHeader({ title, description, children }) {
     <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>
         <h1 className="font-display text-lg tracking-[0.12em] text-ink">{title}</h1>
-        {description ? <p className="mt-1.5 text-[13px] text-ink-muted">{description}</p> : null}
+        {description ? <p className="mt-1.5 text-sm text-ink-muted">{description}</p> : null}
       </div>
       {children ? <div className="flex flex-wrap items-center gap-2">{children}</div> : null}
     </header>
@@ -20,7 +20,7 @@ export function Panel({ title, children, className = '' }) {
   return (
     <section className={`rounded-sm border border-greige bg-cream ${className}`}>
       {title ? (
-        <h2 className="border-b border-greige px-4 py-3 text-[11px] uppercase tracking-[0.18em] text-ink-muted">
+        <h2 className="border-b border-greige px-4 py-3 text-[12px] uppercase tracking-[0.18em] text-ink-muted">
           {title}
         </h2>
       ) : null}
@@ -33,7 +33,7 @@ export function Panel({ title, children, className = '' }) {
 export function Metric({ label, value, hint }) {
   return (
     <div className="rounded-sm border border-greige px-4 py-4">
-      <p className="text-[11px] uppercase tracking-[0.15em] text-ink-muted">{label}</p>
+      <p className="text-[12px] uppercase tracking-[0.15em] text-ink-muted">{label}</p>
       <p className="mt-2 font-sans text-2xl tabular-nums text-ink">{value}</p>
       {hint ? <p className="mt-1 text-[12px] text-ink-muted">{hint}</p> : null}
     </div>
@@ -48,7 +48,7 @@ export function TableWrap({ children }) {
   return (
     <div className="-mx-4 overflow-x-auto sm:mx-0">
       <div className="inline-block min-w-full align-middle sm:px-0">
-        <table className="min-w-full border-collapse text-left text-[13px]">{children}</table>
+        <table className="min-w-full border-collapse text-left text-sm">{children}</table>
       </div>
     </div>
   );
@@ -58,7 +58,7 @@ export function Th({ children, className = '' }) {
   return (
     <th
       scope="col"
-      className={`whitespace-nowrap border-b border-greige px-3 py-2.5 text-[11px] font-normal uppercase tracking-[0.12em] text-ink-muted ${className}`}
+      className={`whitespace-nowrap border-b border-greige px-3 py-2.5 text-[12px] font-normal uppercase tracking-[0.12em] text-ink-muted ${className}`}
     >
       {children}
     </th>
@@ -73,7 +73,7 @@ export function AdminInput({ label, className = '', ...rest }) {
   return (
     <label className="flex flex-col gap-1.5">
       {label ? (
-        <span className="text-[11px] uppercase tracking-[0.12em] text-ink-muted">{label}</span>
+        <span className="text-[12px] uppercase tracking-[0.12em] text-ink-muted">{label}</span>
       ) : null}
       <input
         className={`min-h-[44px] rounded-sm border border-greige bg-cream px-3 text-base text-ink transition-colors focus:border-gold focus:outline-none ${className}`}
@@ -87,7 +87,7 @@ export function AdminTextArea({ label, rows = 3, className = '', ...rest }) {
   return (
     <label className="flex flex-col gap-1.5">
       {label ? (
-        <span className="text-[11px] uppercase tracking-[0.12em] text-ink-muted">{label}</span>
+        <span className="text-[12px] uppercase tracking-[0.12em] text-ink-muted">{label}</span>
       ) : null}
       <textarea
         rows={rows}
@@ -102,7 +102,7 @@ export function AdminSelect({ label, children, className = '', ...rest }) {
   return (
     <label className="flex flex-col gap-1.5">
       {label ? (
-        <span className="text-[11px] uppercase tracking-[0.12em] text-ink-muted">{label}</span>
+        <span className="text-[12px] uppercase tracking-[0.12em] text-ink-muted">{label}</span>
       ) : null}
       <select
         className={`min-h-[44px] rounded-sm border border-greige bg-cream px-3 text-base text-ink transition-colors focus:border-gold focus:outline-none ${className}`}
@@ -118,7 +118,7 @@ export function AdminSelect({ label, children, className = '', ...rest }) {
 export function StatusLine({ status }) {
   if (!status) return null;
   return (
-    <p role="status" className={`text-[13px] ${status.ok ? 'text-ink' : 'text-[#8C2F1F]'}`}>
+    <p role="status" className={`text-sm ${status.ok ? 'text-ink' : 'text-[#8C2F1F]'}`}>
       {status.message}
     </p>
   );

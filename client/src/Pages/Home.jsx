@@ -77,7 +77,7 @@ function Hero({ settings }) {
           transition={{ duration: 0.6, delay: reduced ? 0 : 0.15, ease: [0.23, 1, 0.32, 1] }}
           className="max-w-2xl"
         >
-          <p className="font-sans text-[11px] uppercase tracking-[0.28em] text-gold">
+          <p className="font-sans text-[12px] uppercase tracking-[0.28em] text-sand">
             {brand.descriptor}
           </p>
 
@@ -111,7 +111,30 @@ function Hero({ settings }) {
  * columns makes eight cells for seven tiles, which fills exactly two rows on
  * desktop and exactly four rows at two columns on a phone.
  */
-function Categories({ categories }) {
+function Categories({ categories, loading }) {
+  // Placeholders while the request is in flight. Returning null here meant the
+  // featured products, the olive band and the footer all sat near the top of
+  // the page and then dropped by the height of this grid.
+  if (loading) {
+    return (
+      <section className="mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
+        <div className="h-7 w-56 animate-pulse rounded-xs bg-greige/60" />
+        <div className="mt-3 h-5 w-80 max-w-full animate-pulse rounded-xs bg-greige/50" />
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <div
+              // eslint-disable-next-line react/no-array-index-key
+              key={i}
+              className={`animate-pulse rounded-sm border border-greige bg-greige/40 ${
+                i === 0 ? 'col-span-2 aspect-[16/9] sm:aspect-[2/1]' : 'aspect-[4/5]'
+              }`}
+            />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   if (!categories.length) return null;
 
   return (
@@ -144,10 +167,17 @@ function Categories({ categories }) {
                 />
               </div>
 
-              <span aria-hidden="true" className="absolute inset-0 bg-olive/25" />
+              {/*
+                Flat overlay plus a bottom gradient. Measured against the
+                placeholder the label sits at 5.17:1, but the client's photos
+                are inconsistent and some are bright, so the gradient runs to
+                95% at the base: the label has to stay legible on a photo
+                nobody has taken yet.
+              */}
+              <span aria-hidden="true" className="absolute inset-0 bg-olive/30" />
               <span
                 aria-hidden="true"
-                className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-forest/85 to-transparent"
+                className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-forest/95 via-forest/70 to-transparent"
               />
 
               <span className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-4 sm:p-5">
@@ -277,7 +307,7 @@ export default function Home() {
     <>
       <Hero settings={settings} />
 
-      <Categories categories={categories} />
+      <Categories categories={categories} loading={loading} />
 
       <SectionDivider className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10" />
 
@@ -292,7 +322,7 @@ export default function Home() {
 
           <Link
             to="/catalogue"
-            className="text-[13px] uppercase tracking-[0.15em] text-ink underline decoration-gold decoration-1 underline-offset-4 transition-[text-decoration-thickness] hover:decoration-2"
+            className="inline-flex min-h-[44px] items-center text-sm uppercase tracking-[0.15em] text-ink underline decoration-gold decoration-1 underline-offset-4 transition-[text-decoration-thickness] hover:decoration-2"
           >
             Tout le catalogue
           </Link>

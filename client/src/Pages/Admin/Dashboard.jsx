@@ -63,7 +63,7 @@ export default function Dashboard() {
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <Panel title="Dernières commandes">
           {d.recentes.length === 0 ? (
-            <p className="text-[13px] text-ink-muted">Aucune commande pour le moment.</p>
+            <p className="text-sm text-ink-muted">Aucune commande pour le moment.</p>
           ) : (
             <TableWrap>
               <thead>
@@ -113,18 +113,18 @@ export default function Dashboard() {
 
         <Panel title="Ruptures de stock">
           {d.enRupture.length === 0 ? (
-            <p className="text-[13px] text-ink-muted">Aucun produit en rupture.</p>
+            <p className="text-sm text-ink-muted">Aucun produit en rupture.</p>
           ) : (
             <ul className="flex flex-col divide-y divide-greige">
               {d.enRupture.map((product) => (
                 <li key={product._id} className="flex items-start justify-between gap-3 py-2.5">
                   <span className="min-w-0">
-                    <span className="block text-[13px] leading-snug text-ink">{product.nom}</span>
-                    <span className="text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                    <span className="block text-sm leading-snug text-ink">{product.nom}</span>
+                    <span className="text-[12px] uppercase tracking-[0.12em] text-ink-muted">
                       Réf {product.ref}
                     </span>
                   </span>
-                  <span className="shrink-0 whitespace-nowrap text-[13px] tabular-nums text-ink-muted">
+                  <span className="shrink-0 whitespace-nowrap text-sm tabular-nums text-ink-muted">
                     {formatPriceShort(product.prix)}
                   </span>
                 </li>
@@ -134,7 +134,7 @@ export default function Dashboard() {
 
           <Link
             to="/admin/produits?disponibilite=RUPTURE"
-            className="mt-4 inline-flex min-h-[36px] items-center text-[13px] underline decoration-gold underline-offset-4"
+            className="mt-4 inline-flex min-h-[36px] items-center text-sm underline decoration-gold underline-offset-4"
           >
             Gérer les produits
           </Link>

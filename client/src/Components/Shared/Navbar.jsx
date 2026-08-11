@@ -26,7 +26,7 @@ const LINKS = [
 /** The active link marker: a gold hairline under the label. */
 function navLinkClass({ isActive }) {
   return [
-    'relative py-2 text-[13px] uppercase tracking-[0.15em] transition-colors duration-200',
+    'relative py-2 text-sm uppercase tracking-[0.15em] transition-colors duration-200',
     'after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:bg-gold after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.23,1,0.32,1)]',
     isActive ? 'text-cream after:scale-x-100' : 'text-sand hover:text-cream after:scale-x-0',
   ].join(' ');
@@ -97,7 +97,7 @@ export default function Navbar({ onOpenCart }) {
         {/* Centre: the wordmark */}
         <Link
           to="/"
-          className="shrink-0 font-display text-base tracking-[0.2em] text-cream transition-colors duration-200 hover:text-sand sm:text-lg"
+          className="flex min-h-[44px] shrink-0 items-center font-display text-base tracking-[0.2em] text-cream transition-colors duration-200 hover:text-sand sm:text-lg"
         >
           Evora Home
         </Link>
@@ -136,7 +136,7 @@ export default function Navbar({ onOpenCart }) {
                 initial={reduced ? false : { transform: 'scale(0.6)' }}
                 animate={{ transform: 'scale(1)' }}
                 transition={{ duration: 0.24, ease: EASE_OUT }}
-                className="absolute right-1 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[10px] font-medium tabular-nums text-forest"
+                className="absolute right-1 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[12px] font-medium tabular-nums text-forest"
               >
                 {nbArticles > 99 ? '99+' : nbArticles}
               </motion.span>

@@ -26,7 +26,7 @@ const CATEGORIES = [
 
 function FooterHeading({ children }) {
   return (
-    <h2 className="mb-4 font-sans text-[11px] uppercase tracking-[0.2em] text-gold">{children}</h2>
+    <h2 className="mb-4 font-sans text-[12px] uppercase tracking-[0.2em] text-sand">{children}</h2>
   );
 }
 
@@ -50,7 +50,7 @@ export default function Footer() {
           <div className="lg:pr-8">
             <p className="font-display text-lg tracking-[0.18em] text-cream">Evora Home</p>
             <p className="mt-3 text-sm leading-relaxed text-sand">{brand.tagline}</p>
-            <p className="mt-1 text-[13px] text-sand/75">{brand.descriptor}</p>
+            <p className="mt-1 text-sm text-sand">{brand.descriptor}</p>
           </div>
 
           {/* Catalogue */}
@@ -61,7 +61,7 @@ export default function Footer() {
                 <li key={c.slug}>
                   <Link
                     to={`/catalogue/${c.slug}`}
-                    className="inline-flex min-h-[28px] items-center text-sm text-sand transition-colors duration-200 hover:text-cream"
+                    className="inline-flex min-h-[44px] items-center text-sm text-sand transition-colors duration-200 hover:text-cream"
                   >
                     {c.nom}
                   </Link>
@@ -83,7 +83,7 @@ export default function Footer() {
                 <li key={l.to}>
                   <Link
                     to={l.to}
-                    className="inline-flex min-h-[28px] items-center text-sm text-sand transition-colors duration-200 hover:text-cream"
+                    className="inline-flex min-h-[44px] items-center text-sm text-sand transition-colors duration-200 hover:text-cream"
                   >
                     {l.label}
                   </Link>
@@ -99,7 +99,7 @@ export default function Footer() {
               <li>
                 <a
                   href={`tel:+${toInternational(settings.telephone)}`}
-                  className="inline-flex min-h-[28px] items-center gap-2.5 text-sm text-sand transition-colors duration-200 hover:text-cream"
+                  className="inline-flex min-h-[44px] items-center gap-2.5 text-sm text-sand transition-colors duration-200 hover:text-cream"
                 >
                   <Phone size={15} strokeWidth={1.5} className="shrink-0 text-gold" />
                   <span className="tabular-nums">{formatPhone(settings.telephone)}</span>
@@ -110,7 +110,7 @@ export default function Footer() {
                 <li>
                   <a
                     href={`tel:+${toInternational(settings.telephone2)}`}
-                    className="inline-flex min-h-[28px] items-center gap-2.5 text-sm text-sand transition-colors duration-200 hover:text-cream"
+                    className="inline-flex min-h-[44px] items-center gap-2.5 text-sm text-sand transition-colors duration-200 hover:text-cream"
                   >
                     <Phone size={15} strokeWidth={1.5} className="shrink-0 text-gold" />
                     <span className="tabular-nums">{formatPhone(settings.telephone2)}</span>
@@ -124,7 +124,7 @@ export default function Footer() {
               </li>
 
               {settings.horaires ? (
-                <li className="text-[13px] leading-relaxed text-sand/75">{settings.horaires}</li>
+                <li className="text-sm leading-relaxed text-sand">{settings.horaires}</li>
               ) : null}
             </ul>
 
@@ -157,10 +157,10 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col gap-3 border-t border-sand/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[13px] text-sand/70">
+          <p className="text-sm text-sand">
             {year} Evora Home. El Khroub, Constantine.
           </p>
-          <p className="text-[13px] text-sand/70">Paiement à la livraison dans les 58 wilayas.</p>
+          <p className="text-sm text-sand">Paiement à la livraison dans les 58 wilayas.</p>
         </div>
       </div>
     </footer>

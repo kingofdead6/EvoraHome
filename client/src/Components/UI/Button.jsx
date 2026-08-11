@@ -33,7 +33,7 @@ const VARIANTS = {
 
 const SIZES = {
   // 44px floor on every size. `sm` is dense but still tappable.
-  sm: 'min-h-[44px] px-4 text-[13px]',
+  sm: 'min-h-[44px] px-4 text-sm',
   md: 'min-h-[48px] px-6 text-sm',
   lg: 'min-h-[54px] px-8 text-sm',
 };

@@ -41,7 +41,7 @@ function Sidebar() {
         <Link to="/admin" className="font-display text-sm tracking-[0.18em] text-cream">
           Evora Home
         </Link>
-        <p className="hidden text-[11px] uppercase tracking-[0.15em] text-sand/70 lg:mt-1 lg:block">
+        <p className="hidden text-[12px] uppercase tracking-[0.15em] text-sand/70 lg:mt-1 lg:block">
           Administration
         </p>
 
@@ -62,7 +62,7 @@ function Sidebar() {
                 to={to}
                 end={end}
                 className={({ isActive }) =>
-                  `flex min-h-[44px] items-center gap-2.5 whitespace-nowrap rounded-sm px-3 text-[13px] transition-colors duration-150 ${
+                  `flex min-h-[44px] items-center gap-2.5 whitespace-nowrap rounded-sm px-3 text-sm transition-colors duration-150 ${
                     isActive ? 'bg-forest text-cream' : 'text-sand hover:bg-forest/60 hover:text-cream'
                   }`
                 }

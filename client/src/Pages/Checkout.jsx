@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 import api from '../lib/api';
@@ -43,6 +43,27 @@ export default function Checkout() {
   const [wilayas, setWilayas] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+
+  // Set when a submit fails validation, consumed by the effect below.
+  const focusFirstError = useRef(false);
+
+  /**
+   * Move focus to the first invalid field after a failed submit.
+   *
+   * This has to run in an effect rather than inline after setErrors:
+   * `aria-invalid` does not exist in the DOM until React has re-rendered, so
+   * querying for it inside the submit handler always found nothing and left
+   * the customer to hunt for the red text on a long form.
+   */
+  useEffect(() => {
+    if (!focusFirstError.current) return;
+    focusFirstError.current = false;
+
+    const field = document.querySelector('[aria-invalid="true"]');
+    if (!field) return;
+    field.focus();
+    field.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, [errors]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -112,11 +133,7 @@ export default function Checkout() {
     setSubmitError(null);
 
     if (!validate()) {
-      // Send focus to the first problem rather than leaving the customer to
-      // hunt for the red text on a long form.
-      const firstError = document.querySelector('[aria-invalid="true"]');
-      firstError?.focus();
-      firstError?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      focusFirstError.current = true;
       return;
     }
 
@@ -226,9 +243,9 @@ export default function Checkout() {
             >
               <option value="">Choisissez votre wilaya</option>
               {wilayas.map((w) => (
-                <option key={w._id} value={w._id} disabled={!w.isActive}>
+                <option key={w._id} value={w._id}>
                   {String(w.code).padStart(2, '0')} - {w.nom}
-                  {w.isActive ? '' : ' (non desservie)'}
+                  {w.isActive ? '' : ' (livraison non disponible)'}
                 </option>
               ))}
             </Select>
@@ -285,7 +302,7 @@ export default function Checkout() {
           </fieldset>
 
           {!user ? (
-            <p className="text-[13px] text-ink-muted">
+            <p className="text-sm text-ink-muted">
               Vous commandez sans compte, c&apos;est parfait.{' '}
               <Link to="/connexion" className="underline decoration-gold underline-offset-4">
                 Vous avez déjà un compte ?
@@ -307,14 +324,14 @@ export default function Checkout() {
                   </div>
 
                   <div className="flex min-w-0 flex-1 flex-col">
-                    <span className="line-clamp-2 text-[13px] leading-snug text-ink">{line.nom}</span>
-                    <span className="text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                    <span className="line-clamp-2 text-sm leading-snug text-ink">{line.nom}</span>
+                    <span className="text-[12px] uppercase tracking-[0.12em] text-ink-muted">
                       {line.quantite} x {formatPrice(line.prix)}
                       {line.couleur ? ` · ${line.couleur}` : ''}
                     </span>
                   </div>
 
-                  <span className="shrink-0 text-[13px] tabular-nums text-ink">
+                  <span className="shrink-0 text-sm tabular-nums text-ink">
                     {formatPrice(line.prix * line.quantite)}
                   </span>
                 </li>
@@ -333,7 +350,7 @@ export default function Checkout() {
                   {fraisLivraison !== null ? (
                     formatPrice(fraisLivraison)
                   ) : (
-                    <span className="text-[13px] text-ink-muted">Choisissez une wilaya</span>
+                    <span className="text-sm text-ink-muted">Choisissez une wilaya</span>
                   )}
                 </dd>
               </div>
@@ -347,7 +364,7 @@ export default function Checkout() {
             {deliverable === false ? (
               <p
                 role="alert"
-                className="mt-4 rounded-sm border border-greige bg-greige/25 px-3 py-3 text-[13px] leading-relaxed text-ink"
+                className="mt-4 rounded-sm border border-greige bg-greige/25 px-3 py-3 text-sm leading-relaxed text-ink"
               >
                 Nous ne livrons pas encore à {wilaya.nom}. Appelez-nous, nous trouverons une solution.
               </p>
@@ -364,7 +381,7 @@ export default function Checkout() {
               {submitting ? 'Envoi en cours' : 'Confirmer la commande'}
             </Button>
 
-            <p className="mt-4 text-center text-[13px] leading-relaxed text-ink-muted">
+            <p className="mt-4 text-center text-sm leading-relaxed text-ink-muted">
               Vous payez {formatPrice(total)} à la réception. Rien n&apos;est prélevé maintenant.
             </p>
           </div>

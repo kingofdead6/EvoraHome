@@ -110,17 +110,17 @@ function Dimensions({ dimensions }) {
 
   return (
     <section aria-labelledby="dimensions-heading" className="border-t border-greige pt-6">
-      <h2 id="dimensions-heading" className="text-[11px] uppercase tracking-[0.18em] text-ink-muted">
+      <h2 id="dimensions-heading" className="text-[12px] uppercase tracking-[0.18em] text-ink-muted">
         Dimensions
       </h2>
 
       <dl className="mt-4 grid grid-cols-3 gap-3">
         {rows.map((row) => (
           <div key={row.label} className="rounded-sm border border-greige px-3 py-4 text-center">
-            <dt className="text-[11px] uppercase tracking-[0.12em] text-ink-muted">{row.label}</dt>
+            <dt className="text-[12px] uppercase tracking-[0.12em] text-ink-muted">{row.label}</dt>
             <dd className="mt-1.5 font-sans text-xl tabular-nums text-ink">
               {row.value}
-              <span className="ml-1 text-[13px] text-ink-muted">{dimensions.unite || 'cm'}</span>
+              <span className="ml-1 text-sm text-ink-muted">{dimensions.unite || 'cm'}</span>
             </dd>
           </div>
         ))}
@@ -203,14 +203,17 @@ export default function ProductDetail() {
   return (
     <div className="mx-auto max-w-[1400px] px-4 pb-20 pt-6 sm:px-6 lg:px-10">
       {/* Breadcrumb */}
-      <nav aria-label="Fil d'Ariane" className="mb-6 flex flex-wrap items-center gap-2 text-[13px] text-ink-muted">
-        <Link to="/catalogue" className="hover:text-ink">
+      <nav aria-label="Fil d'Ariane" className="mb-6 flex flex-wrap items-center gap-2 text-sm text-ink-muted">
+        <Link to="/catalogue" className="inline-flex min-h-[44px] items-center hover:text-ink">
           Catalogue
         </Link>
         {product.categoryId?.slug ? (
           <>
             <span aria-hidden="true">/</span>
-            <Link to={`/catalogue/${product.categoryId.slug}`} className="hover:text-ink">
+            <Link
+              to={`/catalogue/${product.categoryId.slug}`}
+              className="inline-flex min-h-[44px] items-center hover:text-ink"
+            >
               {product.categoryId.nom}
             </Link>
           </>
@@ -223,7 +226,7 @@ export default function ProductDetail() {
         <div className="flex flex-col gap-6">
           <header className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="font-sans text-[11px] uppercase tracking-[0.22em] text-gold-deep">
+              <span className="font-sans text-[12px] uppercase tracking-[0.22em] text-gold-deep">
                 Réf {product.ref}
               </span>
               <AvailabilityBadge disponibilite={product.disponibilite} />
@@ -236,7 +239,7 @@ export default function ProductDetail() {
             <Price value={product.prix} ancienPrix={product.ancienPrix} size="lg" />
 
             {product.delaiLivraison ? (
-              <p className="text-[13px] text-ink-muted">Livraison sous {product.delaiLivraison}</p>
+              <p className="text-sm text-ink-muted">Livraison sous {product.delaiLivraison}</p>
             ) : null}
           </header>
 
@@ -249,14 +252,14 @@ export default function ProductDetail() {
           {/* Materials */}
           {product.materiaux?.length ? (
             <section aria-labelledby="materiaux-heading" className="border-t border-greige pt-6">
-              <h2 id="materiaux-heading" className="text-[11px] uppercase tracking-[0.18em] text-ink-muted">
+              <h2 id="materiaux-heading" className="text-[12px] uppercase tracking-[0.18em] text-ink-muted">
                 Matériaux
               </h2>
               <ul className="mt-3 flex flex-wrap gap-2">
                 {product.materiaux.map((m) => (
                   <li
                     key={m}
-                    className="rounded-xs border border-greige px-2.5 py-1 text-[13px] text-ink"
+                    className="rounded-xs border border-greige px-2.5 py-1 text-sm text-ink"
                   >
                     {m}
                   </li>
@@ -268,7 +271,7 @@ export default function ProductDetail() {
           {/* Colours */}
           {product.couleurs?.length ? (
             <fieldset className="border-0 border-t border-greige p-0 pt-6">
-              <legend className="text-[11px] uppercase tracking-[0.18em] text-ink-muted">
+              <legend className="text-[12px] uppercase tracking-[0.18em] text-ink-muted">
                 Coloris
                 {couleur ? <span className="ml-2 normal-case tracking-normal text-ink">{couleur}</span> : null}
               </legend>
@@ -292,7 +295,7 @@ export default function ProductDetail() {
                         className="h-4 w-4 rounded-xs border border-greige"
                         style={{ backgroundColor: c.hex }}
                       />
-                      <span className="text-[13px] text-ink">{c.nom}</span>
+                      <span className="text-sm text-ink">{c.nom}</span>
                     </button>
                   );
                 })}
@@ -372,7 +375,7 @@ export default function ProductDetail() {
               <button
                 type="button"
                 onClick={() => toggleFavourite(product._id)}
-                className="flex min-h-[44px] items-center gap-2 self-start text-[13px] uppercase tracking-[0.1em] text-ink-muted transition-colors hover:text-ink"
+                className="flex min-h-[44px] items-center gap-2 self-start text-sm uppercase tracking-[0.1em] text-ink-muted transition-colors hover:text-ink"
               >
                 <Heart
                   size={16}
@@ -383,7 +386,7 @@ export default function ProductDetail() {
               </button>
             ) : null}
 
-            <p className="text-[13px] leading-relaxed text-ink-muted">
+            <p className="text-sm leading-relaxed text-ink-muted">
               Paiement à la livraison. Les frais de livraison dépendent de votre wilaya et sont
               affichés avant la confirmation de la commande.
             </p>

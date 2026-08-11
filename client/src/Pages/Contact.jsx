@@ -75,7 +75,7 @@ export default function Contact() {
         >
           <Phone size={18} strokeWidth={1.5} className="text-gold" />
           <span>
-            <span className="block text-[11px] uppercase tracking-[0.15em] text-ink-muted">Téléphone</span>
+            <span className="block text-[12px] uppercase tracking-[0.15em] text-ink-muted">Téléphone</span>
             <span className="mt-1 block text-base tabular-nums text-ink">
               {formatPhone(settings.telephone)}
             </span>
@@ -90,7 +90,7 @@ export default function Contact() {
         >
           <MessageCircle size={18} strokeWidth={1.5} className="text-gold" />
           <span>
-            <span className="block text-[11px] uppercase tracking-[0.15em] text-ink-muted">WhatsApp</span>
+            <span className="block text-[12px] uppercase tracking-[0.15em] text-ink-muted">WhatsApp</span>
             <span className="mt-1 block text-base text-ink">Écrire un message</span>
           </span>
         </a>
@@ -104,7 +104,7 @@ export default function Contact() {
           >
             <Instagram size={18} strokeWidth={1.5} className="text-gold" />
             <span>
-              <span className="block text-[11px] uppercase tracking-[0.15em] text-ink-muted">Instagram</span>
+              <span className="block text-[12px] uppercase tracking-[0.15em] text-ink-muted">Instagram</span>
               <span className="mt-1 block text-base text-ink">@{settings.instagram}</span>
             </span>
           </a>
@@ -113,7 +113,7 @@ export default function Contact() {
         <div className="flex min-h-[96px] flex-col justify-between rounded-sm border border-greige p-4">
           <MapPin size={18} strokeWidth={1.5} className="text-gold" />
           <span>
-            <span className="block text-[11px] uppercase tracking-[0.15em] text-ink-muted">Showroom</span>
+            <span className="block text-[12px] uppercase tracking-[0.15em] text-ink-muted">Showroom</span>
             <span className="mt-1 block text-base leading-snug text-ink">{settings.adresse}</span>
           </span>
         </div>
@@ -220,7 +220,7 @@ export default function Contact() {
             />
           </div>
 
-          <p className="mt-3 text-[13px] leading-relaxed text-ink-muted">
+          <p className="mt-3 text-sm leading-relaxed text-ink-muted">
             {settings.adresse}. Appelez-nous en arrivant, nous vous guidons sur les derniers mètres.
           </p>
         </div>

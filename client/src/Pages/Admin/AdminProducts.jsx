@@ -239,7 +239,7 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
 
           {/* Dimensions */}
           <fieldset className="border-0 p-0">
-            <legend className="mb-2 text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+            <legend className="mb-2 text-[12px] uppercase tracking-[0.12em] text-ink-muted">
               Dimensions (cm)
             </legend>
             <div className="grid grid-cols-3 gap-3">
@@ -272,7 +272,7 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
 
           {/* Materials */}
           <fieldset className="border-0 p-0">
-            <legend className="mb-2 text-[11px] uppercase tracking-[0.12em] text-ink-muted">Matériaux</legend>
+            <legend className="mb-2 text-[12px] uppercase tracking-[0.12em] text-ink-muted">Matériaux</legend>
             <div className="flex flex-wrap gap-1.5">
               {MATERIAUX_SUGGESTIONS.map((m) => {
                 const selected = form.materiaux.includes(m);
@@ -295,7 +295,7 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
 
           {/* Colours */}
           <fieldset className="border-0 p-0">
-            <legend className="mb-2 text-[11px] uppercase tracking-[0.12em] text-ink-muted">Coloris</legend>
+            <legend className="mb-2 text-[12px] uppercase tracking-[0.12em] text-ink-muted">Coloris</legend>
 
             <div className="flex flex-col gap-2">
               {form.couleurs.map((couleur, i) => (
@@ -336,7 +336,7 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
 
           {/* Images */}
           <fieldset className="border-0 p-0">
-            <legend className="mb-2 text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+            <legend className="mb-2 text-[12px] uppercase tracking-[0.12em] text-ink-muted">
               Photos (la première est la photo principale)
             </legend>
 
@@ -380,12 +380,12 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
                 ))}
               </ul>
             ) : (
-              <p className="text-[13px] text-ink-muted">Aucune photo.</p>
+              <p className="text-sm text-ink-muted">Aucune photo.</p>
             )}
 
             <div className="mt-3 flex flex-col gap-3">
               <label className="flex flex-col gap-1.5">
-                <span className="text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                <span className="text-[12px] uppercase tracking-[0.12em] text-ink-muted">
                   Téléverser des photos
                 </span>
                 <input
@@ -393,7 +393,7 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
                   accept="image/*"
                   multiple
                   onChange={(e) => setFiles([...e.target.files])}
-                  className="min-h-[44px] rounded-sm border border-greige bg-cream px-3 py-2 text-[13px] text-ink file:mr-3 file:rounded-sm file:border file:border-greige file:bg-cream file:px-3 file:py-1.5 file:text-[13px] file:text-ink"
+                  className="min-h-[44px] rounded-sm border border-greige bg-cream px-3 py-2 text-sm text-ink file:mr-3 file:rounded-sm file:border file:border-greige file:bg-cream file:px-3 file:py-1.5 file:text-sm file:text-ink"
                 />
               </label>
 
@@ -603,7 +603,7 @@ export default function AdminProducts() {
                       </div>
                       <div className="min-w-0">
                         <span className="block leading-snug text-ink">{product.nom}</span>
-                        <span className="mt-0.5 block text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                        <span className="mt-0.5 block text-[12px] uppercase tracking-[0.12em] text-ink-muted">
                           Réf {product.ref}
                         </span>
                         {product.isFeatured || product.isNouveau ? (
@@ -634,14 +634,14 @@ export default function AdminProducts() {
                       <button
                         type="button"
                         onClick={() => setEditing(product)}
-                        className="min-h-[36px] text-[13px] underline decoration-gold underline-offset-4"
+                        className="min-h-[36px] text-sm underline decoration-gold underline-offset-4"
                       >
                         Modifier
                       </button>
                       <button
                         type="button"
                         onClick={() => setConfirmDelete(product)}
-                        className="min-h-[36px] text-[13px] text-[#8C2F1F] underline decoration-[#8C2F1F]/50 underline-offset-4"
+                        className="min-h-[36px] text-sm text-[#8C2F1F] underline decoration-[#8C2F1F]/50 underline-offset-4"
                       >
                         Supprimer
                       </button>

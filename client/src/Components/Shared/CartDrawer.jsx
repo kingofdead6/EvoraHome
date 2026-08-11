@@ -70,7 +70,7 @@ export default function CartDrawer({ open, onClose }) {
               <h2 className="font-display text-base tracking-[0.12em] text-ink">
                 Panier
                 {nbArticles > 0 ? (
-                  <span className="ml-2 font-sans text-[13px] tracking-normal text-ink-muted">
+                  <span className="ml-2 font-sans text-sm tracking-normal text-ink-muted">
                     {nbArticles} article{nbArticles > 1 ? 's' : ''}
                   </span>
                 ) : null}
@@ -120,7 +120,7 @@ export default function CartDrawer({ open, onClose }) {
                             {line.nom}
                           </Link>
 
-                          <span className="text-[11px] uppercase tracking-[0.15em] text-ink-muted">
+                          <span className="text-[12px] uppercase tracking-[0.15em] text-ink-muted">
                             Réf {line.ref}
                             {line.couleur ? ` · ${line.couleur}` : ''}
                           </span>
@@ -177,7 +177,7 @@ export default function CartDrawer({ open, onClose }) {
                     <span className="text-lg tabular-nums text-gold-deep">{formatPrice(sousTotal)}</span>
                   </div>
 
-                  <p className="mt-1 text-[13px] text-ink-muted">
+                  <p className="mt-1 text-sm text-ink-muted">
                     Livraison calculée à l&apos;étape suivante, selon votre wilaya.
                   </p>
 

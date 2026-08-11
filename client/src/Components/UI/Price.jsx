@@ -33,7 +33,7 @@ export default function Price({ value, ancienPrix, size = 'md', onOlive = false,
 
       {hasPromo ? (
         <span
-          className={`font-sans text-[13px] tabular-nums line-through ${
+          className={`font-sans text-sm tabular-nums line-through ${
             onOlive ? 'text-cream/55' : 'text-ink-muted'
           }`}
         >

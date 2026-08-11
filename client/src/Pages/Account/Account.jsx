@@ -69,7 +69,7 @@ export function AccountLayout() {
                 to={tab.to}
                 end={tab.end}
                 className={({ isActive }) =>
-                  `flex min-h-[44px] items-center whitespace-nowrap border-b-2 px-3 text-[13px] uppercase tracking-[0.1em] transition-colors duration-200 ${
+                  `flex min-h-[44px] items-center whitespace-nowrap border-b-2 px-3 text-sm uppercase tracking-[0.1em] transition-colors duration-200 ${
                     isActive ? 'border-gold text-ink' : 'border-transparent text-ink-muted hover:text-ink'
                   }`
                 }
@@ -138,9 +138,9 @@ export function Profile() {
         />
 
         <div className="flex flex-col gap-2">
-          <span className="text-[13px] uppercase tracking-[0.12em] text-ink-muted">Téléphone</span>
+          <span className="text-sm uppercase tracking-[0.12em] text-ink-muted">Téléphone</span>
           <p className="text-base tabular-nums text-ink">{formatPhone(user?.telephone)}</p>
-          <p className="text-[13px] text-ink-muted">
+          <p className="text-sm text-ink-muted">
             Votre identifiant de connexion. Appelez-nous pour le modifier.
           </p>
         </div>
@@ -150,7 +150,7 @@ export function Profile() {
         </Button>
 
         {status ? (
-          <p role="status" className={`text-[13px] ${status.ok ? 'text-ink' : 'text-[#8C2F1F]'}`}>
+          <p role="status" className={`text-sm ${status.ok ? 'text-ink' : 'text-[#8C2F1F]'}`}>
             {status.message}
           </p>
         ) : null}
@@ -181,7 +181,7 @@ export function Profile() {
         </Button>
 
         {passwordStatus ? (
-          <p role="status" className={`text-[13px] ${passwordStatus.ok ? 'text-ink' : 'text-[#8C2F1F]'}`}>
+          <p role="status" className={`text-sm ${passwordStatus.ok ? 'text-ink' : 'text-[#8C2F1F]'}`}>
             {passwordStatus.message}
           </p>
         ) : null}
@@ -225,7 +225,7 @@ export function Orders() {
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="font-display text-base tracking-[0.12em] text-ink">{order.numero}</p>
-              <p className="mt-1 text-[13px] text-ink-muted">{formatDate(order.createdAt)}</p>
+              <p className="mt-1 text-sm text-ink-muted">{formatDate(order.createdAt)}</p>
             </div>
 
             <Badge tone={order.statut === 'ANNULEE' ? 'muted' : 'neutral'}>
@@ -235,7 +235,7 @@ export function Orders() {
 
           <ul className="mt-4 flex flex-col gap-2 border-t border-greige pt-4">
             {order.items.map((item) => (
-              <li key={`${item.ref}-${item.couleur}`} className="flex justify-between gap-4 text-[13px]">
+              <li key={`${item.ref}-${item.couleur}`} className="flex justify-between gap-4 text-sm">
                 <span className="min-w-0 flex-1 text-ink">
                   {item.quantite} x {item.nom}
                   <span className="text-ink-muted"> · Réf {item.ref}</span>
@@ -346,7 +346,7 @@ export function Addresses() {
                         </Badge>
                       ) : null}
                     </p>
-                    <p className="mt-1 text-[13px] leading-relaxed text-ink-muted">
+                    <p className="mt-1 text-sm leading-relaxed text-ink-muted">
                       {address.adresse ? `${address.adresse}, ` : ''}
                       {address.commune}, {wilayaName(address.wilayaId)}
                     </p>

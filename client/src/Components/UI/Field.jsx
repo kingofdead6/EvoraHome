@@ -19,16 +19,16 @@ const CONTROL =
 function Wrapper({ id, label, error, hint, required, children }) {
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-[13px] uppercase tracking-[0.12em] text-ink-muted">
+      <label htmlFor={id} className="text-sm uppercase tracking-[0.12em] text-ink-muted">
         {label}
         {required ? <span className="text-gold-deep"> *</span> : null}
       </label>
 
       {children}
 
-      {hint && !error ? <p className="text-[13px] text-ink-muted">{hint}</p> : null}
+      {hint && !error ? <p className="text-sm text-ink-muted">{hint}</p> : null}
       {error ? (
-        <p role="alert" className="text-[13px] text-[#8C2F1F]">
+        <p role="alert" className="text-sm text-[#8C2F1F]">
           {error}
         </p>
       ) : null}
@@ -97,7 +97,7 @@ export function Select({ label, error, hint, required, children, className = '',
 export function RadioCards({ label, name, value, onChange, options, error }) {
   return (
     <fieldset className="flex flex-col gap-2 border-0 p-0">
-      <legend className="mb-2 text-[13px] uppercase tracking-[0.12em] text-ink-muted">{label}</legend>
+      <legend className="mb-2 text-sm uppercase tracking-[0.12em] text-ink-muted">{label}</legend>
 
       <div className="grid gap-2 sm:grid-cols-2">
         {options.map((option) => {
@@ -119,7 +119,7 @@ export function RadioCards({ label, name, value, onChange, options, error }) {
               />
               <span className="flex flex-col gap-0.5">
                 <span className="text-base text-ink">{option.label}</span>
-                {option.hint ? <span className="text-[13px] text-ink-muted">{option.hint}</span> : null}
+                {option.hint ? <span className="text-sm text-ink-muted">{option.hint}</span> : null}
               </span>
             </label>
           );
@@ -127,7 +127,7 @@ export function RadioCards({ label, name, value, onChange, options, error }) {
       </div>
 
       {error ? (
-        <p role="alert" className="text-[13px] text-[#8C2F1F]">
+        <p role="alert" className="text-sm text-[#8C2F1F]">
           {error}
         </p>
       ) : null}

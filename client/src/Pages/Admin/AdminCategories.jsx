@@ -92,14 +92,14 @@ function CategoryEditor({ category, onClose, onSaved }) {
           />
 
           <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+            <span className="text-[12px] uppercase tracking-[0.12em] text-ink-muted">
               Ou téléverser une image
             </span>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className="min-h-[44px] rounded-sm border border-greige bg-cream px-3 py-2 text-[13px] text-ink file:mr-3 file:rounded-sm file:border file:border-greige file:bg-cream file:px-3 file:py-1.5 file:text-[13px] file:text-ink"
+              className="min-h-[44px] rounded-sm border border-greige bg-cream px-3 py-2 text-sm text-ink file:mr-3 file:rounded-sm file:border file:border-greige file:bg-cream file:px-3 file:py-1.5 file:text-sm file:text-ink"
             />
           </label>
 
@@ -235,14 +235,14 @@ export default function AdminCategories() {
                 <button
                   type="button"
                   onClick={() => setEditing(category)}
-                  className="min-h-[36px] text-[13px] underline decoration-gold underline-offset-4"
+                  className="min-h-[36px] text-sm underline decoration-gold underline-offset-4"
                 >
                   Modifier
                 </button>
                 <button
                   type="button"
                   onClick={() => remove(category)}
-                  className="min-h-[36px] text-[13px] text-[#8C2F1F] underline decoration-[#8C2F1F]/50 underline-offset-4"
+                  className="min-h-[36px] text-sm text-[#8C2F1F] underline decoration-[#8C2F1F]/50 underline-offset-4"
                 >
                   Supprimer
                 </button>
