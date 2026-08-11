@@ -1,38 +1,27 @@
-import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import cors from 'cors';
 
-import { errorHandler } from './Middleware/error.js';
-
-import authRoutes from './Routes/authRoutes.js';
-import productRoutes from './Routes/productRoutes.js';
-import categoryRoutes from './Routes/categoryRoutes.js';
-import deliveryAreaRoutes from './Routes/deliveryAreaRoutes.js';
-import orderRoutes from './Routes/orderRoutes.js';
-import contactRoutes from './Routes/contactRoutes.js';
+import { createApp } from './app.js';
 
 dotenv.config();
 
-const app = express();
+const REQUIRED = ['MONGO_URI', 'JWT_SECRET'];
+const missing = REQUIRED.filter((key) => !process.env[key]);
+if (missing.length) {
+  console.error(`Variables d'environnement manquantes: ${missing.join(', ')}`);
+  process.exit(1);
+}
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const app = createApp();
+const PORT = process.env.PORT || 5000;
 
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.log(err));
-
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/delivery-areas', deliveryAreaRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/contact', contactRoutes);
-
-app.use(errorHandler);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  .then(() => {
+    console.log('MongoDB connecté');
+    app.listen(PORT, () => console.log(`API sur le port ${PORT}`));
+  })
+  .catch((err) => {
+    console.error('Connexion MongoDB impossible:', err.message);
+    process.exit(1);
+  });

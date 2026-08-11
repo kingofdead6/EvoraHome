@@ -1,149 +1,190 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// CATALOG SEED — the single source of demo/catalog data for a store.
-//
-// The reference design loads ALL product data from the database via the API;
-// nothing is hardcoded in the React components. This file is where a store's
-// starting catalog lives. Edit the arrays below per store (or replace images
-// with real Cloudinary { url, public_id } objects after upload).
-//
-// Run:  node seed/seed.js          (requires MONGO_URI in the environment / .env)
-//
-// It uses the existing Mongoose models unchanged.
-// ─────────────────────────────────────────────────────────────────────────────
+/**
+ * Seeds the Evora Home catalogue.
+ *
+ *   node seed/seed.js            upsert categories, products, wilayas, settings
+ *   node seed/seed.js --reset    wipe those collections first
+ *
+ * Requires MONGO_URI. Orders and customer accounts are never touched, including
+ * under --reset: this script runs against the client's live database after
+ * launch to add products, and wiping their orders would be unrecoverable.
+ *
+ * The admin account is created only if no ADMIN role exists yet. Its password
+ * comes from ADMIN_PASSWORD, and the script refuses to invent one, because a
+ * default admin password on a live storefront is a way in.
+ */
 
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
-import User from '../Models/User.js';
-import Category from '../Models/Categories.js';
+import Category from '../Models/Category.js';
 import Product from '../Models/Product.js';
+import Wilaya from '../Models/Wilaya.js';
+import User from '../Models/User.js';
+import Settings, { SINGLETON_ID } from '../Models/Settings.js';
+
+import { CATEGORIES, PRODUITS } from './catalogue.js';
+import { WILAYAS } from './wilayas.js';
+import { slugify } from '../utils/slugify.js';
 
 dotenv.config();
 
-const slugify = (name) =>
-  name
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/[^a-z0-9-]/g, '');
+const RESET = process.argv.includes('--reset');
 
-// ── Admin account ────────────────────────────────────────────────────────────
-const ADMIN = {
-  name: 'Store Admin',
-  email: 'admin@example.com',
-  password: 'changeme123', // hashed by the User model pre-save hook
-  usertype: 'superadmin',
-};
+/**
+ * Image paths follow /products/<slug>-NN.jpg. The client drops real photos in
+ * using that convention and nothing in the code changes.
+ */
+function buildImages(slug, count, nom) {
+  return Array.from({ length: count }, (_, i) => ({
+    url: `/products/${slug}-${String(i + 1).padStart(2, '0')}.jpg`,
+    alt: i === 0 ? nom : `${nom}, vue ${i + 1}`,
+    ordre: i,
+  }));
+}
 
-// ── Categories ───────────────────────────────────────────────────────────────
-const CATEGORIES = [
-  { name: 'Electronics', description: 'Gadgets and electronic devices.', image: { url: 'https://via.placeholder.com/800x600?text=Electronics', public_id: null } },
-  { name: 'Clothing', description: 'Apparel and fashion.', image: { url: 'https://via.placeholder.com/800x600?text=Clothing', public_id: null } },
-  { name: 'Home & Garden', description: 'Everything for your home and garden.', image: { url: 'https://via.placeholder.com/800x600?text=Home+%26+Garden', public_id: null } },
-];
+async function seedCategories() {
+  const bySlug = new Map();
+  for (const cat of CATEGORIES) {
+    const doc = await Category.findOneAndUpdate(
+      { slug: cat.slug },
+      { $set: { ...cat, isActive: true } },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+    bySlug.set(cat.slug, doc);
+  }
+  console.log(`  categories: ${bySlug.size}`);
+  return bySlug;
+}
 
-// ── Products (category resolved by name below) ───────────────────────────────
-const PRODUCTS = [
-  {
-    name: 'Wireless Headphones',
-    categoryName: 'Electronics',
-    price: 8900,
-    stock: 25,
-    featured: true,
-    description: 'Example catalog item. Replace with the real catalog per store.',
-    images: [{ url: 'https://via.placeholder.com/600x600?text=Headphones', public_id: null }],
-  },
-  {
-    name: 'Smart Watch',
-    categoryName: 'Electronics',
-    price: 14500,
-    stock: 18,
-    featured: true,
-    description: 'Example catalog item. Replace with the real catalog per store.',
-    images: [{ url: 'https://via.placeholder.com/600x600?text=Smart+Watch', public_id: null }],
-  },
-  {
-    name: 'Cotton T-Shirt',
-    categoryName: 'Clothing',
-    price: 2500,
-    stock: 60,
-    featured: true,
-    description: 'Example catalog item. Replace with the real catalog per store.',
-    images: [{ url: 'https://via.placeholder.com/600x600?text=T-Shirt', public_id: null }],
-  },
-  {
-    name: 'Denim Jacket',
-    categoryName: 'Clothing',
-    price: 6900,
-    stock: 30,
-    featured: false,
-    description: 'Example catalog item. Replace with the real catalog per store.',
-    images: [{ url: 'https://via.placeholder.com/600x600?text=Denim+Jacket', public_id: null }],
-  },
-  {
-    name: 'Ceramic Plant Pot',
-    categoryName: 'Home & Garden',
-    price: 1800,
-    stock: 40,
-    featured: true,
-    description: 'Example catalog item. Replace with the real catalog per store.',
-    images: [{ url: 'https://via.placeholder.com/600x600?text=Plant+Pot', public_id: null }],
-  },
-  {
-    name: 'LED Desk Lamp',
-    categoryName: 'Home & Garden',
-    price: 3400,
-    stock: 22,
-    featured: false,
-    description: 'Example catalog item. Replace with the real catalog per store.',
-    images: [{ url: 'https://via.placeholder.com/600x600?text=Desk+Lamp', public_id: null }],
-  },
-];
+async function seedProducts(categoriesBySlug) {
+  let count = 0;
+  for (const p of PRODUITS) {
+    const category = categoriesBySlug.get(p.categorie);
+    if (!category) {
+      throw new Error(`Produit ${p.ref}: catégorie inconnue "${p.categorie}"`);
+    }
 
-async function seed() {
+    const slug = slugify(p.nom);
+    const { categorie, nbImages, ...rest } = p;
+
+    await Product.findOneAndUpdate(
+      { ref: p.ref },
+      {
+        $set: {
+          ...rest,
+          slug,
+          categoryId: category._id,
+          dimensions: { ...p.dimensions, unite: 'cm' },
+          images: buildImages(slug, nbImages, p.nom),
+          ancienPrix: p.ancienPrix ?? null,
+          isFeatured: Boolean(p.isFeatured),
+          isNouveau: Boolean(p.isNouveau),
+        },
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+    count += 1;
+  }
+  console.log(`  produits: ${count}`);
+}
+
+async function seedWilayas() {
+  const ops = WILAYAS.map((w) => ({
+    updateOne: {
+      filter: { code: w.code },
+      // Fees are $setOnInsert, not $set: once the client has tuned their real
+      // tariff in the admin, re-running the seed must not overwrite it.
+      update: {
+        $set: { nom: w.nom },
+        $setOnInsert: {
+          fraisDomicile: w.fraisDomicile,
+          fraisStopDesk: w.fraisStopDesk,
+          isActive: w.isActive,
+        },
+      },
+      upsert: true,
+    },
+  }));
+  const res = await Wilaya.bulkWrite(ops);
+  console.log(`  wilayas: ${WILAYAS.length} (${res.upsertedCount} nouvelles)`);
+}
+
+async function seedSettings() {
+  await Settings.findByIdAndUpdate(
+    SINGLETON_ID,
+    {
+      $setOnInsert: {
+        _id: SINGLETON_ID,
+        telephone: '0540870382',
+        telephone2: '',
+        whatsapp: '213540870382',
+        adresse: 'El Khroub 25100, Constantine',
+        horaires: 'Samedi au jeudi, 9h00 à 18h00. Vendredi fermé.',
+        instagram: 'evorahomealgeria',
+        facebook: '',
+        heroTitle: "L'élégance prend forme chez vous",
+        heroSubtitle:
+          'Meuble et article de décoration. Showroom à El Khroub, livraison dans les 58 wilayas.',
+      },
+    },
+    { upsert: true, new: true }
+  );
+  console.log('  settings: ok');
+}
+
+async function seedAdmin() {
+  const existing = await User.findOne({ role: 'ADMIN' });
+  if (existing) {
+    console.log(`  admin: déjà présent (${existing.telephone})`);
+    return;
+  }
+
+  const password = process.env.ADMIN_PASSWORD;
+  if (!password || password.length < 10) {
+    console.log(
+      '  admin: ignoré. Définir ADMIN_PASSWORD (10 caractères minimum) pour créer le compte admin.'
+    );
+    return;
+  }
+
+  const admin = new User({
+    nom: 'Evora Home',
+    telephone: process.env.ADMIN_PHONE || '0540870382',
+    role: 'ADMIN',
+    passwordHash: password,
+  });
+  await admin.save();
+  console.log(`  admin: créé (${admin.telephone})`);
+}
+
+async function main() {
   if (!process.env.MONGO_URI) {
-    console.error('MONGO_URI is not set. Add it to your environment or .env file.');
+    console.error('MONGO_URI manquant.');
     process.exit(1);
   }
 
   await mongoose.connect(process.env.MONGO_URI);
-  console.log('MongoDB connected — seeding…');
+  console.log('MongoDB connecté');
 
-  // Admin (upsert by email so re-running is safe)
-  if (!(await User.findOne({ email: ADMIN.email }))) {
-    await User.create(ADMIN);
-    console.log(`Created admin user: ${ADMIN.email}`);
+  if (RESET) {
+    // Deliberately excludes Order, User and Counter.
+    await Promise.all([Category.deleteMany({}), Product.deleteMany({}), Wilaya.deleteMany({})]);
+    console.log('Catalogue et wilayas vidés (commandes et comptes conservés)');
   }
 
-  // Categories
-  const catByName = {};
-  for (const c of CATEGORIES) {
-    const doc = await Category.findOneAndUpdate(
-      { name: c.name },
-      c,
-      { upsert: true, new: true, setDefaultsOnInsert: true }
-    );
-    catByName[c.name] = doc._id;
-  }
-  console.log(`Seeded ${CATEGORIES.length} categories.`);
-
-  // Products
-  for (const p of PRODUCTS) {
-    const { categoryName, ...rest } = p;
-    await Product.findOneAndUpdate(
-      { name: p.name },
-      { ...rest, slug: slugify(p.name), category: catByName[categoryName] },
-      { upsert: true, new: true, setDefaultsOnInsert: true }
-    );
-  }
-  console.log(`Seeded ${PRODUCTS.length} products.`);
+  console.log('Seed:');
+  const categories = await seedCategories();
+  await seedProducts(categories);
+  await seedWilayas();
+  await seedSettings();
+  await seedAdmin();
 
   await mongoose.disconnect();
-  console.log('Done.');
-  process.exit(0);
+  console.log('Terminé');
 }
 
-seed().catch((err) => {
+main().catch(async (err) => {
   console.error(err);
+  await mongoose.disconnect().catch(() => {});
   process.exit(1);
 });
