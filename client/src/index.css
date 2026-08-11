@@ -1,231 +1,215 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
-/*
-  Brand theme tokens. These three values are the single look-and-feel knob.
-  They are seeded here as defaults and overwritten at runtime from
-  src/store.config.js (see applyTheme() wired in main.jsx) so the config file
-  remains the single source of truth.
-*/
-:root {
-  --primary: #6C2BD9;
-  --secondary: #8B5CF6;
-  --accent: #22D3EE;
-  /* Space-separated RGB channels of the three brand colors, used for alpha
-     glows/shadows via rgb(var(--primary-rgb) / .8). Derived from the hex
-     theme at runtime by applyStoreConfig.js so config stays the single knob. */
-  --primary-rgb: 108 43 217;
-  --secondary-rgb: 139 92 246;
-  --accent-rgb: 34 211 238;
-  --bg: #050816;
-  --surface: #0F172A;
-  --muted: #94A3B8;
-  --line: rgba(255,255,255,0.08);
+/* Scan the whole app explicitly rather than relying on Tailwind's root
+   auto-detection, which keys off the Vite root and silently drops utilities
+   when the root moves. */
+@source "./";
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   EVORA HOME — design tokens
+   El Khroub 25100, Constantine. Meuble et article de decoration.
+
+   Components must never use raw hex values. Everything below is exposed as a
+   Tailwind utility (bg-olive, text-gold, border-greige, font-display, ...).
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Self-hosted fonts ──────────────────────────────────────────────────────
+   Variable woff2 files live in /public/fonts. No Google Fonts CDN link: the
+   audience is on mid-range Android over mobile data and a third-party font
+   request is a render-blocking round trip we control nothing about.          */
+
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('/fonts/cinzel-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('/fonts/cinzel-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('/fonts/jost-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('/fonts/jost-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-/*
-  Tailwind v4 (CSS-first config): expose the brand variables as semantic color
-  tokens so utilities like `bg-primary`, `text-accent`, `border-secondary`
-  resolve to the brand theme. Components must use these instead of raw hex.
-*/
-@theme inline {
-  --color-primary: var(--primary);
-  --color-secondary: var(--secondary);
-  --color-accent: var(--accent);
+@theme {
+  /* ── Colour ───────────────────────────────────────────────────────────────
+     Gold is a hairline colour. It is never a fill for a large area and there
+     is no gold gradient anywhere on this site. The page base is cream: every
+     product photo the client has is beige, greige or cream boucle and those
+     disappear against #FFFFFF.                                              */
+
+  --color-olive: #3e4638; /* navbar, footer, full-bleed bands, primary buttons */
+  --color-forest: #2a3026; /* deepest surfaces, overlays, hover on olive */
+  --color-gold: #c0a062; /* hairlines, rules, active underlines, the mark */
+  --color-sand: #dcc79a; /* gold at low emphasis; body text on olive */
+  --color-cream: #f6f2ea; /* page background. never pure white */
+  --color-greige: #d8d1c5; /* card borders, image frames, input borders */
+  --color-ink: #1f2320; /* body text. never pure black */
+
+  /* Two derived text colours. They exist because the brand palette on its own
+     cannot carry readable text everywhere:
+       ink-muted  secondary text on cream   4.68:1
+       gold-deep  gold-toned text on cream  5.13:1  (raw gold is 2.23:1 and
+                  fails even the 3:1 large-text floor, so prices and any other
+                  gold-reading text use this instead)                        */
+  --color-ink-muted: #6b7065;
+  --color-gold-deep: #7e6228;
+
+  /* ── Type ─────────────────────────────────────────────────────────────────
+     Cinzel is a near-exact match for the engraved serif on the logo card. It
+     is display-only: never body copy, never below 16px, always uppercase with
+     open tracking. Jost carries everything else and matches the wide-tracked
+     sans of the "Meuble Et Article De Decoration" tagline.                   */
+
+  --font-display: 'Cinzel', 'Times New Roman', serif;
+  --font-sans: 'Jost', ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Radius ───────────────────────────────────────────────────────────────
+     4px and 8px. Nothing else. Separation comes from greige hairlines, not
+     from rounding and not from shadow.                                       */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  /* ── Motion ───────────────────────────────────────────────────────────────
+     One curve family, used everywhere. Built-in CSS easings are too weak to
+     read as deliberate at these short durations.                             */
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Product images are always 4:5. The uniform frame is what makes the
+     client's mismatched showroom photography look deliberate. */
+  --aspect-product: 4 / 5;
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+/* ── Base ─────────────────────────────────────────────────────────────────── */
 
-body {
-  margin: 0;
-  background: var(--bg);
-  color: #fff;
-  font-family: 'Manrope', system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-::selection { background: var(--secondary); color: #fff; }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
 
-* { scrollbar-width: thin; scrollbar-color: rgba(139,92,246,.5) transparent; }
-::-webkit-scrollbar { width: 9px; height: 9px; }
-::-webkit-scrollbar-thumb { background: rgba(139,92,246,.45); border-radius: 9px; }
+  body {
+    margin: 0;
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
 
-/* ── Keyframes ── */
-@keyframes auroraA {
-  0%   { transform: translate(0,0) scale(1); }
-  50%  { transform: translate(8vw,6vh) scale(1.25); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes auroraB {
-  0%   { transform: translate(0,0) scale(1.1); }
-  50%  { transform: translate(-10vw,-4vh) scale(.85); }
-  100% { transform: translate(0,0) scale(1.1); }
-}
-@keyframes auroraC {
-  0%   { transform: translate(0,0) scale(1); }
-  50%  { transform: translate(-6vw,8vh) scale(1.2); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob {
-  0%,100% { border-radius: 42% 58% 60% 40% / 48% 42% 58% 52%; }
-  33%      { border-radius: 62% 38% 42% 58% / 56% 60% 40% 44%; }
-  66%      { border-radius: 40% 60% 56% 44% / 38% 50% 50% 62%; }
-}
-@keyframes floaty {
-  0%,100% { transform: translateY(0) rotate(-2deg); }
-  50%      { transform: translateY(-26px) rotate(2deg); }
-}
-@keyframes floatySlow {
-  0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(-16px); }
-}
-@keyframes glowPulse {
-  0%,100% { opacity: .55; transform: scale(1); }
-  50%      { opacity: .9; transform: scale(1.08); }
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(34px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(.94); }
-  to   { opacity: 1; transform: scale(1); }
-}
-@keyframes shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-@keyframes spinSlow {
-  to { transform: rotate(360deg); }
-}
-@keyframes spin3d {
-  from { transform: rotateX(-6deg) rotateY(0deg); }
-  to   { transform: rotateX(-6deg) rotateY(360deg); }
-}
-@keyframes ringPulse {
-  0%  { box-shadow: 0 0 0 0 rgba(34,211,238,.45); }
-  70% { box-shadow: 0 0 0 16px rgba(34,211,238,0); }
-  100%{ box-shadow: 0 0 0 0 rgba(34,211,238,0); }
-}
-@keyframes drawerIn {
-  from { transform: translateX(100%); }
-  to   { transform: translateX(0); }
-}
-@keyframes progressBar {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
-}
+  /* Headings reset only. Casing and family are opt-in via `.font-display`,
+     because plenty of headings here are not display type: a product name is an
+     h3 and must stay in sentence case, and every small tracked label is a real
+     heading too. Baking uppercase into the element leaked into all of them. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 400;
+    font-size: inherit;
+    line-height: 1.15;
+    margin: 0;
+  }
 
-/* ── Utility classes ── */
-.nv-fade-up  { animation: fadeUp .7s both; }
-.nv-fade-in  { animation: fadeIn .5s both; }
-.nv-scale-in { animation: scaleIn .6s both; }
+  /* Cinzel. Uppercase and open tracking are part of the face's identity here,
+     so they travel with it. Never use this below 16px: Cinzel has short
+     descenders and turns to a smear. */
+  .font-display {
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
 
-.nv-aurora-bg {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-}
-.nv-aurora-a {
-  position: absolute; top: -10%; left: -6%; width: 46vw; height: 46vw;
-  background: radial-gradient(circle,rgba(108,43,217,.55),transparent 65%);
-  filter: blur(70px);
-  animation: auroraA 22s ease-in-out infinite;
-}
-.nv-aurora-b {
-  position: absolute; top: 24%; right: -12%; width: 52vw; height: 52vw;
-  background: radial-gradient(circle,rgba(34,211,238,.34),transparent 65%);
-  filter: blur(80px);
-  animation: auroraB 26s ease-in-out infinite;
-}
-.nv-aurora-c {
-  position: absolute; bottom: -18%; left: 24%; width: 48vw; height: 48vw;
-  background: radial-gradient(circle,rgba(139,92,246,.4),transparent 64%);
-  filter: blur(75px);
-  animation: auroraC 30s ease-in-out infinite;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  ::selection {
+    background: var(--color-sand);
+    color: var(--color-forest);
+  }
+
+  /* Focus is visible and gold, on every interactive element. */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-cream);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-greige);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-sand);
+  }
 }
 
-/* ── Tilt cards ── */
-.nv-tilt-card {
-  transform-style: preserve-3d;
-  transition: transform .25s cubic-bezier(.2,.9,.3,1), box-shadow .3s;
-}
-.nv-tilt-card:hover {
-  box-shadow: 0 34px 60px -22px rgba(108,43,217,.6);
-}
+/* ── Reduced motion ───────────────────────────────────────────────────────────
+   Global floor. Individual components still branch on useReducedMotion() so
+   that entrances resolve to their final state rather than being skipped
+   mid-flight, but this guarantees nothing moves even if one is missed.       */
 
-/* ── Magnetic button ── */
-.nv-mag-btn {
-  transition: transform .2s;
-}
-.nv-mag-btn:hover {
-  transform: scale(1.04);
-}
-
-/* ── Brand row ── */
-.nv-brand-row {
-  display: flex;
-  gap: 14px;
-  height: 330px;
-  /* allow logo images to overflow upward out of cards */
-  overflow: visible;
-}
-.nv-brand-card {
-  flex: 1;
-  min-width: 64px;
-  transition: flex .6s cubic-bezier(.2,.9,.3,1), box-shadow .4s, border-color .4s;
-  /* stacking context so z-index on logo works per-card */
-  isolation: isolate;
-}
-.nv-brand-card:hover {
-  flex: 2.6;
-  box-shadow: 0 30px 60px -20px rgba(108,43,217,.6);
-  border-color: rgba(139,92,246,.5);
-}
-
-/* Brand logo — sits centered, rises above the card on hover */
-.nv-brand-logo {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%) scale(0.85);
-  width: 80%;
-  max-width: 180px;
-  height: 55%;
-  object-fit: contain;
-  opacity: 0.18;
-  z-index: 1;
-  pointer-events: none;
-  transition: transform .5s cubic-bezier(.2,.9,.3,1), opacity .4s, filter .4s, bottom .5s cubic-bezier(.2,.9,.3,1);
-  filter: drop-shadow(0 0 0px transparent);
-}
-.nv-brand-card:hover .nv-brand-logo {
-  transform: translateX(-50%) scale(1.15);
-  bottom: 60%;
-  opacity: 1;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,.6));
-  z-index: 10;
-}
-
-/* ── Progress bar ── */
-.nv-progress-bar {
-  position: fixed; top: 0; left: 0; height: 3px; width: 100%;
-  transform-origin: 0 50%;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
-  z-index: 120;
-  box-shadow: 0 0 14px rgba(34,211,238,.6);
-}
-
-/* ── Mobile responsive ── */
-@media (max-width: 860px) {
-  .nv-hero-row { flex-direction: column !important; }
-  .nv-brand-row { height: auto !important; flex-wrap: wrap; }
-  .nv-brand-card { flex: unset !important; width: calc(50% - 7px) !important; height: 160px; }
-}
-@media (max-width: 640px) {
-  .nv-brand-card { width: 100% !important; }
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
