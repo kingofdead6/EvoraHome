@@ -84,16 +84,16 @@ function CategoryEditor({ category, onClose, onSaved }) {
           <AdminInput label="Nom" value={form.nom} onChange={set('nom')} required />
           <AdminTextArea label="Description" rows={3} value={form.description} onChange={set('description')} />
 
-          <AdminInput
-            label="Chemin de l'image"
-            value={form.image}
-            onChange={set('image')}
-            placeholder="/products/categories/salons.jpg"
-          />
+          {form.image ? (
+            <div className="rounded-sm border border-greige bg-cream p-3">
+              <p className="mb-2 text-sm uppercase tracking-[0.12em] text-ink-muted">Photo actuelle</p>
+              <ProductImage src={form.image} alt={form.nom || 'Image de catégorie'} sizes="180px" className="h-[180px] w-full rounded-sm object-cover" />
+            </div>
+          ) : null}
 
           <label className="flex flex-col gap-1.5">
             <span className="text-[12px] uppercase tracking-[0.12em] text-ink-muted">
-              Ou téléverser une image
+              Téléverser une image
             </span>
             <input
               type="file"
@@ -101,6 +101,7 @@ function CategoryEditor({ category, onClose, onSaved }) {
               onChange={(e) => setFile(e.target.files?.[0] || null)}
               className="min-h-[44px] rounded-sm border border-greige bg-cream px-3 py-2 text-sm text-ink file:mr-3 file:rounded-sm file:border file:border-greige file:bg-cream file:px-3 file:py-1.5 file:text-sm file:text-ink"
             />
+            <span className="text-sm text-ink-muted">Laisser vide pour conserver la photo actuelle.</span>
           </label>
 
           <label className="flex min-h-[44px] cursor-pointer items-center gap-2.5">

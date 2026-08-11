@@ -20,6 +20,7 @@ import { EASE_OUT, useReducedMotion } from '../../lib/motion';
 const LINKS = [
   { to: '/catalogue', label: 'Catalogue' },
   { to: '/showroom', label: 'Notre showroom' },
+  { to: '/faq', label: 'FAQ' },
   { to: '/contact', label: 'Contact' },
 ];
 

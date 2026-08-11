@@ -20,12 +20,27 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const controller = new AbortController();
+    let active = true;
+
     api
       .me(controller.signal)
-      .then(setUser)
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
-    return () => controller.abort();
+      .then((account) => {
+        if (!active) return;
+        setUser(account);
+      })
+      .catch((err) => {
+        if (!active || err.name === 'AbortError') return;
+        setUser(null);
+      })
+      .finally(() => {
+        if (!active) return;
+        setLoading(false);
+      });
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
   }, []);
 
   const login = useCallback(async (credentials) => {
@@ -65,7 +80,7 @@ export function AuthProvider({ children }) {
       user,
       loading,
       isLoggedIn: Boolean(user),
-      isAdmin: user?.role === 'ADMIN',
+      isAdmin: ['ADMIN', 'SUPER_ADMIN'].includes(user?.role),
       login,
       register,
       logout,

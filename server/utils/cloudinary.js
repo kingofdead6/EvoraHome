@@ -1,5 +1,9 @@
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { randomUUID } from 'crypto';
 
 dotenv.config();
 
@@ -15,6 +19,18 @@ if (configured) {
   });
 }
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const localUploadDir = path.join(__dirname, '..', 'public', 'products');
+
+async function saveLocalImage(file) {
+  await fs.mkdir(localUploadDir, { recursive: true });
+  const ext = path.extname(file.originalname) || '.jpg';
+  const filename = `${Date.now()}-${randomUUID()}${ext}`;
+  const filePath = path.join(localUploadDir, filename);
+  await fs.writeFile(filePath, file.buffer);
+  return { url: `/products/${filename}`, alt: '', ordre: 0 };
+}
+
 /**
  * Uploads one image and returns `{ url, alt, ordre }`, ready to push into a
  * product's images array.
@@ -26,29 +42,24 @@ if (configured) {
 export async function uploadToCloudinary(file) {
   if (!file) return null;
 
-  if (!configured) {
-    throw new Error(
-      "L'upload d'images n'est pas configuré. Renseignez CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY et CLOUDINARY_API_SECRET, ou déposez les photos dans client/public/products/."
-    );
+  if (configured) {
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'evora-home',
+          resource_type: 'image',
+          allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'avif'],
+          transformation: [{ width: 1600, height: 1600, crop: 'limit' }, { quality: 'auto:good' }],
+        },
+        (error, uploaded) => (error ? reject(error) : resolve(uploaded))
+      );
+      stream.end(file.buffer);
+    });
+
+    return { url: result.secure_url, alt: '', ordre: 0 };
   }
 
-  const result = await new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream(
-      {
-        folder: 'evora-home',
-        resource_type: 'image',
-        allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'avif'],
-        // Photos come straight off a phone at 4000px. Cap the stored size and
-        // let Cloudinary pick the format, which is the single biggest win for
-        // customers on mobile data.
-        transformation: [{ width: 1600, height: 1600, crop: 'limit' }, { quality: 'auto:good' }],
-      },
-      (error, uploaded) => (error ? reject(error) : resolve(uploaded))
-    );
-    stream.end(file.buffer);
-  });
-
-  return { url: result.secure_url, alt: '', ordre: 0 };
+  return await saveLocalImage(file);
 }
 
 export async function deleteFromCloudinary(publicId) {

@@ -109,6 +109,12 @@ export default function AdminSettings() {
               onChange={set('facebook')}
               placeholder="https://facebook.com/..."
             />
+            <AdminInput
+              label="TikTok (identifiant sans @)"
+              value={form.tiktok || ''}
+              onChange={set('tiktok')}
+              placeholder="evorahome"
+            />
           </div>
         </Panel>
 

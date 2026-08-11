@@ -3,6 +3,7 @@ import User, { normalisePhone, isValidPhone } from '../Models/User.js';
 import { signSession, clearSession } from '../Middleware/auth.js';
 
 const MIN_PASSWORD = 6;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /**
  * Register. Phone number is the identifier, email is optional.
@@ -13,6 +14,7 @@ const MIN_PASSWORD = 6;
  */
 export const register = asyncHandler(async (req, res) => {
   const { nom, telephone, email, password } = req.body;
+  const cleanEmail = email?.trim().toLowerCase();
 
   if (!nom?.trim()) {
     res.status(400);
@@ -22,21 +24,33 @@ export const register = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Numéro de téléphone invalide. Format attendu: 05, 06 ou 07 suivi de 8 chiffres');
   }
+  if (cleanEmail && !EMAIL_REGEX.test(cleanEmail)) {
+    res.status(400);
+    throw new Error('Adresse email invalide');
+  }
   if (!password || password.length < MIN_PASSWORD) {
     res.status(400);
     throw new Error(`Le mot de passe doit contenir au moins ${MIN_PASSWORD} caractères`);
   }
 
-  const existing = await User.findOne({ telephone: normalisePhone(telephone) });
-  if (existing) {
+  const existingPhone = await User.findOne({ telephone: normalisePhone(telephone) });
+  if (existingPhone) {
     res.status(409);
     throw new Error('Un compte existe déjà avec ce numéro');
+  }
+
+  if (cleanEmail) {
+    const existingEmail = await User.findOne({ email: cleanEmail });
+    if (existingEmail) {
+      res.status(409);
+      throw new Error('Un compte existe déjà avec cette adresse email');
+    }
   }
 
   const user = new User({
     nom: nom.trim(),
     telephone,
-    email: email?.trim() || '',
+    email: cleanEmail || undefined,
     passwordHash: password,
     // Role is never taken from the request body. An admin is made by the seed
     // script or by another admin, never by signing up.
@@ -48,22 +62,31 @@ export const register = asyncHandler(async (req, res) => {
   res.status(201).json(user.toPublic());
 });
 
-/** Login with phone number and password. */
+/** Login with phone number or email and password. */
 export const login = asyncHandler(async (req, res) => {
-  const { telephone, password } = req.body;
+  const { identifier, password } = req.body;
+  const cleanIdentifier = identifier?.trim().toLowerCase();
 
-  if (!telephone || !password) {
+  if (!cleanIdentifier || !password) {
     res.status(400);
-    throw new Error('Numéro de téléphone et mot de passe requis');
+    throw new Error('Téléphone ou email et mot de passe requis');
   }
 
-  const user = await User.findOne({ telephone: normalisePhone(telephone) }).select('+passwordHash');
+  let user;
+  if (isValidPhone(cleanIdentifier)) {
+    user = await User.findOne({ telephone: normalisePhone(cleanIdentifier) }).select('+passwordHash');
+  } else if (EMAIL_REGEX.test(cleanIdentifier)) {
+    user = await User.findOne({ email: cleanIdentifier }).select('+passwordHash');
+  } else {
+    res.status(400);
+    throw new Error('Identifiant invalide. Utilisez un téléphone ou une adresse email');
+  }
 
   // One message for both cases, so the response cannot be used to discover
-  // which phone numbers have accounts.
+  // which accounts exist.
   if (!user || !(await user.verifyPassword(password))) {
     res.status(401);
-    throw new Error('Numéro ou mot de passe incorrect');
+    throw new Error('Identifiant ou mot de passe incorrect');
   }
 
   signSession(res, user);
@@ -83,7 +106,21 @@ export const me = asyncHandler(async (req, res) => {
 export const updateProfile = asyncHandler(async (req, res) => {
   const { nom, email } = req.body;
   if (nom?.trim()) req.user.nom = nom.trim();
-  if (email !== undefined) req.user.email = email.trim();
+  if (email !== undefined) {
+    const cleanEmail = email?.trim().toLowerCase();
+    if (cleanEmail && !EMAIL_REGEX.test(cleanEmail)) {
+      res.status(400);
+      throw new Error('Adresse email invalide');
+    }
+    if (cleanEmail && cleanEmail !== req.user.email) {
+      const existingEmail = await User.findOne({ email: cleanEmail, _id: { $ne: req.user._id } });
+      if (existingEmail) {
+        res.status(409);
+        throw new Error('Cette adresse email est déjà utilisée');
+      }
+    }
+    req.user.email = cleanEmail || undefined;
+  }
   await req.user.save();
   res.json(req.user.toPublic());
 });

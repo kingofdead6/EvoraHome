@@ -17,9 +17,7 @@ export function signSession(res, user) {
   res.cookie(TOKEN_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    // The storefront and API are on different hosts in production (Vercel and
-    // Render), so the cookie has to survive a cross-site request.
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    sameSite: 'none',
     maxAge: 30 * 24 * 60 * 60 * 1000,
     path: '/',
   });
@@ -29,7 +27,7 @@ export function clearSession(res) {
   res.clearCookie(TOKEN_COOKIE, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    sameSite: 'none',
     path: '/',
   });
 }
@@ -71,7 +69,7 @@ export const admin = (req, res, next) => {
     res.status(401);
     return next(new Error('Vous devez être connecté'));
   }
-  if (req.user.role !== 'ADMIN') {
+  if (!['ADMIN', 'SUPER_ADMIN'].includes(req.user.role)) {
     res.status(403);
     return next(new Error('Accès réservé à l\'administration'));
   }

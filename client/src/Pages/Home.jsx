@@ -15,16 +15,8 @@ import Button from '../Components/UI/Button';
 import { ProductGridSkeleton } from '../Components/UI/States';
 import { revealVariants, revealTransition, viewportOnce, useReducedMotion } from '../lib/motion';
 
-/**
- * Home.
- *
- * Five sections, each of which has to earn its place: hero, categories,
- * featured products, an olive band about the physical shop, and a contact
- * strip. There is no "why choose us" row of three icon cards, no testimonials
- * and no statistics, because the client has none of those things and inventing
- * them is what makes a site read as generated.
- */
-
+import HeroBg from '../assets/HeroBg.png';
+import ShowroomImage from '../assets/ShopImg.png';
 function Reveal({ children, className = '', as: Component = motion.div }) {
   const reduced = useReducedMotion();
   return (
@@ -53,8 +45,12 @@ function Hero({ settings }) {
 
   return (
     <section className="relative isolate min-h-[70vh] overflow-hidden bg-olive sm:min-h-[76vh]">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-30 bg-[radial-gradient(circle_at_top_left,_rgba(247,244,234,0.16),_transparent_35%),linear-gradient(180deg,#5f6d4f_0%,#30371f_100%)]"
+      />
       <img
-        src="/products/hero.jpg"
+        src={HeroBg}
         alt=""
         aria-hidden="true"
         fetchPriority="high"
@@ -244,7 +240,7 @@ function ShowroomBand({ settings }) {
 
           <Reveal>
             <ProductImage
-              src="/products/showroom.jpg"
+              src={ShowroomImage}
               alt="Le showroom Evora Home à El Khroub"
               className="aspect-[4/3] border-sand/25"
               sizes="(min-width: 1024px) 50vw, 100vw"

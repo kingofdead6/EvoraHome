@@ -28,3 +28,8 @@ export function isValidEmail(raw) {
   if (!raw) return true; // email is optional everywhere on this site
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(raw).trim());
 }
+
+export function isValidIdentifier(raw) {
+  if (!raw?.trim()) return false;
+  return isValidPhoneClient(raw) || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(raw).trim());
+}

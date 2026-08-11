@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-export const ROLES = ['CLIENT', 'ADMIN'];
+export const ROLES = ['CLIENT', 'ADMIN', 'SUPER_ADMIN'];
 
 /** Normalises 0540870382, +213 540 87 03 82 and 213540870382 to one form. */
 export function normalisePhone(raw) {
@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
       index: true,
       set: normalisePhone,
     },
-    email: { type: String, trim: true, lowercase: true, default: '' },
+    email: { type: String, trim: true, lowercase: true, default: undefined },
 
     // `select: false` so the hash never leaks through a stray .find().
     passwordHash: { type: String, required: true, select: false },
@@ -66,6 +66,8 @@ userSchema.pre('save', async function hashPassword() {
 userSchema.methods.verifyPassword = function verifyPassword(plain) {
   return bcrypt.compare(plain, this.passwordHash);
 };
+
+userSchema.index({ email: 1 }, { unique: true, partialFilterExpression: { email: { $type: 'string', $ne: '' } } });
 
 userSchema.methods.toPublic = function toPublic() {
   return {
