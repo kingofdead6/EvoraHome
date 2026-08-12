@@ -162,20 +162,24 @@ third-party service and is the cheaper path.
 
 ## Deployment
 
-> **The API on Render must be redeployed from this branch before the new
+> **The API on Render must be running this branch's server code before the new
 > storefront will work.**
 >
-> `client/api.js` points at `https://evorahome.onrender.com/api`, which is
-> correct. But that host is currently running the code on `main`, which is the
-> old template API. It has no `/api/settings`, `/api/wilayas`,
+> `client/api.js` points at `https://furniture-ecomm-xcel.onrender.com/api`.
+> That host has to be serving the API from this branch, not the old template
+> one. The old API has no `/api/settings`, `/api/wilayas`,
 > `/api/livraison/quote`, `/api/auth/me` or `/api/admin/*`, and its
-> `/api/products` still returns the old `name` / `price` / `stock` shape rather
-> than `nom` / `prix` / `ref` / `dimensions`.
+> `/api/products` returns the old `name` / `price` / `stock` shape rather than
+> `nom` / `prix` / `ref` / `dimensions`, so every page would load its shell and
+> then fail.
+>
+> I could not check what is currently deployed there: this build environment
+> blocks outbound requests to that host. Confirm it yourself with
+> `curl https://furniture-ecomm-xcel.onrender.com/api/health` — the new API
+> answers `{"ok":true,...}` and the old one 404s.
 >
 > Deploy the server from `claude/evora-home-storefront-7d0bod` first, set the
-> environment variables below, seed, and only then deploy the client. Until the
-> API is redeployed, the storefront will load its shell and then fail every
-> request.
+> environment variables below, seed, and only then deploy the client.
 
 ### Server (Render, or any Node host)
 

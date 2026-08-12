@@ -10,9 +10,9 @@
 import { API_BASE_URL } from '../../api.js';
 
 /**
- * The deployed Render API is the default, from `client/api.js`. VITE_API_URL
- * overrides it when you want a local server, which keeps the one real URL in
- * one file rather than duplicated across environments.
+ * The deployed API on Render, from `client/api.js`, so the one real URL lives
+ * in one file. VITE_API_URL overrides it when you want to point a local build
+ * at a local server; leave it unset and you get production.
  */
 const BASE = import.meta.env.VITE_API_URL || API_BASE_URL;
 
