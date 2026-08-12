@@ -7,7 +7,14 @@
  * `err.message` directly to the customer without checking shapes.
  */
 
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_BASE_URL } from '../../api.js';
+
+/**
+ * The deployed Render API is the default, from `client/api.js`. VITE_API_URL
+ * overrides it when you want a local server, which keeps the one real URL in
+ * one file rather than duplicated across environments.
+ */
+const BASE = import.meta.env.VITE_API_URL || API_BASE_URL;
 
 export class ApiError extends Error {
   constructor(message, status) {

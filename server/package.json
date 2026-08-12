@@ -8,7 +8,11 @@
     "start": "node index.js",
     "seed": "node seed/seed.js",
     "verify": "node seed/verify.js",
-    "smoke": "node seed/smoke.js"
+    "smoke": "node seed/smoke.js",
+    "products:template": "node scripts/import-products.js --template",
+    "products:import": "node scripts/import-products.js",
+    "products:export": "node scripts/export-products.js",
+    "products:verify": "node scripts/verify-import.js"
   },
   "keywords": [],
   "author": "",
