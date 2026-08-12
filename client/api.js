@@ -3,6 +3,6 @@
 //
 // To point a local build at a local server instead, set VITE_API_URL in
 // client/.env.local. Nothing else needs to change.
-export const API_BASE_URL = "https://furniture-ecomm-xcel.onrender.com/api";
+export const API_BASE_URL = "https://evorahome.onrender.com/api";
 
 export default API_BASE_URL;
