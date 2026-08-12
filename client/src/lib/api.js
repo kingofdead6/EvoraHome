@@ -9,9 +9,15 @@
 // const API_BASE_URL = "http://localhost:5000/api";
 // 
 
+import { API_BASE_URL } from '../../api.js';
 
-const API_BASE_URL = "https://evorahome.onrender.com/api";
+/**
+ * The deployed API on Render, from `client/api.js`, so the one real URL lives
+ * in one file. VITE_API_URL overrides it when you want to point a local build
+ * at a local server; leave it unset and you get production.
+ */
 const BASE = API_BASE_URL;
+
 
 export class ApiError extends Error {
   constructor(message, status) {

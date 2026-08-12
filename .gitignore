@@ -11,3 +11,6 @@ dist/
 # fresh checkout can restore with `npx skills install`.
 .agents/
 .claude/skills/
+
+# Working catalogue files produced by the import/export scripts.
+catalogue-export.csv

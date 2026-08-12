@@ -162,6 +162,25 @@ third-party service and is the cheaper path.
 
 ## Deployment
 
+> **The API on Render must be running this branch's server code before the new
+> storefront will work.**
+>
+> `client/api.js` points at `https://furniture-ecomm-xcel.onrender.com/api`.
+> That host has to be serving the API from this branch, not the old template
+> one. The old API has no `/api/settings`, `/api/wilayas`,
+> `/api/livraison/quote`, `/api/auth/me` or `/api/admin/*`, and its
+> `/api/products` returns the old `name` / `price` / `stock` shape rather than
+> `nom` / `prix` / `ref` / `dimensions`, so every page would load its shell and
+> then fail.
+>
+> I could not check what is currently deployed there: this build environment
+> blocks outbound requests to that host. Confirm it yourself with
+> `curl https://furniture-ecomm-xcel.onrender.com/api/health` — the new API
+> answers `{"ok":true,...}` and the old one 404s.
+>
+> Deploy the server from `claude/evora-home-storefront-7d0bod` first, set the
+> environment variables below, seed, and only then deploy the client.
+
 ### Server (Render, or any Node host)
 
 Root directory `server/`, build `npm install`, start `npm start`.
@@ -211,6 +230,68 @@ One environment variable:
 7. Place one real test order end to end and print the slip.
 
 ---
+
+## Loading the real catalogue
+
+`npm run seed` loads the 40 placeholder products. To load the client's real
+catalogue, use the spreadsheet workflow rather than typing products into the
+admin one at a time.
+
+```bash
+cd server
+
+npm run products:template                        # writes catalogue.csv
+# open it in Excel, replace the two examples with the real products
+
+npm run products:import -- catalogue.csv --dry-run   # check, write nothing
+npm run products:import -- catalogue.csv             # import
+```
+
+Round-tripping is the normal workflow. A price rise across the whole catalogue
+is a column drag in Excel, not 40 trips through the admin form:
+
+```bash
+npm run products:export                          # writes catalogue-export.csv
+# edit in Excel
+npm run products:import -- catalogue-export.csv
+```
+
+**Columns.** `ref`, `nom`, `categorie`, `prix` are required; the rest are
+optional. `ancienPrix`, `description`, `largeur`, `profondeur`, `hauteur`,
+`materiaux`, `couleurs`, `images`, `nbImages`, `disponibilite`,
+`delaiLivraison`, `isFeatured`, `isNouveau`.
+
+- Lists use `|`: `Tissu bouclé | Bois massif`
+- Colours are `Nom:#HEX`: `Beige sable:#D8CDB8 | Gris perle:#B9B7B0`
+- Leave `images` empty and set `nbImages` to 3 to generate
+  `/products/<slug>-01.jpg` and so on, matching the photo naming convention
+- `disponibilite` accepts `en stock`, `sur commande`, `rupture`
+- Booleans accept `oui` / `non` / `x` / `1` / `0`
+
+**What it handles for you.** French Excel's `;` delimiter and UTF-8 BOM, prices
+written as `139 000,00 DA`, accented and renamed column headers (`Référence`,
+`Coloris`, `Vedette`), and categories given by either name or slug.
+
+**What makes it safe to hand over.**
+
+- **Nothing is written unless every row is valid.** One bad price means zero
+  products imported, not 39, so there is never a half-loaded catalogue to
+  reconcile by hand. Every problem in the file is reported at once, because the
+  client fixes them in one pass.
+- **Rows are matched on `ref` and upserted**, so re-importing a corrected file
+  updates the same products instead of duplicating them.
+- **Renames are flagged before writing.** Changing a product's name changes its
+  URL, which breaks links already shared on Instagram; the script lists the
+  old and new addresses and makes you look at them.
+- **Orders are never touched.** They carry their own copy of the name and price
+  from the time they were placed.
+- `--prune` additionally deletes products absent from the file. It is off by
+  default and reports what it will remove first.
+
+`npm run products:verify` runs 66 offline checks over the CSV parser and the
+row mapping. The database write itself is the one part that could not be tested
+here (see the caveat above about no reachable MongoDB), so run the first real
+import with `--dry-run`.
 
 ## Running it locally
 

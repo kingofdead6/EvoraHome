@@ -9,7 +9,7 @@
     "seed": "node seed/seed.js",
     "verify": "node seed/verify.js",
     "smoke": "node seed/smoke.js",
-    "create-admin": "node create-admin.js"
+
   },
   "keywords": [],
   "author": "",
