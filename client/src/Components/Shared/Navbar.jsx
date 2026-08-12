@@ -6,6 +6,8 @@ import { Menu, X, ShoppingBag, User, Search } from 'lucide-react';
 import { useCart } from '../../lib/cart';
 import { useAuth } from '../../lib/auth';
 import { EASE_OUT, useReducedMotion } from '../../lib/motion';
+import { useI18n } from '../../lib/i18n';
+import LangSwitch from './LangSwitch';
 
 /**
  * The navbar.
@@ -17,11 +19,13 @@ import { EASE_OUT, useReducedMotion } from '../../lib/motion';
  * The nav is a single line on desktop and a full-height sheet on mobile.
  */
 
+/** Translation keys, not labels: the array lives at module scope where no hook
+ *  can run, so the text is resolved at render time instead. */
 const LINKS = [
-  { to: '/catalogue', label: 'Catalogue' },
-  { to: '/showroom', label: 'Notre showroom' },
-  { to: '/faq', label: 'FAQ' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/catalogue', key: 'nav.catalogue' },
+  { to: '/showroom', key: 'nav.showroom' },
+  { to: '/faq', key: 'nav.faq' },
+  { to: '/contact', key: 'nav.contact' },
 ];
 
 /** The active link marker: a gold hairline under the label. */
@@ -39,6 +43,7 @@ export default function Navbar({ onOpenCart }) {
   const { isLoggedIn, isAdmin } = useAuth();
   const location = useLocation();
   const reduced = useReducedMotion();
+  const { t } = useI18n();
 
   const closeRef = useRef(null);
 
@@ -69,7 +74,7 @@ export default function Navbar({ onOpenCart }) {
   return (
     <header className="sticky top-0 z-40 border-b border-gold/25 bg-olive">
       <nav
-        aria-label="Navigation principale"
+        aria-label={t('nav.menu')}
         className="mx-auto flex h-16 max-w-[1400px] items-center justify-between gap-4 px-4 sm:px-6 lg:h-[68px] lg:px-10"
       >
         {/* Left: menu trigger on mobile, links on desktop */}
@@ -78,8 +83,8 @@ export default function Navbar({ onOpenCart }) {
             type="button"
             onClick={() => setMenuOpen(true)}
             aria-expanded={menuOpen}
-            aria-label="Ouvrir le menu"
-            className="-ml-2 flex h-11 w-11 items-center justify-center text-sand transition-colors duration-200 hover:text-cream lg:hidden"
+            aria-label={t('nav.menu')}
+            className="-ms-2 flex h-11 w-11 items-center justify-center text-sand transition-colors duration-200 hover:text-cream lg:hidden"
           >
             <Menu size={20} strokeWidth={1.5} />
           </button>
@@ -88,7 +93,7 @@ export default function Navbar({ onOpenCart }) {
             {LINKS.map((link) => (
               <li key={link.to}>
                 <NavLink to={link.to} className={navLinkClass}>
-                  {link.label}
+                  {t(link.key)}
                 </NavLink>
               </li>
             ))}
@@ -103,11 +108,13 @@ export default function Navbar({ onOpenCart }) {
           Evora Home
         </Link>
 
-        {/* Right: account and cart */}
+        {/* Right: language, account and cart */}
         <div className="flex flex-1 items-center justify-end gap-1 sm:gap-2">
+          <LangSwitch tone="onOlive" className="me-1 hidden sm:inline-flex" />
+
           <Link
             to="/catalogue"
-            aria-label="Rechercher un produit"
+            aria-label={t('nav.search')}
             className="hidden h-11 w-11 items-center justify-center text-sand transition-colors duration-200 hover:text-cream sm:flex"
           >
             <Search size={19} strokeWidth={1.5} />
@@ -115,7 +122,7 @@ export default function Navbar({ onOpenCart }) {
 
           <Link
             to={isAdmin ? '/admin' : isLoggedIn ? '/compte' : '/connexion'}
-            aria-label={isLoggedIn ? 'Mon compte' : 'Se connecter'}
+            aria-label={isLoggedIn ? t('nav.account') : t('nav.login')}
             className="flex h-11 w-11 items-center justify-center text-sand transition-colors duration-200 hover:text-cream"
           >
             <User size={19} strokeWidth={1.5} />
@@ -124,7 +131,7 @@ export default function Navbar({ onOpenCart }) {
           <button
             type="button"
             onClick={onOpenCart}
-            aria-label={`Panier, ${nbArticles} article${nbArticles > 1 ? 's' : ''}`}
+            aria-label={`${t('nav.cart')} (${nbArticles})`}
             className="relative flex h-11 w-11 items-center justify-center text-sand transition-colors duration-200 hover:text-cream"
           >
             <ShoppingBag size={19} strokeWidth={1.5} />
@@ -137,7 +144,7 @@ export default function Navbar({ onOpenCart }) {
                 initial={reduced ? false : { transform: 'scale(0.6)' }}
                 animate={{ transform: 'scale(1)' }}
                 transition={{ duration: 0.24, ease: EASE_OUT }}
-                className="absolute right-1 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[12px] font-medium tabular-nums text-forest"
+                className="absolute end-1 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[12px] font-medium tabular-nums text-forest"
               >
                 {nbArticles > 99 ? '99+' : nbArticles}
               </motion.span>
@@ -157,7 +164,7 @@ export default function Navbar({ onOpenCart }) {
             className="fixed inset-0 z-50 bg-olive lg:hidden"
             role="dialog"
             aria-modal="true"
-            aria-label="Menu"
+            aria-label={t('nav.menu')}
           >
             <div className="flex h-16 items-center justify-between px-4 sm:px-6">
               <span className="font-display text-base tracking-[0.2em] text-cream">Evora Home</span>
@@ -165,14 +172,14 @@ export default function Navbar({ onOpenCart }) {
                 ref={closeRef}
                 type="button"
                 onClick={() => setMenuOpen(false)}
-                aria-label="Fermer le menu"
-                className="-mr-2 flex h-11 w-11 items-center justify-center text-sand transition-colors duration-200 hover:text-cream"
+                aria-label={t('nav.close')}
+                className="-me-2 flex h-11 w-11 items-center justify-center text-sand transition-colors duration-200 hover:text-cream"
               >
                 <X size={22} strokeWidth={1.5} />
               </button>
             </div>
 
-            <nav aria-label="Menu mobile" className="px-4 pt-6 sm:px-6">
+            <nav aria-label={t('nav.menu')} className="px-4 pt-6 sm:px-6">
               <ul className="flex flex-col">
                 {LINKS.map((link, i) => (
                   <motion.li
@@ -186,7 +193,7 @@ export default function Navbar({ onOpenCart }) {
                       to={link.to}
                       className="flex min-h-[60px] items-center font-display text-lg tracking-[0.1em] text-cream"
                     >
-                      {link.label}
+                      {t(link.key)}
                     </Link>
                   </motion.li>
                 ))}
@@ -201,10 +208,19 @@ export default function Navbar({ onOpenCart }) {
                     to={isAdmin ? '/admin' : isLoggedIn ? '/compte' : '/connexion'}
                     className="flex min-h-[60px] items-center font-display text-lg tracking-[0.1em] text-cream"
                   >
-                    {isAdmin ? 'Administration' : isLoggedIn ? 'Mon compte' : 'Se connecter'}
+                    {isAdmin ? 'Administration' : isLoggedIn ? t('nav.account') : t('nav.login')}
                   </Link>
                 </motion.li>
               </ul>
+
+              {/* The switcher is hidden in the desktop bar below sm, so the
+                  sheet is where a phone user finds it. */}
+              <div className="mt-8 flex items-center gap-3 sm:hidden">
+                <span className="text-[12px] uppercase tracking-[0.15em] text-sand/70">
+                  {t('lang.switch')}
+                </span>
+                <LangSwitch tone="onOlive" />
+              </div>
             </nav>
           </motion.div>
         ) : null}

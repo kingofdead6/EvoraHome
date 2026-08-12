@@ -8,6 +8,7 @@ import { formatPrice } from '../../lib/format';
 import ProductImage from '../UI/ProductImage';
 import Button from '../UI/Button';
 import EvoraTree from '../Brand/EvoraTree';
+import { useI18n } from '../../lib/i18n';
 import { useReducedMotion } from '../../lib/motion';
 
 /**
@@ -19,6 +20,7 @@ import { useReducedMotion } from '../../lib/motion';
  * door.
  */
 export default function CartDrawer({ open, onClose }) {
+  const { t } = useI18n();
   const { items, nbArticles, sousTotal, setQuantity, remove, lineKey } = useCart();
   const reduced = useReducedMotion();
   const closeRef = useRef(null);
@@ -47,7 +49,7 @@ export default function CartDrawer({ open, onClose }) {
         <>
           <motion.button
             type="button"
-            aria-label="Fermer le panier"
+            aria-label={t('nav.close')}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -59,18 +61,18 @@ export default function CartDrawer({ open, onClose }) {
           <motion.aside
             role="dialog"
             aria-modal="true"
-            aria-label="Panier"
+            aria-label={t('cart.title')}
             initial={reduced ? { opacity: 0 } : { transform: 'translateX(100%)' }}
             animate={reduced ? { opacity: 1 } : { transform: 'translateX(0%)' }}
             exit={reduced ? { opacity: 0 } : { transform: 'translateX(100%)' }}
             transition={{ duration: 0.32, ease: [0.32, 0.72, 0, 1] }}
-            className="fixed inset-y-0 right-0 z-50 flex w-full max-w-[26rem] flex-col bg-cream shadow-none"
+            className="fixed inset-y-0 end-0 z-50 flex w-full max-w-[26rem] flex-col bg-cream shadow-none"
           >
             <header className="flex items-center justify-between border-b border-greige px-4 py-4 sm:px-6">
               <h2 className="font-display text-base tracking-[0.12em] text-ink">
                 Panier
                 {nbArticles > 0 ? (
-                  <span className="ml-2 font-sans text-sm tracking-normal text-ink-muted">
+                  <span className="ms-2 font-sans text-sm tracking-normal text-ink-muted">
                     {nbArticles} article{nbArticles > 1 ? 's' : ''}
                   </span>
                 ) : null}
@@ -80,8 +82,8 @@ export default function CartDrawer({ open, onClose }) {
                 ref={closeRef}
                 type="button"
                 onClick={onClose}
-                aria-label="Fermer le panier"
-                className="-mr-2 flex h-11 w-11 items-center justify-center text-ink-muted transition-colors duration-200 hover:text-ink"
+                aria-label={t('nav.close')}
+                className="-me-2 flex h-11 w-11 items-center justify-center text-ink-muted transition-colors duration-200 hover:text-ink"
               >
                 <X size={20} strokeWidth={1.5} />
               </button>
@@ -91,7 +93,7 @@ export default function CartDrawer({ open, onClose }) {
               <div className="flex flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
                 <EvoraTree size={88} className="text-sand" />
                 <div className="flex flex-col gap-1.5">
-                  <p className="font-display text-base text-ink">Votre panier est vide</p>
+                  <p className="font-display text-base text-ink">{t('cart.empty')}</p>
                   <p className="text-sm text-ink-muted">
                     Parcourez le catalogue et ajoutez les pièces qui vous plaisent.
                   </p>
@@ -135,7 +137,7 @@ export default function CartDrawer({ open, onClose }) {
                                 type="button"
                                 onClick={() => setQuantity(key, line.quantite - 1)}
                                 disabled={line.quantite <= 1}
-                                aria-label="Diminuer la quantité"
+                                aria-label={t('product.decrease')}
                                 className="flex h-11 w-11 items-center justify-center text-ink-muted transition-colors hover:text-ink disabled:opacity-35"
                               >
                                 <Minus size={15} strokeWidth={1.5} />
@@ -149,7 +151,7 @@ export default function CartDrawer({ open, onClose }) {
                                 type="button"
                                 onClick={() => setQuantity(key, line.quantite + 1)}
                                 disabled={line.quantite >= 20}
-                                aria-label="Augmenter la quantité"
+                                aria-label={t('product.increase')}
                                 className="flex h-11 w-11 items-center justify-center text-ink-muted transition-colors hover:text-ink disabled:opacity-35"
                               >
                                 <Plus size={15} strokeWidth={1.5} />
@@ -173,7 +175,7 @@ export default function CartDrawer({ open, onClose }) {
 
                 <footer className="border-t border-greige px-4 py-4 sm:px-6">
                   <div className="flex items-baseline justify-between">
-                    <span className="text-sm text-ink-muted">Sous-total</span>
+                    <span className="text-sm text-ink-muted">{t('cart.subtotal')}</span>
                     <span className="text-lg tabular-nums text-gold-deep">{formatPrice(sousTotal)}</span>
                   </div>
 

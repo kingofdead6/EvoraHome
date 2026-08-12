@@ -7,6 +7,7 @@ import api from '../lib/api';
 import { useSettings } from '../lib/settings';
 import { formatPhone, toInternational } from '../lib/format';
 import { brand } from '../brand';
+import { useI18n } from '../lib/i18n';
 
 import SectionDivider from '../Components/Brand/SectionDivider';
 import ProductGrid from '../Components/Products/ProductGrid';
@@ -89,6 +90,7 @@ function Reveal({ children, className = '', as: Component = motion.div }) {
  */
 function Hero({ settings }) {
   const reduced = useReducedMotion();
+  const { t } = useI18n();
 
   return (
     <section className="relative isolate min-h-[70vh] overflow-hidden bg-olive sm:min-h-[76vh]">
@@ -134,10 +136,10 @@ function Hero({ settings }) {
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button to="/catalogue" variant="onOliveSolid" size="lg">
-              Voir le catalogue
+              {t('home.heroCta')}
             </Button>
             <Button to="/showroom" variant="onOlive" size="lg">
-              Notre showroom
+              {t('home.heroShowroom')}
             </Button>
           </div>
         </motion.div>
@@ -155,6 +157,7 @@ function Hero({ settings }) {
  * desktop and exactly four rows at two columns on a phone.
  */
 function Categories({ categories, loading }) {
+  const { t } = useI18n();
   // Placeholders while the request is in flight. Returning null here meant the
   // featured products, the olive band and the footer all sat near the top of
   // the page and then dropped by the height of this grid.
@@ -183,9 +186,9 @@ function Categories({ categories, loading }) {
   return (
     <section className="mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
       <Reveal>
-        <h2 className="font-display text-xl tracking-[0.12em] text-ink sm:text-2xl">Nos collections</h2>
+        <h2 className="font-display text-xl tracking-[0.12em] text-ink sm:text-2xl">{t('home.collectionsTitle')}</h2>
         <p className="mt-3 max-w-lg text-base text-ink-muted">
-          Sept familles de pièces, du salon complet à l&apos;objet qui termine une pièce.
+          {t('home.collectionsLead')}
         </p>
       </Reveal>
 
@@ -232,7 +235,7 @@ function Categories({ categories, loading }) {
                 </span>
                 <span
                   aria-hidden="true"
-                  className="mt-2 h-px w-10 origin-left bg-gold transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-safe:[@media(hover:hover)]:group-hover:scale-x-[2.4]"
+                  className="mt-2 h-px w-10 origin-[left_center] rtl:origin-[right_center] bg-gold transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-safe:[@media(hover:hover)]:group-hover:scale-x-[2.4]"
                 />
               </span>
             </Link>
@@ -253,24 +256,24 @@ function Categories({ categories, loading }) {
  * and the grid falls back to the two-column browse the rest of the site uses.
  */
 function FeaturedProducts({ featured, loading }) {
+  const { t } = useI18n();
   return (
     <section className="mx-auto max-w-[1400px] px-4 py-20 sm:px-6 lg:px-10 lg:py-28">
       <Reveal className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-10">
         <div className="max-w-xl">
           <p className="font-sans text-[12px] uppercase tracking-[0.28em] text-gold-deep">
-            Sélection
+            {t('home.featuredEyebrow')}
           </p>
 
           <h2 className="mt-4 font-display text-[clamp(1.5rem,4vw,2.5rem)] leading-[1.15] tracking-[0.1em] text-ink">
-            <WordReveal text="Les pièces du moment" />
+            <WordReveal text={t('home.featuredTitle')} />
           </h2>
 
           {/* The gold hairline that the rest of the site uses to mark a heading. */}
           <span aria-hidden="true" className="mt-6 block h-px w-16 bg-gold" />
 
           <p className="mt-6 text-base leading-relaxed text-ink-muted">
-            Les pièces que nous montrons en premier au showroom, choisies pour la matière autant
-            que pour la ligne.
+            {t('home.featuredLead')}
           </p>
         </div>
 
@@ -279,7 +282,7 @@ function FeaturedProducts({ featured, loading }) {
           className="group inline-flex min-h-[44px] shrink-0 items-center gap-3 self-start text-sm uppercase tracking-[0.15em] text-ink sm:self-auto sm:pb-1"
         >
           <span className="underline decoration-gold decoration-1 underline-offset-4 transition-[text-decoration-thickness] group-hover:decoration-2">
-            Tout le catalogue
+            {t('home.allCatalogue')}
           </span>
           <ArrowRight
             size={16}
@@ -297,7 +300,7 @@ function FeaturedProducts({ featured, loading }) {
           <ProductGrid products={featured} offset parallax />
         ) : (
           <p className="text-base text-ink-muted">
-            Le catalogue arrive. Appelez-nous en attendant, nous avons tout en showroom.
+            {t('home.featuredEmpty')}
           </p>
         )}
       </div>
@@ -307,7 +310,7 @@ function FeaturedProducts({ featured, loading }) {
       {!loading && featured.length ? (
         <Reveal className="mt-12 flex justify-center sm:hidden">
           <Button to="/catalogue" variant="secondary" size="md" full>
-            Tout le catalogue
+            {t('home.allCatalogue')}
           </Button>
         </Reveal>
       ) : null}
@@ -317,26 +320,25 @@ function FeaturedProducts({ featured, loading }) {
 
 /** The olive band. The physical shop is what makes an Algerian customer trust a site. */
 function ShowroomBand({ settings }) {
+  const { t } = useI18n();
   return (
     <section className="bg-olive text-cream">
       <div className="mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <Reveal>
             <h2 className="font-display text-xl tracking-[0.12em] text-cream sm:text-2xl">
-              Venez voir, toucher, vous asseoir
+              {t('home.showroomTitle')}
             </h2>
 
             <p className="mt-5 max-w-md text-base leading-relaxed text-sand">
-              Une photo ne dit pas la fermeté d&apos;une assise ni la vraie couleur d&apos;un tissu.
-              Notre showroom d&apos;El Khroub est ouvert six jours sur sept et nos pièces y sont
-              montées.
+              {t('home.showroomLead')}
             </p>
 
             <dl className="mt-8 flex flex-col gap-4">
               <div className="flex items-start gap-3">
                 <MapPin size={17} strokeWidth={1.5} className="mt-1 shrink-0 text-gold" />
                 <div>
-                  <dt className="sr-only">Adresse</dt>
+                  <dt className="sr-only">{t('showroom.address')}</dt>
                   <dd className="text-base text-cream">{settings.adresse}</dd>
                 </div>
               </div>
@@ -344,7 +346,7 @@ function ShowroomBand({ settings }) {
               <div className="flex items-start gap-3">
                 <Phone size={17} strokeWidth={1.5} className="mt-1 shrink-0 text-gold" />
                 <div>
-                  <dt className="sr-only">Horaires</dt>
+                  <dt className="sr-only">{t('showroom.hours')}</dt>
                   <dd className="text-base text-sand">{settings.horaires}</dd>
                 </div>
               </div>
@@ -352,7 +354,7 @@ function ShowroomBand({ settings }) {
 
             <div className="mt-8">
               <Button to="/showroom" variant="onOlive" size="md">
-                Voir le showroom
+                {t('home.showroomCta')}
               </Button>
             </div>
           </Reveal>
@@ -360,7 +362,7 @@ function ShowroomBand({ settings }) {
           <Reveal>
             <ProductImage
               src={ShowroomImage}
-              alt="Le showroom Evora Home à El Khroub"
+              alt={t('showroom.imageAlt')}
               className="aspect-[4/3] border-sand/25"
               sizes="(min-width: 1024px) 50vw, 100vw"
             />
@@ -373,13 +375,14 @@ function ShowroomBand({ settings }) {
 
 /** Contact strip. One row, real information, no form. The form lives on /contact. */
 function ContactStrip({ settings }) {
+  const { t } = useI18n();
   return (
     <section className="mx-auto max-w-[1400px] px-4 py-14 sm:px-6 lg:px-10">
       <Reveal className="flex flex-col items-start justify-between gap-6 border-t border-greige pt-10 sm:flex-row sm:items-center">
         <div>
-          <h2 className="font-display text-base tracking-[0.12em] text-ink">Une question sur une pièce ?</h2>
+          <h2 className="font-display text-base tracking-[0.12em] text-ink">{t('home.contactTitle')}</h2>
           <p className="mt-2 max-w-md text-base text-ink-muted">
-            Appelez-nous pour les dimensions, les délais ou une commande sur mesure.
+            {t('home.contactLead')}
           </p>
         </div>
 
@@ -388,7 +391,7 @@ function ContactStrip({ settings }) {
             {formatPhone(settings.telephone)}
           </Button>
           <Button to="/contact" variant="secondary" size="md">
-            Nous écrire
+            {t('common.write')}
           </Button>
         </div>
       </Reveal>

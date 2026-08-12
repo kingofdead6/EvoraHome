@@ -5,6 +5,7 @@ import ProductImage from '../UI/ProductImage';
 import Price from '../UI/Price';
 import Badge from '../UI/Badge';
 import { gridItem, useScrollParallax } from '../../lib/motion';
+import { useI18n } from '../../lib/i18n';
 
 /**
  * A product card.
@@ -26,6 +27,7 @@ export default function ProductCard({ product, priority = false, parallax = fals
   // invent: it answers "what does the back look like" without a page load.
   const alternate = product.images?.[1];
   const rupture = product.disponibilite === 'RUPTURE';
+  const { t } = useI18n();
 
   // Opt-in, because the effect costs a scroll listener per card and only the
   // home page's eight featured cards are worth it. When it is off the hook
@@ -85,7 +87,7 @@ export default function ProductCard({ product, priority = false, parallax = fals
               aria-hidden="true"
               className="pointer-events-none absolute inset-x-0 bottom-0 z-20 translate-y-full bg-forest/88 px-3 py-2.5 text-center font-sans text-[11px] uppercase tracking-[0.18em] text-cream opacity-0 transition-[transform,opacity] duration-300 ease-out-strong motion-safe:[@media(hover:hover)]:group-hover:translate-y-0 motion-safe:[@media(hover:hover)]:group-hover:opacity-100"
             >
-              Voir la pièce
+              {t('product.viewPiece')}
             </span>
           </ProductImage>
 
@@ -96,14 +98,14 @@ export default function ProductCard({ product, priority = false, parallax = fals
           />
 
           {product.isNouveau && !rupture ? (
-            <Badge tone="olive" className="absolute left-3 top-3 z-10">
-              Nouveau
+            <Badge tone="olive" className="absolute start-3 top-3 z-10">
+              {t('product.isNew')}
             </Badge>
           ) : null}
 
           {rupture ? (
             <span className="absolute inset-0 z-10 flex items-end bg-forest/45 p-3">
-              <Badge tone="olive">Rupture de stock</Badge>
+              <Badge tone="olive">{t('product.availability.RUPTURE')}</Badge>
             </span>
           ) : null}
         </div>
@@ -112,7 +114,7 @@ export default function ProductCard({ product, priority = false, parallax = fals
           {/* The reference code, always. It is how the client and their
               customers already talk about a piece on Instagram. */}
           <span className="font-sans text-[12px] uppercase tracking-[0.18em] text-ink-muted">
-            Réf {product.ref}
+            {t('product.ref')} {product.ref}
           </span>
 
           {/* Long French furniture names are the norm, so the card reserves two

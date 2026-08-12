@@ -9,8 +9,8 @@ import ProductGrid from '../Components/Products/ProductGrid';
 import Button from '../Components/UI/Button';
 import { Select } from '../Components/UI/Field';
 import { EmptyState, ErrorState, ProductGridSkeleton } from '../Components/UI/States';
-import { DISPONIBILITE_LABEL } from '../Components/UI/Badge';
 import { EASE_OUT, useReducedMotion } from '../lib/motion';
+import { useI18n } from '../lib/i18n';
 
 /**
  * Category listing.
@@ -24,11 +24,13 @@ import { EASE_OUT, useReducedMotion } from '../lib/motion';
  * either eats the grid or collapses into an accordion nobody opens.
  */
 
+/** Translation keys rather than labels: this array lives at module scope,
+ *  outside any component, so no hook can resolve the text here. */
 const SORTS = [
-  { value: 'recent', label: 'Les plus récents' },
-  { value: 'prix-asc', label: 'Prix croissant' },
-  { value: 'prix-desc', label: 'Prix décroissant' },
-  { value: 'nom', label: 'Nom (A-Z)' },
+  { value: 'recent', key: 'catalogue.sortRecent' },
+  { value: 'prix-asc', key: 'catalogue.sortPriceAsc' },
+  { value: 'prix-desc', key: 'catalogue.sortPriceDesc' },
+  { value: 'nom', key: 'catalogue.sortName' },
 ];
 
 const DISPONIBILITES = ['EN_STOCK', 'SUR_COMMANDE', 'RUPTURE'];
@@ -41,6 +43,7 @@ function toggleInList(current, value) {
 }
 
 function FilterPanel({ options, params, setParam, onReset, activeCount }) {
+  const { t } = useI18n();
   const selectedDispo = params.get('disponibilite') || '';
   const selectedCouleurs = params.get('couleur') || '';
 
@@ -48,11 +51,13 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
     <div className="flex flex-col gap-8">
       {/* Price */}
       <fieldset className="border-0 p-0">
-        <legend className="mb-3 text-[12px] uppercase tracking-[0.18em] text-ink-muted">Prix</legend>
+        <legend className="mb-3 text-[12px] uppercase tracking-[0.18em] text-ink-muted">
+          {t('catalogue.priceRange')}
+        </legend>
 
         <div className="flex items-center gap-3">
           <label className="flex-1">
-            <span className="sr-only">Prix minimum</span>
+            <span className="sr-only">{t('catalogue.priceMin')}</span>
             <input
               type="number"
               inputMode="numeric"
@@ -69,7 +74,7 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
           </span>
 
           <label className="flex-1">
-            <span className="sr-only">Prix maximum</span>
+            <span className="sr-only">{t('catalogue.priceMax')}</span>
             <input
               type="number"
               inputMode="numeric"
@@ -84,7 +89,10 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
 
         {options.prixMin || options.prixMax ? (
           <p className="mt-2 text-sm text-ink-muted">
-            De {formatPrice(options.prixMin)} à {formatPrice(options.prixMax)}
+            {t('catalogue.priceFrom', {
+              min: formatPrice(options.prixMin),
+              max: formatPrice(options.prixMax),
+            })}
           </p>
         ) : null}
       </fieldset>
@@ -92,7 +100,7 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
       {/* Availability */}
       <fieldset className="border-0 p-0">
         <legend className="mb-3 text-[12px] uppercase tracking-[0.18em] text-ink-muted">
-          Disponibilité
+          {t('catalogue.availability')}
         </legend>
 
         <div className="flex flex-col gap-1">
@@ -114,7 +122,7 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
                   onChange={() => setParam('disponibilite', toggleInList(selectedDispo, value))}
                   className="h-5 w-5 accent-[#3E4638]"
                 />
-                <span className="flex-1 text-base text-ink">{DISPONIBILITE_LABEL[value]}</span>
+                <span className="flex-1 text-base text-ink">{t(`product.availability.${value}`)}</span>
                 <span className="text-sm tabular-nums text-ink-muted">{count}</span>
               </label>
             );
@@ -125,7 +133,9 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
       {/* Colours */}
       {options.couleurs?.length ? (
         <fieldset className="border-0 p-0">
-          <legend className="mb-3 text-[12px] uppercase tracking-[0.18em] text-ink-muted">Couleur</legend>
+          <legend className="mb-3 text-[12px] uppercase tracking-[0.18em] text-ink-muted">
+            {t('catalogue.colour')}
+          </legend>
 
           <div className="flex flex-col gap-1">
             {options.couleurs.map((couleur) => {
@@ -154,7 +164,7 @@ function FilterPanel({ options, params, setParam, onReset, activeCount }) {
 
       {activeCount > 0 ? (
         <Button onClick={onReset} variant="ghost" size="sm" className="self-start px-0">
-          Réinitialiser les filtres
+          {t('catalogue.resetFilters')}
         </Button>
       ) : null}
     </div>
@@ -165,6 +175,7 @@ export default function Catalogue() {
   const { slug } = useParams();
   const [params, setParams] = useSearchParams();
   const reduced = useReducedMotion();
+  const { t } = useI18n();
 
   const [categories, setCategories] = useState([]);
   const [options, setOptions] = useState({ couleurs: [], disponibilites: [] });
@@ -241,7 +252,7 @@ export default function Catalogue() {
 
   useEffect(() => load(), [load]);
 
-  const title = category?.nom || 'Tout le catalogue';
+  const title = category?.nom || t('catalogue.emptyAction');
 
   return (
     <div className="mx-auto max-w-[1400px] px-4 pb-20 pt-8 sm:px-6 lg:px-10">
@@ -255,7 +266,7 @@ export default function Catalogue() {
 
       {/* Category tabs. Horizontal scroll on a phone, which beats a select for
           something the customer switches between constantly. */}
-      <nav aria-label="Catégories" className="-mx-4 mt-7 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+      <nav aria-label={t('catalogue.categoriesNav')} className="-mx-4 mt-7 overflow-x-auto px-4 sm:mx-0 sm:px-0">
         <ul className="flex w-max gap-2 pb-1">
           <li>
             <Link
@@ -264,7 +275,7 @@ export default function Catalogue() {
                 !slug ? 'border-gold bg-olive text-cream' : 'border-greige text-ink hover:border-sand'
               }`}
             >
-              Tout
+              {t('catalogue.allCategories')}
             </Link>
           </li>
 
@@ -291,7 +302,7 @@ export default function Catalogue() {
           className="flex min-h-[44px] items-center gap-2 text-sm uppercase tracking-[0.1em] text-ink lg:hidden"
         >
           <SlidersHorizontal size={16} strokeWidth={1.5} />
-          Filtrer
+          {t('catalogue.filter')}
           {activeCount > 0 ? (
             <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-olive px-1 text-[12px] text-cream">
               {activeCount}
@@ -300,11 +311,11 @@ export default function Catalogue() {
         </button>
 
         <p className="hidden text-sm tabular-nums text-ink-muted lg:block" aria-live="polite">
-          {loading ? 'Chargement' : `${data.total} pièce${data.total > 1 ? 's' : ''}`}
+          {loading ? t('common.loading') : t('catalogue.resultCount', { count: data.total })}
         </p>
 
         <label className="flex items-center gap-2">
-          <span className="sr-only">Trier par</span>
+          <span className="sr-only">{t('catalogue.sortBy')}</span>
           <select
             value={params.get('sort') || 'recent'}
             onChange={(e) => setParam('sort', e.target.value === 'recent' ? '' : e.target.value)}
@@ -312,7 +323,7 @@ export default function Catalogue() {
           >
             {SORTS.map((s) => (
               <option key={s.value} value={s.value}>
-                {s.label}
+                {t(s.key)}
               </option>
             ))}
           </select>
@@ -334,7 +345,7 @@ export default function Catalogue() {
         {/* Results */}
         <div className="min-w-0 flex-1">
           <p className="mb-4 text-sm tabular-nums text-ink-muted lg:hidden" aria-live="polite">
-            {loading ? 'Chargement' : `${data.total} pièce${data.total > 1 ? 's' : ''}`}
+            {loading ? t('common.loading') : t('catalogue.resultCount', { count: data.total })}
           </p>
 
           {error ? (
@@ -343,13 +354,9 @@ export default function Catalogue() {
             <ProductGridSkeleton count={8} />
           ) : data.products.length === 0 ? (
             <EmptyState
-              title={activeCount > 0 ? 'Aucune pièce ne correspond' : 'Cette collection arrive'}
-              message={
-                activeCount > 0
-                  ? 'Essayez d\'élargir votre recherche, ou appelez-nous : nous avons peut-être la pièce en showroom.'
-                  : 'Nous ajoutons les pièces de cette collection. Appelez-nous en attendant.'
-              }
-              actionLabel={activeCount > 0 ? 'Réinitialiser les filtres' : 'Voir tout le catalogue'}
+              title={activeCount > 0 ? t('catalogue.empty') : t('catalogue.collectionComing')}
+              message={activeCount > 0 ? t('catalogue.emptyBroaden') : t('catalogue.collectionComingLead')}
+              actionLabel={activeCount > 0 ? t('catalogue.resetFilters') : t('catalogue.emptyAction')}
               actionTo={activeCount > 0 ? undefined : '/catalogue'}
               onAction={activeCount > 0 ? reset : undefined}
             />
@@ -358,14 +365,14 @@ export default function Catalogue() {
               <ProductGrid products={data.products} />
 
               {data.pages > 1 ? (
-                <nav aria-label="Pagination" className="mt-14 flex items-center justify-center gap-2">
+                <nav aria-label={t('catalogue.pagination')} className="mt-14 flex items-center justify-center gap-2">
                   <Button
                     onClick={() => setParams(new URLSearchParams({ ...Object.fromEntries(params), page: data.page - 1 }))}
                     disabled={data.page <= 1}
                     variant="secondary"
                     size="sm"
                   >
-                    Précédent
+                    {t('catalogue.previous')}
                   </Button>
 
                   <span className="px-3 text-sm tabular-nums text-ink-muted">
@@ -378,7 +385,7 @@ export default function Catalogue() {
                     variant="secondary"
                     size="sm"
                   >
-                    Suivant
+                    {t('catalogue.next')}
                   </Button>
                 </nav>
               ) : null}
@@ -393,7 +400,7 @@ export default function Catalogue() {
           <>
             <motion.button
               type="button"
-              aria-label="Fermer les filtres"
+              aria-label={t('catalogue.closeFilters')}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -405,7 +412,7 @@ export default function Catalogue() {
             <motion.div
               role="dialog"
               aria-modal="true"
-              aria-label="Filtres"
+              aria-label={t('catalogue.filters')}
               initial={reduced ? { opacity: 0 } : { transform: 'translateY(100%)' }}
               animate={reduced ? { opacity: 1 } : { transform: 'translateY(0%)' }}
               exit={reduced ? { opacity: 0 } : { transform: 'translateY(100%)' }}
@@ -413,12 +420,12 @@ export default function Catalogue() {
               className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-md bg-cream lg:hidden"
             >
               <div className="sticky top-0 flex items-center justify-between border-b border-greige bg-cream px-4 py-4">
-                <h2 className="font-display text-base tracking-[0.12em] text-ink">Filtrer</h2>
+                <h2 className="font-display text-base tracking-[0.12em] text-ink">{t('catalogue.filter')}</h2>
                 <button
                   type="button"
                   onClick={() => setSheetOpen(false)}
-                  aria-label="Fermer les filtres"
-                  className="-mr-2 flex h-11 w-11 items-center justify-center text-ink-muted"
+                  aria-label={t('catalogue.closeFilters')}
+                  className="-me-2 flex h-11 w-11 items-center justify-center text-ink-muted"
                 >
                   <X size={20} strokeWidth={1.5} />
                 </button>
@@ -436,7 +443,7 @@ export default function Catalogue() {
 
               <div className="sticky bottom-0 border-t border-greige bg-cream px-4 py-4">
                 <Button onClick={() => setSheetOpen(false)} variant="primary" size="lg" full>
-                  Voir {data.total} pièce{data.total > 1 ? 's' : ''}
+                  {t('catalogue.seeResults', { count: data.total })}
                 </Button>
               </div>
             </motion.div>

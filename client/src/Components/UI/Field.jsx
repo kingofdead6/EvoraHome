@@ -78,7 +78,7 @@ export function Select({ label, error, hint, required, children, className = '',
       <select
         id={id}
         aria-invalid={error ? 'true' : undefined}
-        className={`${CONTROL} appearance-none bg-[length:14px] bg-[right_0.9rem_center] bg-no-repeat pr-10 ${
+        className={`${CONTROL} appearance-none bg-[length:14px] bg-[right_0.9rem_center] bg-no-repeat pe-10 ${
           error ? 'border-[#8C2F1F]' : 'border-greige'
         } ${className}`}
         style={{

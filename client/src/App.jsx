@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './lib/auth';
 import { CartProvider } from './lib/cart';
 import { SettingsProvider } from './lib/settings';
+import { I18nProvider } from './lib/i18n';
 import { useSmoothScroll, pageVariants, pageTransition, useReducedMotion } from './lib/motion';
 
 import Navbar from './Components/Shared/Navbar';
@@ -219,13 +220,17 @@ function Shell() {
 export default function App() {
   return (
     <BrowserRouter>
-      <SettingsProvider>
-        <AuthProvider>
-          <CartProvider>
-            <Shell />
-          </CartProvider>
-        </AuthProvider>
-      </SettingsProvider>
+      {/* Outermost: the language decides `dir` on <html>, which every layout
+          below it depends on. */}
+      <I18nProvider>
+        <SettingsProvider>
+          <AuthProvider>
+            <CartProvider>
+              <Shell />
+            </CartProvider>
+          </AuthProvider>
+        </SettingsProvider>
+      </I18nProvider>
     </BrowserRouter>
   );
 }

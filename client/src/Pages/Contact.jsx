@@ -23,6 +23,7 @@ import { Field, TextArea } from '../Components/UI/Field';
 import Button from '../Components/UI/Button';
 import SectionDivider from '../Components/Brand/SectionDivider';
 import EvoraTree from '../Components/Brand/EvoraTree';
+import { useI18n } from '../lib/i18n';
 
 /**
  * The showroom on Google Maps.
@@ -139,7 +140,7 @@ function ChannelCard({ icon: Icon, label, value, href, external }) {
         {interactive ? (
           <span
             aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-gold transition-transform duration-300 ease-out-strong motion-safe:[@media(hover:hover)]:group-hover:scale-x-100"
+            className="absolute inset-x-0 bottom-0 h-px origin-[left_center] rtl:origin-[right_center] scale-x-0 bg-gold transition-transform duration-300 ease-out-strong motion-safe:[@media(hover:hover)]:group-hover:scale-x-100"
           />
         ) : null}
       </Component>
@@ -157,6 +158,7 @@ function ChannelCard({ icon: Icon, label, value, href, external }) {
 export default function Contact() {
   const settings = useSettings();
   const reduced = useReducedMotion();
+  const { t } = useI18n();
 
   const [form, setForm] = useState({ nom: '', telephone: '', email: '', sujet: '', message: '' });
   const [errors, setErrors] = useState({});
@@ -174,12 +176,12 @@ export default function Contact() {
     setSubmitError(null);
 
     const next = {};
-    if (!form.nom.trim()) next.nom = 'Votre nom est requis';
+    if (!form.nom.trim()) next.nom = t('validation.nameRequired');
     if (!isValidPhoneClient(form.telephone)) {
-      next.telephone = 'Numéro invalide. Format : 05, 06 ou 07 suivi de 8 chiffres';
+      next.telephone = t('validation.phoneInvalid');
     }
-    if (!isValidEmail(form.email)) next.email = 'Adresse email invalide';
-    if (!form.message.trim()) next.message = 'Votre message est vide';
+    if (!isValidEmail(form.email)) next.email = t('validation.emailInvalid');
+    if (!form.message.trim()) next.message = t('validation.messageEmpty');
 
     setErrors(next);
     if (Object.keys(next).length) return;
@@ -198,27 +200,27 @@ export default function Contact() {
   const channels = [
     {
       icon: Phone,
-      label: 'Téléphone',
+      label: t('contact.phone'),
       value: formatPhone(settings.telephone),
       href: `tel:+${toInternational(settings.telephone)}`,
     },
     {
       icon: MessageCircle,
-      label: 'WhatsApp',
-      value: 'Écrire un message',
+      label: t('contact.whatsapp'),
+      value: t('contact.whatsappCta'),
       href: whatsappLink('Bonjour Evora Home,', settings.whatsapp),
       external: true,
     },
     settings.instagram
       ? {
           icon: Instagram,
-          label: 'Instagram',
+          label: t('contact.instagram'),
           value: `@${settings.instagram}`,
           href: `https://instagram.com/${settings.instagram}`,
           external: true,
         }
       : null,
-    { icon: MapPin, label: 'Showroom', value: settings.adresse },
+    { icon: MapPin, label: t('contact.showroom'), value: settings.adresse },
   ].filter(Boolean);
 
   return (
@@ -231,19 +233,16 @@ export default function Contact() {
         className="max-w-2xl"
       >
         <p className="font-sans text-[12px] uppercase tracking-[0.28em] text-gold-deep">
-          Nous contacter
+          {t('contact.eyebrow')}
         </p>
 
         <h1 className="mt-4 font-display text-[clamp(1.5rem,4vw,2.5rem)] leading-[1.15] tracking-[0.08em] text-ink">
-          <WordReveal text="Parlons de votre projet" />
+          <WordReveal text={t('contact.title')} />
         </h1>
 
         <span aria-hidden="true" className="mt-6 block h-px w-16 bg-gold" />
 
-        <p className="mt-6 text-base leading-relaxed text-ink-muted sm:text-lg">
-          Pour une question sur une pièce, un délai ou une commande sur mesure, le plus rapide
-          reste le téléphone. Nous répondons pendant les heures d&apos;ouverture.
-        </p>
+        <p className="mt-6 text-base leading-relaxed text-ink-muted sm:text-lg">{t('contact.lead')}</p>
 
         <p className="mt-4 inline-flex items-center gap-2.5 text-base text-ink-muted">
           <Clock size={16} strokeWidth={1.5} className="shrink-0 text-gold" />
@@ -269,7 +268,7 @@ export default function Contact() {
       <div className="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-16">
         {/* Form */}
         <Reveal>
-          <h2 className="font-display text-base tracking-[0.12em] text-ink">Nous écrire</h2>
+          <h2 className="font-display text-base tracking-[0.12em] text-ink">{t('contact.writeTitle')}</h2>
           <span aria-hidden="true" className="mt-4 block h-px w-10 bg-gold" />
 
           {/* The success panel and the form swap in place rather than one
@@ -293,11 +292,8 @@ export default function Contact() {
                 </motion.div>
 
                 <div>
-                  <p className="font-display text-base tracking-[0.12em] text-ink">Message envoyé</p>
-                  <p className="mt-2 text-base leading-relaxed text-ink-muted">
-                    Nous vous répondons sur le numéro que vous avez indiqué. Pour une réponse
-                    immédiate, appelez-nous.
-                  </p>
+                  <p className="font-display text-base tracking-[0.12em] text-ink">{t('contact.sent')}</p>
+                  <p className="mt-2 text-base leading-relaxed text-ink-muted">{t('contact.sentLead')}</p>
                 </div>
 
                 <Button
@@ -308,7 +304,7 @@ export default function Contact() {
                   variant="secondary"
                   size="sm"
                 >
-                  Écrire un autre message
+                  {t('contact.writeAnother')}
                 </Button>
               </motion.div>
             ) : (
@@ -340,7 +336,7 @@ export default function Contact() {
                 </AnimatePresence>
 
                 <Field
-                  label="Nom et prénom"
+                  label={t('checkout.name')}
                   required
                   autoComplete="name"
                   value={form.nom}
@@ -349,7 +345,7 @@ export default function Contact() {
                 />
 
                 <Field
-                  label="Téléphone"
+                  label={t('checkout.phone')}
                   required
                   type="tel"
                   inputMode="tel"
@@ -361,7 +357,7 @@ export default function Contact() {
                 />
 
                 <Field
-                  label="Email (facultatif)"
+                  label={t('checkout.email')}
                   type="email"
                   autoComplete="email"
                   value={form.email}
@@ -369,10 +365,10 @@ export default function Contact() {
                   error={errors.email}
                 />
 
-                <Field label="Sujet" value={form.sujet} onChange={set('sujet')} />
+                <Field label={t('contact.subject')} value={form.sujet} onChange={set('sujet')} />
 
                 <TextArea
-                  label="Message"
+                  label={t('contact.message')}
                   required
                   rows={5}
                   value={form.message}
@@ -387,7 +383,7 @@ export default function Contact() {
                   disabled={loading}
                   className="self-start"
                 >
-                  {loading ? 'Envoi…' : 'Envoyer le message'}
+                  {loading ? `${t('contact.sending')}…` : t('contact.send')}
                 </Button>
               </motion.form>
             )}
@@ -396,7 +392,7 @@ export default function Contact() {
 
         {/* Map */}
         <Reveal delay={0.08}>
-          <h2 className="font-display text-base tracking-[0.12em] text-ink">Nous trouver</h2>
+          <h2 className="font-display text-base tracking-[0.12em] text-ink">{t('contact.findTitle')}</h2>
           <span aria-hidden="true" className="mt-4 block h-px w-10 bg-gold" />
 
           {/* The client's own Google Maps place, not a bounding box around El
@@ -404,7 +400,7 @@ export default function Contact() {
               and the embed agree with each other. */}
           <div className="mt-6 overflow-hidden rounded-sm border border-greige">
             <iframe
-              title="Emplacement du showroom Evora Home à El Khroub"
+              title={t('contact.mapTitle')}
               src={MAP_EMBED}
               className="h-[22rem] w-full border-0 lg:h-[26rem]"
               loading="lazy"
@@ -414,7 +410,7 @@ export default function Contact() {
           </div>
 
           <p className="mt-4 text-base leading-relaxed text-ink-muted">
-            {settings.adresse}. Appelez-nous en arrivant, nous vous guidons sur les derniers mètres.
+            {settings.adresse}. {t('contact.guideLead')}
           </p>
 
           <div className="mt-5 flex flex-col gap-3 sm:flex-row">
@@ -427,10 +423,10 @@ export default function Contact() {
               variant="secondary"
               size="md"
             >
-              Ouvrir dans Maps
+              {t('contact.openMaps')}
             </Button>
             <Button to="/showroom" variant="secondary" size="md">
-              Voir le showroom
+              {t('showroom.title')}
             </Button>
           </div>
         </Reveal>

@@ -1,6 +1,7 @@
 import { Check, X, Truck, Package, ClipboardCheck, FileText } from 'lucide-react';
 
 import { formatDateTime } from '../../lib/format';
+import { useI18n } from '../../lib/i18n';
 
 /**
  * The progress line for one order.
@@ -19,11 +20,11 @@ import { formatDateTime } from '../../lib/format';
  */
 
 export const STEPS = [
-  { statut: 'NOUVELLE', label: 'Reçue', icon: FileText },
-  { statut: 'CONFIRMEE', label: 'Confirmée', icon: ClipboardCheck },
-  { statut: 'EN_PREPARATION', label: 'En préparation', icon: Package },
-  { statut: 'EXPEDIEE', label: 'Expédiée', icon: Truck },
-  { statut: 'LIVREE', label: 'Livrée', icon: Check },
+  { statut: 'NOUVELLE', icon: FileText },
+  { statut: 'CONFIRMEE', icon: ClipboardCheck },
+  { statut: 'EN_PREPARATION', icon: Package },
+  { statut: 'EXPEDIEE', icon: Truck },
+  { statut: 'LIVREE', icon: Check },
 ];
 
 const STEP_INDEX = Object.fromEntries(STEPS.map((s, i) => [s.statut, i]));
@@ -55,6 +56,7 @@ function reachedBeforeCancel(historique) {
 }
 
 export default function OrderTracker({ statut, historique = [], className = '' }) {
+  const { t } = useI18n();
   const cancelled = statut === 'ANNULEE';
   const dates = datesByStatut(historique);
   const currentIndex = cancelled ? reachedBeforeCancel(historique) : STEP_INDEX[statut] ?? 0;
@@ -62,7 +64,13 @@ export default function OrderTracker({ statut, historique = [], className = '' }
 
   return (
     <div className={className}>
-      {/* ── Horizontal rail, sm and up ──────────────────────────────────── */}
+      {/*
+        ── Horizontal rail, sm and up ────────────────────────────────────
+        `flex` follows the document direction, so under RTL the steps lay
+        themselves out right-to-left and the progress reads from the right
+        without any extra work. That is correct: an Arabic reader expects the
+        first step where their eye starts.
+      */}
       <ol className="hidden sm:flex sm:items-start">
         {STEPS.map((step, i) => {
           const done = i < currentIndex;
@@ -107,7 +115,7 @@ export default function OrderTracker({ statut, historique = [], className = '' }
                   current && !cancelled ? 'text-ink' : 'text-ink-muted'
                 }`}
               >
-                {step.label}
+                {t(`order.steps.${step.statut}`)}
               </span>
 
               {dates[step.statut] ? (
@@ -155,7 +163,7 @@ export default function OrderTracker({ statut, historique = [], className = '' }
 
               <div className={`min-w-0 ${last ? 'pb-0' : 'pb-4'}`}>
                 <p className={`text-sm leading-tight ${current ? 'text-ink' : 'text-ink-muted'}`}>
-                  {step.label}
+                  {t(`order.steps.${step.statut}`)}
                 </p>
                 {dates[step.statut] ? (
                   <p className="mt-0.5 text-[11px] tabular-nums text-ink-muted/80">
@@ -172,9 +180,14 @@ export default function OrderTracker({ statut, historique = [], className = '' }
         <p className="mt-3 flex items-start gap-2 rounded-sm border border-[#8C2F1F]/35 bg-[#8C2F1F]/5 px-3 py-2 text-sm text-[#8C2F1F]">
           <X size={15} strokeWidth={2} className="mt-0.5 shrink-0" />
           <span>
-            Commande annulée
-            {cancelDate ? ` le ${formatDateTime(cancelDate)}` : ''}, au stade «{' '}
-            {STEPS[currentIndex].label} ».
+            {cancelDate
+              ? t('order.cancelledAt', {
+                  date: formatDateTime(cancelDate),
+                  step: t(`order.steps.${STEPS[currentIndex].statut}`),
+                })
+              : t('order.cancelled', {
+                  step: t(`order.steps.${STEPS[currentIndex].statut}`),
+                })}
           </span>
         </p>
       ) : null}

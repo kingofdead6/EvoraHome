@@ -9,6 +9,7 @@ import Button from '../Components/UI/Button';
 import { Field } from '../Components/UI/Field';
 import { Loading, EmptyState } from '../Components/UI/States';
 import SectionDivider from '../Components/Brand/SectionDivider';
+import { useI18n } from '../lib/i18n';
 
 /**
  * Order confirmation, and order lookup.
@@ -23,6 +24,8 @@ import SectionDivider from '../Components/Brand/SectionDivider';
  */
 
 function OrderSummary({ order, settings, justPlaced }) {
+  const { t } = useI18n();
+
   return (
     <div className="mx-auto max-w-2xl px-4 pb-20 pt-10 sm:px-6">
       {justPlaced ? (
@@ -32,28 +35,30 @@ function OrderSummary({ order, settings, justPlaced }) {
           </span>
 
           <h1 className="mt-6 font-display text-xl tracking-[0.1em] text-ink sm:text-2xl">
-            Merci, votre commande est enregistrée
+            {t('confirmation.thanks')}
           </h1>
 
           <p className="mt-4 max-w-md text-base leading-relaxed text-ink-muted">
-            Nous vous appelons dans les prochaines heures pour confirmer avant l&apos;expédition.
+            {t('confirmation.thanksLead')}
           </p>
         </div>
       ) : (
-        <h1 className="font-display text-xl tracking-[0.1em] text-ink sm:text-2xl">Votre commande</h1>
+        <h1 className="font-display text-xl tracking-[0.1em] text-ink sm:text-2xl">
+          {t('confirmation.yourOrder')}
+        </h1>
       )}
 
       {/* The number. Deliberately the loudest thing here. */}
       <div className="mt-8 rounded-sm border border-gold/50 px-5 py-6 text-center">
-        <p className="text-[12px] uppercase tracking-[0.2em] text-ink-muted">Numéro de commande</p>
-        <p className="mt-2 font-display text-2xl tracking-[0.14em] text-ink sm:text-3xl">{order.numero}</p>
-        <p className="mt-3 text-sm leading-relaxed text-ink-muted">
-          Notez-le. Il nous permet de retrouver votre commande immédiatement au téléphone.
+        <p className="text-[12px] uppercase tracking-[0.2em] text-ink-muted">
+          {t('confirmation.number')}
         </p>
+        <p className="mt-2 font-display text-2xl tracking-[0.14em] text-ink sm:text-3xl">{order.numero}</p>
+        <p className="mt-3 text-sm leading-relaxed text-ink-muted">{t('confirmation.numberHint')}</p>
       </div>
 
       <div className="mt-8 rounded-sm border border-greige p-5">
-        <h2 className="font-display text-base tracking-[0.12em] text-ink">Détail</h2>
+        <h2 className="font-display text-base tracking-[0.12em] text-ink">{t('confirmation.detail')}</h2>
 
         <ul className="mt-4 flex flex-col gap-3 border-b border-greige pb-4">
           {order.items.map((item) => (
@@ -61,7 +66,7 @@ function OrderSummary({ order, settings, justPlaced }) {
               <span className="min-w-0 flex-1">
                 <span className="block text-base leading-snug text-ink">{item.nom}</span>
                 <span className="text-[12px] uppercase tracking-[0.12em] text-ink-muted">
-                  Réf {item.ref} · {item.quantite} x {formatPrice(item.prix)}
+                  {t('product.ref')} {item.ref} · {item.quantite} x {formatPrice(item.prix)}
                   {item.couleur ? ` · ${item.couleur}` : ''}
                 </span>
               </span>
@@ -74,26 +79,30 @@ function OrderSummary({ order, settings, justPlaced }) {
 
         <dl className="mt-4 flex flex-col gap-2.5">
           <div className="flex justify-between">
-            <dt className="text-base text-ink-muted">Sous-total</dt>
+            <dt className="text-base text-ink-muted">{t('cart.subtotal')}</dt>
             <dd className="text-base tabular-nums text-ink">{formatPrice(order.sousTotal)}</dd>
           </div>
 
           <div className="flex justify-between">
             <dt className="text-base text-ink-muted">
-              Livraison ({order.modeLivraison === 'STOP_DESK' ? 'point de retrait' : 'à domicile'})
+              {t('confirmation.deliveryMode', {
+                mode: order.modeLivraison === 'STOP_DESK' ? t('checkout.stopDesk') : t('checkout.home'),
+              })}
             </dt>
             <dd className="text-base tabular-nums text-ink">{formatPrice(order.fraisLivraison)}</dd>
           </div>
 
           <div className="flex justify-between border-t border-greige pt-3">
-            <dt className="font-display text-base tracking-[0.1em] text-ink">À payer à la livraison</dt>
+            <dt className="font-display text-base tracking-[0.1em] text-ink">
+              {t('confirmation.toPayAtDelivery')}
+            </dt>
             <dd className="text-xl tabular-nums text-gold-deep">{formatPrice(order.total)}</dd>
           </div>
         </dl>
       </div>
 
       <div className="mt-6 rounded-sm border border-greige p-5">
-        <h2 className="font-display text-base tracking-[0.12em] text-ink">Livraison</h2>
+        <h2 className="font-display text-base tracking-[0.12em] text-ink">{t('confirmation.delivery')}</h2>
         <address className="mt-3 not-italic text-base leading-relaxed text-ink">
           {order.clientNom}
           <br />
@@ -112,14 +121,14 @@ function OrderSummary({ order, settings, justPlaced }) {
       <SectionDivider className="mt-12" />
 
       <div className="mt-10 flex flex-col items-center gap-4 text-center">
-        <p className="text-base text-ink-muted">Une question sur cette commande ?</p>
+        <p className="text-base text-ink-muted">{t('confirmation.question')}</p>
 
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
           <Button href={`tel:+${toInternational(settings.telephone)}`} variant="primary" size="md">
             {formatPhone(settings.telephone)}
           </Button>
           <Button to="/catalogue" variant="secondary" size="md">
-            Continuer mes achats
+            {t('confirmation.continue')}
           </Button>
         </div>
       </div>
@@ -128,6 +137,7 @@ function OrderSummary({ order, settings, justPlaced }) {
 }
 
 function LookupForm({ onFound }) {
+  const { t } = useI18n();
   const [numero, setNumero] = useState('');
   const [telephone, setTelephone] = useState('');
   const [error, setError] = useState(null);
@@ -150,14 +160,12 @@ function LookupForm({ onFound }) {
 
   return (
     <div className="mx-auto max-w-md px-4 pb-20 pt-12 sm:px-6">
-      <h1 className="font-display text-xl tracking-[0.1em] text-ink">Suivre ma commande</h1>
-      <p className="mt-3 text-base leading-relaxed text-ink-muted">
-        Entrez votre numéro de commande et le téléphone utilisé lors de la commande.
-      </p>
+      <h1 className="font-display text-xl tracking-[0.1em] text-ink">{t('confirmation.trackCta')}</h1>
+      <p className="mt-3 text-base leading-relaxed text-ink-muted">{t('confirmation.trackLead')}</p>
 
       <form onSubmit={handleSubmit} noValidate className="mt-8 flex flex-col gap-5">
         <Field
-          label="Numéro de commande"
+          label={t('confirmation.orderNumber')}
           required
           placeholder="EVH-2026-0001"
           value={numero}
@@ -165,7 +173,7 @@ function LookupForm({ onFound }) {
         />
 
         <Field
-          label="Téléphone"
+          label={t('checkout.phone')}
           required
           type="tel"
           inputMode="tel"
@@ -176,7 +184,7 @@ function LookupForm({ onFound }) {
         />
 
         <Button type="submit" variant="primary" size="lg" full disabled={loading}>
-          {loading ? 'Recherche' : 'Retrouver ma commande'}
+          {loading ? t('confirmation.searching') : t('confirmation.findOrder')}
         </Button>
       </form>
     </div>
@@ -187,6 +195,7 @@ export default function Confirmation() {
   const location = useLocation();
   const [params] = useSearchParams();
   const settings = useSettings();
+  const { t } = useI18n();
 
   const [order, setOrder] = useState(location.state?.order || null);
   const [loading, setLoading] = useState(false);
@@ -207,7 +216,7 @@ export default function Confirmation() {
       .finally(() => setLoading(false));
   }, [params, order]);
 
-  if (loading) return <Loading label="Recherche de la commande" />;
+  if (loading) return <Loading label={t('confirmation.searchingOrder')} />;
   if (order) return <OrderSummary order={order} settings={settings} justPlaced={justPlaced} />;
 
   return <LookupForm onFound={setOrder} />;

@@ -18,6 +18,7 @@ import {
 import Button from '../Components/UI/Button';
 import SectionDivider from '../Components/Brand/SectionDivider';
 import EvoraTree from '../Components/Brand/EvoraTree';
+import { useI18n } from '../lib/i18n';
 
 import ShowroomImage from '../assets/ShopImg.png';
 import HeroBg from '../assets/HeroBg.png';
@@ -95,6 +96,7 @@ function WordReveal({ text, className = '' }) {
  */
 function Header({ settings }) {
   const reduced = useReducedMotion();
+  const { t } = useI18n();
 
   return (
     <section className="relative isolate overflow-hidden bg-olive text-cream">
@@ -119,18 +121,17 @@ function Header({ settings }) {
           transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
         >
           <p className="font-sans text-[12px] uppercase tracking-[0.28em] text-gold">
-            El Khroub, Constantine
+            {t('showroom.eyebrow')}
           </p>
 
           <h1 className="mt-5 font-display text-[clamp(1.6rem,4.5vw,2.75rem)] leading-[1.15] tracking-[0.08em] text-cream">
-            Notre showroom
+            {t('showroom.title')}
           </h1>
 
           <span aria-hidden="true" className="mt-6 block h-px w-16 bg-gold" />
 
           <p className="mt-6 max-w-md text-base leading-relaxed text-sand sm:text-lg">
-            {brand.tagline}. Nos pièces sont montées sur place — asseyez-vous dessus, ouvrez les
-            tiroirs, comparez deux tissus sous la même lumière.
+            {brand.tagline}. {t('showroom.lead')}
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -139,10 +140,10 @@ function Header({ settings }) {
               variant="onOliveSolid"
               size="lg"
             >
-              Appeler le showroom
+              {t('showroom.callCta')}
             </Button>
             <Button to="/catalogue" variant="onOlive" size="lg">
-              Voir le catalogue
+              {t('common.seeAll')}
             </Button>
           </div>
         </motion.div>
@@ -156,7 +157,7 @@ function Header({ settings }) {
           <div className="aspect-[4/3] overflow-hidden rounded-sm border border-sand/25">
             <img
               src={ShowroomImage}
-              alt="Le showroom Evora Home à El Khroub"
+              alt={t('showroom.imageAlt')}
               fetchPriority="high"
               className="h-full w-full object-cover"
             />
@@ -182,23 +183,25 @@ function Header({ settings }) {
  * brought somebody here and they should not require a scroll.
  */
 function PracticalInfo({ settings }) {
+  const { t } = useI18n();
+
   const items = [
     {
       icon: MapPin,
-      label: 'Adresse',
+      label: t('showroom.address'),
       value: settings.adresse,
       href: `https://www.google.com/maps/search/${encodeURIComponent(
         `Evora Home ${settings.adresse}`
       )}`,
-      action: 'Ouvrir dans Maps',
+      action: t('showroom.openMaps'),
     },
-    { icon: Clock, label: 'Horaires', value: settings.horaires },
+    { icon: Clock, label: t('showroom.hours'), value: settings.horaires },
     {
       icon: Phone,
-      label: 'Téléphone',
+      label: t('checkout.phone'),
       value: formatPhone(settings.telephone),
       href: `tel:+${toInternational(settings.telephone)}`,
-      action: 'Appeler maintenant',
+      action: t('showroom.callNow'),
       tabular: true,
     },
   ];
@@ -250,37 +253,27 @@ function PracticalInfo({ settings }) {
  * What is on the floor. Four plain statements, each one a thing the customer
  * can verify by walking in, rather than a marketing claim.
  */
+/** Translation keys rather than copy: this array lives at module scope,
+ *  outside any component, so no hook can resolve the text here. */
 const OFFERINGS = [
-  {
-    icon: Armchair,
-    title: 'Les pièces sont montées',
-    body: 'Salons, chambres et tables sont exposés assemblés. Vous jugez la fermeté d’une assise en vous asseyant dessus, pas sur une photo.',
-  },
-  {
-    icon: Ruler,
-    title: 'Le sur-mesure se décide sur place',
-    body: 'Nous prenons les mesures avec vous et confirmons le délai de fabrication avant de lancer quoi que ce soit.',
-  },
-  {
-    icon: Truck,
-    title: 'Livraison dans les 58 wilayas',
-    body: 'À domicile ou en point de retrait. Les frais dépendent de votre wilaya et sont affichés avant que vous confirmiez.',
-  },
-  {
-    icon: Banknote,
-    title: 'Paiement à la livraison',
-    body: 'En espèces, au moment où vous recevez. Le site ne demande aucune donnée bancaire et rien n’est prélevé à la commande.',
-  },
+  { icon: Armchair, titleKey: 'showroom.offering1Title', bodyKey: 'showroom.offering1Body' },
+  { icon: Ruler, titleKey: 'showroom.offering2Title', bodyKey: 'showroom.offering2Body' },
+  { icon: Truck, titleKey: 'showroom.offering3Title', bodyKey: 'showroom.offering3Body' },
+  { icon: Banknote, titleKey: 'showroom.offering4Title', bodyKey: 'showroom.offering4Body' },
 ];
 
 function Offerings() {
+  const { t } = useI18n();
+
   return (
     <section className="mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
       <Reveal className="max-w-xl">
-        <p className="font-sans text-[12px] uppercase tracking-[0.28em] text-gold-deep">Sur place</p>
+        <p className="font-sans text-[12px] uppercase tracking-[0.28em] text-gold-deep">
+          {t('showroom.onSiteEyebrow')}
+        </p>
 
         <h2 className="mt-4 font-display text-[clamp(1.4rem,3.5vw,2.25rem)] leading-[1.15] tracking-[0.1em] text-ink">
-          <WordReveal text="Ce que vous trouverez" />
+          <WordReveal text={t('showroom.onSiteTitle')} />
         </h2>
 
         <span aria-hidden="true" className="mt-6 block h-px w-16 bg-gold" />
@@ -293,15 +286,15 @@ function Offerings() {
         variants={gridContainer}
         className="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:mt-14 lg:gap-x-16"
       >
-        {OFFERINGS.map(({ icon: Icon, title, body }) => (
-          <motion.div key={title} variants={gridItem} className="flex gap-4">
+        {OFFERINGS.map(({ icon: Icon, titleKey, bodyKey }) => (
+          <motion.div key={titleKey} variants={gridItem} className="flex gap-4">
             <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-sm border border-greige text-gold">
               <Icon size={18} strokeWidth={1.5} />
             </span>
 
             <div>
-              <h3 className="font-sans text-base leading-snug text-ink">{title}</h3>
-              <p className="mt-2 text-base leading-relaxed text-ink-muted">{body}</p>
+              <h3 className="font-sans text-base leading-snug text-ink">{t(titleKey)}</h3>
+              <p className="mt-2 text-base leading-relaxed text-ink-muted">{t(bodyKey)}</p>
             </div>
           </motion.div>
         ))}
@@ -315,6 +308,8 @@ function Offerings() {
  * the page a full-bleed moment between two cream sections.
  */
 function VisitBand({ settings }) {
+  const { t } = useI18n();
+
   return (
     <section className="relative isolate overflow-hidden bg-olive text-cream">
       <img
@@ -331,23 +326,22 @@ function VisitBand({ settings }) {
           <EvoraTree size={44} className="mx-auto text-gold" />
 
           <h2 className="mt-6 font-display text-[clamp(1.4rem,3.5vw,2.25rem)] leading-[1.15] tracking-[0.1em] text-cream">
-            Venez voir, toucher, vous asseoir
+            {t('showroom.visitTitle')}
           </h2>
 
           <p className="mt-5 text-base leading-relaxed text-sand sm:text-lg">
-            Une photo ne dit pas la fermeté d&apos;une assise ni la vraie couleur d&apos;un tissu.
-            Nous sommes ouverts six jours sur sept, et vous pouvez passer sans rendez-vous.
+            {t('showroom.visitLead')}
           </p>
 
           <dl className="mt-8 flex flex-col items-center gap-2">
             <div className="flex items-center gap-2.5">
-              <dt className="sr-only">Horaires</dt>
+              <dt className="sr-only">{t('showroom.hours')}</dt>
               <Clock size={16} strokeWidth={1.5} className="shrink-0 text-gold" />
               <dd className="text-base text-sand">{settings.horaires}</dd>
             </div>
 
             <div className="flex items-center gap-2.5">
-              <dt className="sr-only">Adresse</dt>
+              <dt className="sr-only">{t('showroom.address')}</dt>
               <MapPin size={16} strokeWidth={1.5} className="shrink-0 text-gold" />
               <dd className="text-base text-sand">{settings.adresse}</dd>
             </div>
@@ -362,7 +356,7 @@ function VisitBand({ settings }) {
               {formatPhone(settings.telephone)}
             </Button>
             <Button to="/contact" variant="onOlive" size="lg">
-              Nous écrire
+              {t('common.write')}
             </Button>
           </div>
         </Reveal>
@@ -378,57 +372,53 @@ function VisitBand({ settings }) {
  * Somebody scanning for "do I pay now or later" should find it without reading
  * a block of text.
  */
+/** Translation keys rather than copy: this array lives at module scope,
+ *  outside any component, so no hook can resolve the text here. */
 const TERMS = [
   {
     icon: Truck,
-    title: 'Livraison',
-    lines: [
-      'Les 58 wilayas, à domicile ou en point de retrait.',
-      'Les frais dépendent de votre wilaya et du mode choisi.',
-      'Le montant est affiché avant la confirmation, jamais après.',
-    ],
+    titleKey: 'showroom.delivery',
+    lineKeys: ['showroom.deliveryLine1', 'showroom.deliveryLine2', 'showroom.deliveryLine3'],
   },
   {
     icon: Banknote,
-    title: 'Paiement',
-    lines: [
-      'À la livraison, en espèces.',
-      'Aucune donnée bancaire demandée sur le site.',
-      'Nous appelons pour confirmer avant l’expédition.',
-    ],
+    titleKey: 'showroom.payment',
+    lineKeys: ['showroom.paymentLine1', 'showroom.paymentLine2', 'showroom.paymentLine3'],
   },
 ];
 
 function Terms() {
+  const { t } = useI18n();
+
   return (
     <section id="livraison" className="mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
       <Reveal className="max-w-xl">
         <p className="font-sans text-[12px] uppercase tracking-[0.28em] text-gold-deep">
-          Commander
+          {t('showroom.orderEyebrow')}
         </p>
 
         <h2 className="mt-4 font-display text-[clamp(1.4rem,3.5vw,2.25rem)] leading-[1.15] tracking-[0.1em] text-ink">
-          Livraison et paiement
+          {t('showroom.orderTitle')}
         </h2>
 
         <span aria-hidden="true" className="mt-6 block h-px w-16 bg-gold" />
       </Reveal>
 
       <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:mt-14 lg:gap-16">
-        {TERMS.map(({ icon: Icon, title, lines }, i) => (
-          <Reveal key={title} delay={i * 0.08}>
+        {TERMS.map(({ icon: Icon, titleKey, lineKeys }, i) => (
+          <Reveal key={titleKey} delay={i * 0.08}>
             <div className="flex items-center gap-3">
               <Icon size={18} strokeWidth={1.5} className="shrink-0 text-gold" />
               <h3 className="font-sans text-[12px] uppercase tracking-[0.18em] text-ink-muted">
-                {title}
+                {t(titleKey)}
               </h3>
             </div>
 
             <ul className="mt-4 flex flex-col gap-2.5 border-t border-greige pt-4">
-              {lines.map((line) => (
-                <li key={line} className="flex gap-3 text-base leading-relaxed text-ink">
+              {lineKeys.map((lineKey) => (
+                <li key={lineKey} className="flex gap-3 text-base leading-relaxed text-ink">
                   <span aria-hidden="true" className="mt-2.5 h-px w-4 shrink-0 bg-gold" />
-                  <span>{line}</span>
+                  <span>{t(lineKey)}</span>
                 </li>
               ))}
             </ul>
@@ -438,14 +428,14 @@ function Terms() {
 
       <Reveal className="mt-12 border-t border-greige pt-8">
         <p className="text-base text-ink-muted">
-          Une question avant de commander ? Appelez-nous au{' '}
+          {t('showroom.questionBefore')}{' '}
           <a
             href={`tel:+${toInternational(contact.telephone)}`}
             className="tabular-nums text-ink underline decoration-gold decoration-1 underline-offset-4 transition-[text-decoration-thickness] hover:decoration-2"
           >
             {formatPhone(contact.telephone)}
           </a>
-          , nous répondons pendant les heures d&apos;ouverture.
+          , {t('showroom.questionAfter')}
         </p>
       </Reveal>
     </section>

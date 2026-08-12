@@ -198,6 +198,48 @@
   }
 }
 
+/* ── Arabic / RTL ─────────────────────────────────────────────────────────────
+   Cinzel and Jost carry no Arabic glyphs, so under `lang="ar"` the browser would
+   fall back to whatever the system offers and the page would lose its typographic
+   identity entirely. The stack below names the good system Arabic faces first and
+   ends at the generic `sans-serif`, so every platform lands somewhere deliberate.
+
+   Arabic script has no uppercase and its letterforms connect, so the tracking and
+   `text-transform: uppercase` that carry the brand in Latin actively damage it:
+   uppercase is a no-op that some fonts still mangle, and letter-spacing breaks
+   the joins between characters. Both are switched off for Arabic only.          */
+
+:root {
+  --font-arabic: 'Noto Naskh Arabic', 'Geeza Pro', 'Segoe UI', 'Dubai', 'Tahoma', sans-serif;
+}
+
+[lang='ar'] body,
+[lang='ar'] .font-display,
+[lang='ar'] .font-sans {
+  font-family: var(--font-arabic);
+}
+
+/* Letter-spacing severs the connections between Arabic letters. This clears it
+   wherever a tracking utility was applied, including the display face. */
+[lang='ar'] .font-display,
+[lang='ar'] [class*='tracking-'] {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+/* Arabic-Indic digits are not used for prices in Algeria — customers read and
+   write Western digits for money. Numerals stay Latin even in Arabic. */
+[lang='ar'] .tabular-nums {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Mirror anything that encodes direction as a physical transform. A chevron
+   pointing "forward" must point left in RTL, and a scale-x origin flips too. */
+[dir='rtl'] .rtl-flip {
+  transform: scaleX(-1);
+}
+
 /* ── The offset product grid ──────────────────────────────────────────────────
    The featured grid runs on two baselines rather than one: even-numbered cards
    drop by a fixed offset so a row of four reads as an arrangement instead of a

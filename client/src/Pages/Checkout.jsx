@@ -6,6 +6,7 @@ import { useCart } from '../lib/cart';
 import { useAuth } from '../lib/auth';
 import { formatPrice } from '../lib/format';
 import { isValidPhoneClient } from '../lib/validate';
+import { useI18n } from '../lib/i18n';
 
 import { Field, TextArea, Select, RadioCards } from '../Components/UI/Field';
 import Button from '../Components/UI/Button';
@@ -37,6 +38,7 @@ export default function Checkout() {
   const navigate = useNavigate();
   const { items, sousTotal, clear } = useCart();
   const { user } = useAuth();
+  const { t } = useI18n();
 
   const [form, setForm] = useState(EMPTY);
   const [errors, setErrors] = useState({});
@@ -113,15 +115,17 @@ export default function Checkout() {
   function validate() {
     const next = {};
 
-    if (!form.clientNom.trim()) next.clientNom = 'Votre nom est requis';
+    if (!form.clientNom.trim()) next.clientNom = t('validation.nameRequired');
     if (!isValidPhoneClient(form.clientTelephone)) {
-      next.clientTelephone = 'Numéro invalide. Format : 05, 06 ou 07 suivi de 8 chiffres';
+      next.clientTelephone = t('validation.phoneInvalid');
     }
-    if (!form.wilayaId) next.wilayaId = 'Choisissez votre wilaya';
-    else if (wilaya && !wilaya.isActive) next.wilayaId = `Nous ne livrons pas encore à ${wilaya.nom}`;
-    if (!form.commune.trim()) next.commune = 'La commune est requise';
+    if (!form.wilayaId) next.wilayaId = t('validation.wilayaRequired');
+    else if (wilaya && !wilaya.isActive) {
+      next.wilayaId = t('validation.wilayaUnavailable', { wilaya: wilaya.nom });
+    }
+    if (!form.commune.trim()) next.commune = t('validation.communeRequired');
     if (form.modeLivraison === 'DOMICILE' && !form.adresse.trim()) {
-      next.adresse = 'Adresse requise pour une livraison à domicile';
+      next.adresse = t('validation.addressRequired');
     }
 
     setErrors(next);
@@ -166,9 +170,9 @@ export default function Checkout() {
   if (items.length === 0) {
     return (
       <EmptyState
-        title="Votre panier est vide"
-        message="Ajoutez au moins une pièce avant de passer commande."
-        actionLabel="Voir le catalogue"
+        title={t('checkout.emptyCartTitle')}
+        message={t('checkout.emptyCartLead')}
+        actionLabel={t('common.seeAll')}
         actionTo="/catalogue"
       />
     );
@@ -176,10 +180,8 @@ export default function Checkout() {
 
   return (
     <div className="mx-auto max-w-[1400px] px-4 pb-20 pt-8 sm:px-6 lg:px-10">
-      <h1 className="font-display text-xl tracking-[0.12em] text-ink sm:text-2xl">Votre commande</h1>
-      <p className="mt-3 max-w-lg text-base text-ink-muted">
-        Paiement à la livraison. Nous vous appelons pour confirmer avant l&apos;expédition.
-      </p>
+      <h1 className="font-display text-xl tracking-[0.12em] text-ink sm:text-2xl">{t('checkout.title')}</h1>
+      <p className="mt-3 max-w-lg text-base text-ink-muted">{t('checkout.lead')}</p>
 
       {submitError ? (
         <div
@@ -195,11 +197,11 @@ export default function Checkout() {
           {/* Contact */}
           <fieldset className="flex flex-col gap-5 border-0 p-0">
             <legend className="mb-1 font-display text-base tracking-[0.12em] text-ink">
-              Vos coordonnées
+              {t('checkout.contact')}
             </legend>
 
             <Field
-              label="Nom et prénom"
+              label={t('checkout.name')}
               required
               autoComplete="name"
               value={form.clientNom}
@@ -208,7 +210,7 @@ export default function Checkout() {
             />
 
             <Field
-              label="Téléphone"
+              label={t('checkout.phone')}
               required
               type="tel"
               inputMode="tel"
@@ -217,11 +219,11 @@ export default function Checkout() {
               value={form.clientTelephone}
               onChange={set('clientTelephone')}
               error={errors.clientTelephone}
-              hint="C'est le numéro sur lequel nous vous appellerons pour confirmer."
+              hint={t('checkout.phoneHint')}
             />
 
             <Field
-              label="Email (facultatif)"
+              label={t('checkout.email')}
               type="email"
               autoComplete="email"
               value={form.clientEmail}
@@ -232,45 +234,47 @@ export default function Checkout() {
 
           {/* Delivery */}
           <fieldset className="flex flex-col gap-5 border-0 border-t border-greige p-0 pt-8">
-            <legend className="mb-1 font-display text-base tracking-[0.12em] text-ink">Livraison</legend>
+            <legend className="mb-1 font-display text-base tracking-[0.12em] text-ink">
+              {t('checkout.delivery')}
+            </legend>
 
             <Select
-              label="Wilaya"
+              label={t('checkout.wilaya')}
               required
               value={form.wilayaId}
               onChange={set('wilayaId')}
               error={errors.wilayaId}
             >
-              <option value="">Choisissez votre wilaya</option>
+              <option value="">{t('checkout.chooseWilaya')}</option>
               {wilayas.map((w) => (
                 <option key={w._id} value={w._id}>
                   {String(w.code).padStart(2, '0')} - {w.nom}
-                  {w.isActive ? '' : ' (livraison non disponible)'}
+                  {w.isActive ? '' : t('checkout.deliveryUnavailableOption')}
                 </option>
               ))}
             </Select>
 
             <RadioCards
-              label="Mode de livraison"
+              label={t('checkout.mode')}
               name="modeLivraison"
               value={form.modeLivraison}
               onChange={(value) => setForm((prev) => ({ ...prev, modeLivraison: value }))}
               options={[
                 {
                   value: 'DOMICILE',
-                  label: 'À domicile',
-                  hint: wilaya?.isActive ? formatPrice(wilaya.fraisDomicile) : 'Livrée chez vous',
+                  label: t('checkout.home'),
+                  hint: wilaya?.isActive ? formatPrice(wilaya.fraisDomicile) : t('checkout.homeHint'),
                 },
                 {
                   value: 'STOP_DESK',
-                  label: 'Point de retrait',
-                  hint: wilaya?.isActive ? formatPrice(wilaya.fraisStopDesk) : 'À récupérer sur place',
+                  label: t('checkout.stopDesk'),
+                  hint: wilaya?.isActive ? formatPrice(wilaya.fraisStopDesk) : t('checkout.stopDeskHint'),
                 },
               ]}
             />
 
             <Field
-              label="Commune"
+              label={t('checkout.commune')}
               required
               autoComplete="address-level2"
               value={form.commune}
@@ -280,32 +284,32 @@ export default function Checkout() {
 
             {form.modeLivraison === 'DOMICILE' ? (
               <TextArea
-                label="Adresse"
+                label={t('checkout.address')}
                 required
                 rows={3}
                 autoComplete="street-address"
-                placeholder="Cité, bâtiment, étage, point de repère"
+                placeholder={t('checkout.addressPlaceholder')}
                 value={form.adresse}
                 onChange={set('adresse')}
                 error={errors.adresse}
-                hint="Un point de repère aide beaucoup le livreur."
+                hint={t('checkout.addressHint')}
               />
             ) : null}
 
             <TextArea
-              label="Note pour nous (facultatif)"
+              label={t('checkout.note')}
               rows={2}
               value={form.noteClient}
               onChange={set('noteClient')}
-              placeholder="Horaire de livraison souhaité, précision sur le coloris..."
+              placeholder={t('checkout.notePlaceholder')}
             />
           </fieldset>
 
           {!user ? (
             <p className="text-sm text-ink-muted">
-              Vous commandez sans compte, c&apos;est parfait.{' '}
+              {t('checkout.guestNote')}{' '}
               <Link to="/connexion" className="underline decoration-gold underline-offset-4">
-                Vous avez déjà un compte ?
+                {t('checkout.hasAccountLink')}
               </Link>
             </p>
           ) : null}
@@ -314,7 +318,7 @@ export default function Checkout() {
         {/* Summary */}
         <aside className="lg:sticky lg:top-24 lg:h-fit">
           <div className="rounded-sm border border-greige p-5">
-            <h2 className="font-display text-base tracking-[0.12em] text-ink">Votre commande</h2>
+            <h2 className="font-display text-base tracking-[0.12em] text-ink">{t('checkout.summaryTitle')}</h2>
 
             <ul className="mt-5 flex flex-col gap-4">
               {items.map((line) => (
@@ -340,23 +344,23 @@ export default function Checkout() {
 
             <dl className="mt-6 flex flex-col gap-3 border-t border-greige pt-5">
               <div className="flex items-baseline justify-between">
-                <dt className="text-base text-ink-muted">Sous-total</dt>
+                <dt className="text-base text-ink-muted">{t('cart.subtotal')}</dt>
                 <dd className="text-base tabular-nums text-ink">{formatPrice(sousTotal)}</dd>
               </div>
 
               <div className="flex items-baseline justify-between gap-4">
-                <dt className="text-base text-ink-muted">Livraison</dt>
-                <dd className="text-right text-base tabular-nums text-ink">
+                <dt className="text-base text-ink-muted">{t('cart.delivery')}</dt>
+                <dd className="text-end text-base tabular-nums text-ink">
                   {fraisLivraison !== null ? (
                     formatPrice(fraisLivraison)
                   ) : (
-                    <span className="text-sm text-ink-muted">Choisissez une wilaya</span>
+                    <span className="text-sm text-ink-muted">{t('checkout.chooseWilayaShort')}</span>
                   )}
                 </dd>
               </div>
 
               <div className="flex items-baseline justify-between border-t border-greige pt-3">
-                <dt className="font-display text-base tracking-[0.1em] text-ink">Total</dt>
+                <dt className="font-display text-base tracking-[0.1em] text-ink">{t('cart.total')}</dt>
                 <dd className="text-xl tabular-nums text-gold-deep">{formatPrice(total)}</dd>
               </div>
             </dl>
@@ -366,7 +370,7 @@ export default function Checkout() {
                 role="alert"
                 className="mt-4 rounded-sm border border-greige bg-greige/25 px-3 py-3 text-sm leading-relaxed text-ink"
               >
-                Nous ne livrons pas encore à {wilaya.nom}. Appelez-nous, nous trouverons une solution.
+                {t('checkout.deliveryUnavailable', { wilaya: wilaya.nom })}
               </p>
             ) : null}
 
@@ -378,11 +382,11 @@ export default function Checkout() {
               className="mt-5"
               disabled={submitting || deliverable === false}
             >
-              {submitting ? 'Envoi en cours' : 'Confirmer la commande'}
+              {submitting ? t('checkout.submitting') : t('checkout.submit')}
             </Button>
 
             <p className="mt-4 text-center text-sm leading-relaxed text-ink-muted">
-              Vous payez {formatPrice(total)} à la réception. Rien n&apos;est prélevé maintenant.
+              {t('checkout.payAtDelivery', { total: formatPrice(total) })}
             </p>
           </div>
         </aside>

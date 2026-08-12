@@ -5,6 +5,7 @@ import { useCart } from '../lib/cart';
 import { formatPrice } from '../lib/format';
 import ProductImage from '../Components/UI/ProductImage';
 import Button from '../Components/UI/Button';
+import { useI18n } from '../lib/i18n';
 import { EmptyState } from '../Components/UI/States';
 
 /**
@@ -15,14 +16,15 @@ import { EmptyState } from '../Components/UI/States';
  * check what I am about to spend".
  */
 export default function Cart() {
+  const { t } = useI18n();
   const { items, nbArticles, sousTotal, setQuantity, remove, lineKey } = useCart();
 
   if (items.length === 0) {
     return (
       <EmptyState
-        title="Votre panier est vide"
-        message="Parcourez le catalogue et ajoutez les pièces qui vous plaisent. Vous n'avez pas besoin de compte pour commander."
-        actionLabel="Voir le catalogue"
+        title={t('cart.empty')}
+        message={t('cart.emptyLead')}
+        actionLabel={t('common.seeAll')}
         actionTo="/catalogue"
       />
     );
@@ -31,9 +33,9 @@ export default function Cart() {
   return (
     <div className="mx-auto max-w-[1400px] px-4 pb-20 pt-8 sm:px-6 lg:px-10">
       <h1 className="font-display text-xl tracking-[0.12em] text-ink sm:text-2xl">
-        Panier
-        <span className="ml-3 font-sans text-base tracking-normal text-ink-muted">
-          {nbArticles} article{nbArticles > 1 ? 's' : ''}
+        {t('cart.title')}
+        <span className="ms-3 font-sans text-base tracking-normal text-ink-muted">
+          {t('cart.itemCount', { count: nbArticles })}
         </span>
       </h1>
 
@@ -49,7 +51,7 @@ export default function Cart() {
 
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <span className="text-[12px] uppercase tracking-[0.18em] text-ink-muted">
-                    Réf {line.ref}
+                    {t('product.ref')} {line.ref}
                     {line.couleur ? ` · ${line.couleur}` : ''}
                   </span>
 
@@ -68,7 +70,7 @@ export default function Cart() {
                         type="button"
                         onClick={() => setQuantity(key, line.quantite - 1)}
                         disabled={line.quantite <= 1}
-                        aria-label="Diminuer la quantité"
+                        aria-label={t('product.decrease')}
                         className="flex h-11 w-11 items-center justify-center text-ink-muted transition-colors hover:text-ink disabled:opacity-35"
                       >
                         <Minus size={15} strokeWidth={1.5} />
@@ -82,7 +84,7 @@ export default function Cart() {
                         type="button"
                         onClick={() => setQuantity(key, line.quantite + 1)}
                         disabled={line.quantite >= 20}
-                        aria-label="Augmenter la quantité"
+                        aria-label={t('product.increase')}
                         className="flex h-11 w-11 items-center justify-center text-ink-muted transition-colors hover:text-ink disabled:opacity-35"
                       >
                         <Plus size={15} strokeWidth={1.5} />
@@ -97,7 +99,7 @@ export default function Cart() {
                       <button
                         type="button"
                         onClick={() => remove(key)}
-                        aria-label={`Retirer ${line.nom} du panier`}
+                        aria-label={t('cart.removeItem', { name: line.nom })}
                         className="flex h-11 w-11 items-center justify-center text-ink-muted transition-colors hover:text-[#8C2F1F]"
                       >
                         <Trash2 size={16} strokeWidth={1.5} />
@@ -113,37 +115,34 @@ export default function Cart() {
         {/* Summary */}
         <aside className="lg:sticky lg:top-24 lg:h-fit">
           <div className="rounded-sm border border-greige p-5">
-            <h2 className="font-display text-base tracking-[0.12em] text-ink">Récapitulatif</h2>
+            <h2 className="font-display text-base tracking-[0.12em] text-ink">{t('cart.title')}</h2>
 
             <dl className="mt-5 flex flex-col gap-3">
               <div className="flex items-baseline justify-between">
-                <dt className="text-base text-ink-muted">Sous-total</dt>
+                <dt className="text-base text-ink-muted">{t('cart.subtotal')}</dt>
                 <dd className="text-base tabular-nums text-ink">{formatPrice(sousTotal)}</dd>
               </div>
 
               <div className="flex items-baseline justify-between">
-                <dt className="text-base text-ink-muted">Livraison</dt>
-                <dd className="text-sm text-ink-muted">Selon votre wilaya</dd>
+                <dt className="text-base text-ink-muted">{t('cart.delivery')}</dt>
+                <dd className="text-sm text-ink-muted">{t('cart.deliveryHint')}</dd>
               </div>
             </dl>
 
             <p className="mt-4 border-t border-greige pt-4 text-sm leading-relaxed text-ink-muted">
-              Les frais de livraison sont calculés à l&apos;étape suivante, une fois votre wilaya
-              choisie. Vous voyez le total avant de confirmer.
+              {t('cart.deliveryNote')}
             </p>
 
             <div className="mt-5 flex flex-col gap-2">
               <Button to="/commande" variant="primary" size="lg" full>
-                Passer la commande
+                {t('cart.checkoutCta')}
               </Button>
               <Button to="/catalogue" variant="secondary" size="md" full>
-                Continuer mes achats
+                {t('cart.continue')}
               </Button>
             </div>
 
-            <p className="mt-4 text-center text-sm text-ink-muted">
-              Paiement à la livraison. Aucun compte requis.
-            </p>
+            <p className="mt-4 text-center text-sm text-ink-muted">{t('cart.codNote')}</p>
           </div>
         </aside>
       </div>

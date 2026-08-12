@@ -19,6 +19,7 @@ import { Loading, ErrorState, EmptyState } from '../Components/UI/States';
 import ProductGrid from '../Components/Products/ProductGrid';
 import SectionDivider from '../Components/Brand/SectionDivider';
 import { EASE_OUT, useReducedMotion } from '../lib/motion';
+import { useI18n } from '../lib/i18n';
 
 /**
  * Product detail.
@@ -44,6 +45,7 @@ import { EASE_OUT, useReducedMotion } from '../lib/motion';
 function Gallery({ images, nom }) {
   const [index, setIndex] = useState(0);
   const reduced = useReducedMotion();
+  const { t } = useI18n();
 
   const ordered = [...(images || [])].sort((a, b) => a.ordre - b.ordre);
   const current = ordered[index];
@@ -68,10 +70,10 @@ function Gallery({ images, nom }) {
                   zooming so it never sits on top of what is being inspected. */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute bottom-3 right-3 hidden items-center gap-1.5 rounded-xs bg-forest/80 px-2.5 py-1.5 font-sans text-[11px] uppercase tracking-[0.14em] text-cream opacity-100 transition-opacity duration-300 [@media(hover:hover)]:flex"
+                className="pointer-events-none absolute bottom-3 end-3 hidden items-center gap-1.5 rounded-xs bg-forest/80 px-2.5 py-1.5 font-sans text-[11px] uppercase tracking-[0.14em] text-cream opacity-100 transition-opacity duration-300 [@media(hover:hover)]:flex"
               >
                 <Search size={13} strokeWidth={1.6} />
-                Survolez pour agrandir
+                {t('product.zoomHint')}
               </span>
             </ZoomImage>
           </motion.div>
@@ -87,7 +89,7 @@ function Gallery({ images, nom }) {
               key={image.url}
               type="button"
               onClick={() => setIndex(i)}
-              aria-label={`Voir la photo ${i + 1}`}
+              aria-label={t('product.viewPhoto', { n: i + 1 })}
               aria-current={i === index}
               className={`overflow-hidden rounded-sm border transition-colors duration-200 ${
                 i === index ? 'border-gold' : 'border-greige hover:border-sand'
@@ -125,19 +127,21 @@ function SpecHeading({ children, ...props }) {
  * in three separate boxes, so they read as one measurement of one object.
  */
 function Dimensions({ dimensions }) {
+  const { t } = useI18n();
+
   if (!dimensions) return null;
 
   const rows = [
-    { label: 'Largeur', value: dimensions.largeur },
-    { label: 'Profondeur', value: dimensions.profondeur },
-    { label: 'Hauteur', value: dimensions.hauteur },
+    { label: t('product.width'), value: dimensions.largeur },
+    { label: t('product.depth'), value: dimensions.profondeur },
+    { label: t('product.height'), value: dimensions.hauteur },
   ].filter((r) => r.value);
 
   if (!rows.length) return null;
 
   return (
     <section aria-labelledby="dimensions-heading">
-      <SpecHeading id="dimensions-heading">Dimensions</SpecHeading>
+      <SpecHeading id="dimensions-heading">{t('product.dimensions')}</SpecHeading>
 
       <dl
         className={`mt-4 grid gap-px overflow-hidden rounded-sm border border-greige bg-greige ${
@@ -151,7 +155,7 @@ function Dimensions({ dimensions }) {
             </dt>
             <dd className="mt-1.5 font-sans text-xl tabular-nums text-ink">
               {row.value}
-              <span className="ml-1 text-sm text-ink-muted">{dimensions.unite || 'cm'}</span>
+              <span className="ms-1 text-sm text-ink-muted">{dimensions.unite || 'cm'}</span>
             </dd>
           </div>
         ))}
@@ -166,16 +170,18 @@ function Dimensions({ dimensions }) {
  * column, which is where text goes to not be read.
  */
 function Reassurance({ delai }) {
+  const { t } = useI18n();
+
   const items = [
     {
       icon: ShieldCheck,
-      title: 'Paiement à la livraison',
-      body: 'Vous payez en espèces au moment où vous recevez la pièce.',
+      title: t('product.payOnDelivery'),
+      body: t('product.payOnDeliveryLead'),
     },
     {
       icon: Truck,
-      title: delai ? `Livraison sous ${delai}` : 'Livraison dans les 58 wilayas',
-      body: 'Les frais dépendent de votre wilaya et sont affichés avant la confirmation.',
+      title: delai ? t('product.deliveryIn', { delai }) : t('product.deliveryAll'),
+      body: t('product.deliveryLead'),
     },
   ];
 
@@ -199,6 +205,7 @@ export default function ProductDetail() {
   const { add } = useCart();
   const { isLoggedIn, isFavourite, toggleFavourite } = useAuth();
   const settings = useSettings();
+  const { t } = useI18n();
 
   const [state, setState] = useState({ loading: true, error: null, product: null, similaires: [] });
   const [quantite, setQuantite] = useState(1);
@@ -240,14 +247,14 @@ export default function ProductDetail() {
 
   const { loading, error, product, similaires } = state;
 
-  if (loading) return <Loading label="Chargement de la pièce" />;
+  if (loading) return <Loading label={t('product.loading')} />;
 
   if (error?.status === 404) {
     return (
       <EmptyState
-        title="Cette pièce est introuvable"
-        message="Elle a peut-être été retirée du catalogue. Parcourez les collections ou appelez-nous."
-        actionLabel="Voir le catalogue"
+        title={t('product.notFound')}
+        message={t('product.notFoundLead')}
+        actionLabel={t('common.seeAll')}
         actionTo="/catalogue"
       />
     );
@@ -268,9 +275,9 @@ export default function ProductDetail() {
   return (
     <div className="mx-auto max-w-[1400px] px-4 pb-20 pt-6 sm:px-6 lg:px-10">
       {/* Breadcrumb */}
-      <nav aria-label="Fil d'Ariane" className="mb-6 flex flex-wrap items-center gap-2 text-sm text-ink-muted">
+      <nav aria-label={t('product.breadcrumb')} className="mb-6 flex flex-wrap items-center gap-2 text-sm text-ink-muted">
         <Link to="/catalogue" className="inline-flex min-h-[44px] items-center hover:text-ink">
-          Catalogue
+          {t('catalogue.title')}
         </Link>
         {product.categoryId?.slug ? (
           <>
@@ -292,7 +299,7 @@ export default function ProductDetail() {
           <header className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center gap-3">
               <span className="font-sans text-[12px] uppercase tracking-[0.22em] text-gold-deep">
-                Réf {product.ref}
+                {t('product.ref')} {product.ref}
               </span>
               <AvailabilityBadge disponibilite={product.disponibilite} />
             </div>
@@ -320,9 +327,9 @@ export default function ProductDetail() {
           {product.couleurs?.length ? (
             <fieldset className="border-0 p-0">
               <legend className="font-sans text-[12px] uppercase tracking-[0.18em] text-ink-muted">
-                Coloris
+                {t('product.colours')}
                 {couleur ? (
-                  <span className="ml-2 normal-case tracking-normal text-ink">{couleur}</span>
+                  <span className="ms-2 normal-case tracking-normal text-ink">{couleur}</span>
                 ) : null}
               </legend>
 
@@ -357,14 +364,14 @@ export default function ProductDetail() {
           <div className="flex flex-col gap-3">
             {rupture ? (
               <p className="rounded-sm border border-greige bg-greige/25 px-4 py-3 text-base leading-relaxed text-ink">
-                Cette pièce est en rupture. Appelez-nous au{' '}
+                {t('product.outOfStockBefore')}{' '}
                 <a
                   href={`tel:+${toInternational(settings.telephone)}`}
                   className="tabular-nums text-gold-deep underline decoration-gold decoration-1 underline-offset-4"
                 >
                   {formatPhone(settings.telephone)}
                 </a>{' '}
-                pour connaître le prochain arrivage.
+                {t('product.outOfStockAfter')}
               </p>
             ) : (
               <>
@@ -374,7 +381,7 @@ export default function ProductDetail() {
                       type="button"
                       onClick={() => setQuantite((q) => Math.max(1, q - 1))}
                       disabled={quantite <= 1}
-                      aria-label="Diminuer la quantité"
+                      aria-label={t('product.decrease')}
                       className="flex h-12 w-12 items-center justify-center text-ink-muted transition-colors hover:text-ink disabled:opacity-35"
                     >
                       <Minus size={16} strokeWidth={1.5} />
@@ -391,7 +398,7 @@ export default function ProductDetail() {
                       type="button"
                       onClick={() => setQuantite((q) => Math.min(20, q + 1))}
                       disabled={quantite >= 20}
-                      aria-label="Augmenter la quantité"
+                      aria-label={t('product.increase')}
                       className="flex h-12 w-12 items-center justify-center text-ink-muted transition-colors hover:text-ink disabled:opacity-35"
                     >
                       <Plus size={16} strokeWidth={1.5} />
@@ -402,10 +409,10 @@ export default function ProductDetail() {
                     {added ? (
                       <>
                         <Check size={16} strokeWidth={2} />
-                        Ajouté au panier
+                        {t('product.added')}
                       </>
                     ) : (
-                      'Ajouter au panier'
+                      t('product.addToCart')
                     )}
                   </Button>
                 </div>
@@ -419,7 +426,7 @@ export default function ProductDetail() {
                   variant="secondary"
                   size="lg"
                 >
-                  Commander via WhatsApp
+                  {t('product.orderWhatsapp')}
                 </Button>
               </>
             )}
@@ -435,7 +442,7 @@ export default function ProductDetail() {
                   strokeWidth={1.5}
                   className={favourite ? 'fill-gold text-gold' : ''}
                 />
-                {favourite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                {favourite ? t('product.removeFavourite') : t('product.addFavourite')}
               </button>
             ) : null}
           </div>
@@ -448,7 +455,7 @@ export default function ProductDetail() {
 
             {product.materiaux?.length ? (
               <section aria-labelledby="materiaux-heading">
-                <SpecHeading id="materiaux-heading">Matériaux</SpecHeading>
+                <SpecHeading id="materiaux-heading">{t('product.materials')}</SpecHeading>
                 <ul className="mt-3 flex flex-wrap gap-2">
                   {product.materiaux.map((m) => (
                     <li
@@ -471,7 +478,7 @@ export default function ProductDetail() {
 
           <section className="mt-16">
             <h2 className="font-display text-lg tracking-[0.12em] text-ink">
-              Dans la même collection
+              {t('product.similar')}
             </h2>
             <div className="mt-8">
               <ProductGrid products={similaires} priorityCount={0} />

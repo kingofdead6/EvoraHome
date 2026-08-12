@@ -1,9 +1,14 @@
+import { useI18n } from '../../lib/i18n';
+
 /**
  * Availability and catalogue badges.
  *
  * Deliberately not colour-coded traffic lights. Availability is stated in
  * words, because "En stock" and "Sur commande" mean different things to a
  * furniture customer and a green dot conveys neither.
+ *
+ * DISPONIBILITE_LABEL stays exported as a French fallback for any call site
+ * that has not been converted to the translated <AvailabilityBadge>.
  */
 
 export const DISPONIBILITE_LABEL = {
@@ -34,10 +39,11 @@ export default function Badge({ tone = 'neutral', className = '', children }) {
 }
 
 export function AvailabilityBadge({ disponibilite, className = '' }) {
+  const { t } = useI18n();
   const tone = disponibilite === 'RUPTURE' ? 'muted' : disponibilite === 'SUR_COMMANDE' ? 'gold' : 'neutral';
   return (
     <Badge tone={tone} className={className}>
-      {DISPONIBILITE_LABEL[disponibilite] || disponibilite}
+      {t(`product.availability.${disponibilite}`)}
     </Badge>
   );
 }

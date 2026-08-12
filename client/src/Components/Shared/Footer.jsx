@@ -5,6 +5,8 @@ import EvoraTree from '../Brand/EvoraTree';
 import { useSettings } from '../../lib/settings';
 import { formatPhone, toInternational } from '../../lib/format';
 import { brand } from '../../brand';
+import { useI18n } from '../../lib/i18n';
+import LangSwitch from './LangSwitch';
 
 import LogoCard from '../../assets/Logo.png';
 
@@ -47,6 +49,7 @@ const FOOTER_LINK =
 
 export default function Footer() {
   const settings = useSettings();
+  const { t } = useI18n();
   const year = new Date().getFullYear();
 
   return (
@@ -62,7 +65,7 @@ export default function Footer() {
       <div className="mx-auto max-w-[1400px] px-4 py-12 sm:px-6 lg:px-10 lg:py-16">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {/* Brand */}
-          <div className="lg:pr-8">
+          <div className="lg:pe-8">
             {/*
               The logo card itself rather than the SVG mark. The source photo is
               gold foil on olive stock and its wordmark is cropped off both
@@ -92,7 +95,7 @@ export default function Footer() {
 
           {/* Catalogue */}
           <nav aria-labelledby="footer-catalogue">
-            <FooterHeading id="footer-catalogue">Catalogue</FooterHeading>
+            <FooterHeading id="footer-catalogue">{t('footer.catalogue')}</FooterHeading>
             <ul className="flex flex-col gap-0.5">
               {CATEGORIES.map((c) => (
                 <li key={c.slug}>
@@ -106,17 +109,17 @@ export default function Footer() {
 
           {/* Shop */}
           <nav aria-labelledby="footer-maison">
-            <FooterHeading id="footer-maison">La maison</FooterHeading>
+            <FooterHeading id="footer-maison">{t('footer.house')}</FooterHeading>
             <ul className="flex flex-col gap-0.5">
               {[
-                { to: '/showroom', label: 'Notre showroom' },
-                { to: '/faq', label: 'FAQ' },
-                { to: '/contact', label: 'Nous contacter' },
-                { to: '/compte/commandes', label: 'Suivre ma commande' },
+                { to: '/showroom', key: 'nav.showroom' },
+                { to: '/faq', key: 'nav.faq' },
+                { to: '/contact', key: 'nav.contact' },
+                { to: '/compte/commandes', key: 'footer.trackOrder' },
               ].map((l) => (
                 <li key={l.to}>
                   <Link to={l.to} className={FOOTER_LINK}>
-                    {l.label}
+                    {t(l.key)}
                   </Link>
                 </li>
               ))}
@@ -125,7 +128,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <FooterHeading>Nous joindre</FooterHeading>
+            <FooterHeading>{t('footer.reach')}</FooterHeading>
             <ul className="flex flex-col gap-1">
               <li>
                 <a
@@ -202,8 +205,8 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col gap-1.5 border-t border-sand/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-sand">{year} Evora Home. El Khroub, Constantine.</p>
-          <p className="text-sm text-sand">Paiement à la livraison dans les 58 wilayas.</p>
+          <p className="text-sm text-sand">{t('footer.rights', { year })}</p>
+          <p className="text-sm text-sand">{t('footer.cod')}</p>
         </div>
       </div>
     </footer>

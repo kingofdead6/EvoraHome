@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import EvoraTree from '../Brand/EvoraTree';
 import Button from './Button';
 import { EASE_OUT, useReducedMotion } from '../../lib/motion';
+import { useI18n } from '../../lib/i18n';
 
 /**
  * Loading, empty and error states.
@@ -19,8 +20,9 @@ import { EASE_OUT, useReducedMotion } from '../../lib/motion';
  * screen when the content arrives. That single shift was worth 0.92 CLS on the
  * product page. Pass a className to opt out where the loader is inline.
  */
-export function Loading({ label = 'Chargement', className = 'min-h-[calc(100dvh-4rem)]' }) {
+export function Loading({ label, className = 'min-h-[calc(100dvh-4rem)]' }) {
   const reduced = useReducedMotion();
+  const { t } = useI18n();
 
   return (
     <div className={`flex flex-col items-center justify-center gap-4 py-20 ${className}`} role="status">
@@ -31,7 +33,7 @@ export function Loading({ label = 'Chargement', className = 'min-h-[calc(100dvh-
       >
         <EvoraTree size={64} />
       </motion.div>
-      <span className="text-sm uppercase tracking-[0.15em] text-ink-muted">{label}</span>
+      <span className="text-sm uppercase tracking-[0.15em] text-ink-muted">{label || t('common.loading')}</span>
     </div>
   );
 }
@@ -83,6 +85,7 @@ export function EmptyState({ title, message, actionLabel, actionTo, onAction, cl
  */
 export function ErrorState({ message, onRetry, className = '' }) {
   const reduced = useReducedMotion();
+  const { t } = useI18n();
 
   return (
     <motion.div
@@ -93,13 +96,13 @@ export function ErrorState({ message, onRetry, className = '' }) {
       role="alert"
     >
       <div className="flex max-w-md flex-col gap-2">
-        <h2 className="font-display text-lg text-ink">Une erreur est survenue</h2>
+        <h2 className="font-display text-lg text-ink">{t('common.error')}</h2>
         <p className="text-base text-ink-muted">{message}</p>
       </div>
 
       {onRetry ? (
         <Button onClick={onRetry} variant="secondary" size="md">
-          Réessayer
+          {t('common.retry')}
         </Button>
       ) : null}
     </motion.div>

@@ -17,33 +17,16 @@ import {
 
 import Button from '../Components/UI/Button';
 import SectionDivider from '../Components/Brand/SectionDivider';
+import { useI18n } from '../lib/i18n';
 
+/** Translation keys rather than copy: this array lives at module scope,
+ *  outside any component, so no hook can resolve the text here. */
 const FAQ_ITEMS = [
-  {
-    question: 'Comment puis-je commander une pièce ?',
-    answer:
-      'Parcourez le catalogue, ouvrez la page de la pièce qui vous intéresse et ajoutez-la au panier. Vous pouvez aussi commander via WhatsApp depuis la page produit.',
-  },
-  {
-    question: 'Est-ce que vous livrez dans toutes les wilayas ?',
-    answer:
-      'Oui, nous livrons dans les 58 wilayas. Les frais exacts sont affichés avant la confirmation de la commande.',
-  },
-  {
-    question: 'Puis-je voir les pièces avant de commander ?',
-    answer:
-      'Oui. Notre showroom à El Khroub est ouvert six jours sur sept. Venez toucher les tissus et comparer les coloris en personne.',
-  },
-  {
-    question: 'Comment choisir la bonne couleur ou le bon tissu ?',
-    answer:
-      'Les photos donnent une idée, mais l’éclairage varie. Nous recommandons de venir au showroom ou de demander un échantillon avant de confirmer votre commande.',
-  },
-  {
-    question: 'Comment puis-je suivre ma commande ?',
-    answer:
-      'Vous pouvez suivre votre commande depuis votre compte client sous “Mes commandes”. Si vous n’avez pas encore de compte, contactez-nous via WhatsApp ou téléphone.',
-  },
+  { questionKey: 'faq.q1', answerKey: 'faq.a1' },
+  { questionKey: 'faq.q2', answerKey: 'faq.a2' },
+  { questionKey: 'faq.q3', answerKey: 'faq.a3' },
+  { questionKey: 'faq.q4', answerKey: 'faq.a4' },
+  { questionKey: 'faq.q5', answerKey: 'faq.a5' },
 ];
 
 /** Words rise out of a clipped line. Matches the home and showroom headings. */
@@ -93,6 +76,7 @@ function WordReveal({ text, className = '' }) {
  */
 function Question({ item, isOpen, onToggle, index }) {
   const reduced = useReducedMotion();
+  const { t } = useI18n();
   const panelId = `faq-panel-${index}`;
   const buttonId = `faq-button-${index}`;
 
@@ -114,14 +98,14 @@ function Question({ item, isOpen, onToggle, index }) {
           onClick={onToggle}
           aria-expanded={isOpen}
           aria-controls={panelId}
-          className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left sm:px-6"
+          className="flex w-full items-center justify-between gap-4 px-5 py-5 text-start sm:px-6"
         >
           <span
             className={`font-sans text-base leading-snug transition-colors duration-200 sm:text-lg ${
               isOpen ? 'text-gold-deep' : 'text-ink'
             }`}
           >
-            {item.question}
+            {t(item.questionKey)}
           </span>
 
           {/* A plus that rotates into a minus. Cheaper to read than a chevron
@@ -159,7 +143,7 @@ function Question({ item, isOpen, onToggle, index }) {
           >
             <div className="px-5 pb-5 sm:px-6 sm:pb-6">
               <span aria-hidden="true" className="mb-4 block h-px w-10 bg-gold" />
-              <p className="text-base leading-relaxed text-ink-muted">{item.answer}</p>
+              <p className="text-base leading-relaxed text-ink-muted">{t(item.answerKey)}</p>
             </div>
           </motion.div>
         ) : null}
@@ -170,6 +154,7 @@ function Question({ item, isOpen, onToggle, index }) {
 
 export default function FAQ() {
   const settings = useSettings();
+  const { t } = useI18n();
   // Open the first question by default: an accordion where everything is shut
   // gives a first-time visitor nothing to read and no clue what a row does.
   const [openIndex, setOpenIndex] = useState(0);
@@ -189,16 +174,16 @@ export default function FAQ() {
       >
         <div>
           <p className="font-sans text-[12px] uppercase tracking-[0.28em] text-gold-deep">
-            Questions fréquentes
+            {t('faq.eyebrow')}
           </p>
 
           <h1 className="mt-4 max-w-2xl font-display text-3xl leading-[1.15] tracking-[0.04em] text-ink sm:text-4xl">
-            <WordReveal text="Tout ce qu’il faut savoir avant de commander." />
+            <WordReveal text={t('faq.title')} />
           </h1>
         </div>
 
         <Button to="/contact" variant="secondary" size="lg">
-          Nous contacter
+          {t('faq.contactCta')}
         </Button>
       </motion.div>
 
@@ -208,7 +193,7 @@ export default function FAQ() {
         <div className="flex flex-col gap-3">
           {FAQ_ITEMS.map((item, i) => (
             <Question
-              key={item.question}
+              key={item.questionKey}
               item={item}
               index={i}
               isOpen={openIndex === i}
@@ -226,14 +211,14 @@ export default function FAQ() {
           className="h-fit rounded-sm border border-greige bg-olive/[0.06] p-6 lg:sticky lg:top-24"
         >
           <p className="font-sans text-[12px] uppercase tracking-[0.18em] text-ink-muted">
-            Besoin d’aide rapide ?
+            {t('faq.helpTitle')}
           </p>
 
           <span aria-hidden="true" className="mt-4 block h-px w-10 bg-gold" />
 
           <div className="mt-5 flex flex-col gap-3 text-base leading-relaxed text-ink">
             <p>
-              Appelez-nous au{' '}
+              {t('faq.callBefore')}{' '}
               <a
                 href={`tel:+${toInternational(settings.telephone)}`}
                 className="tabular-nums text-ink underline decoration-gold decoration-1 underline-offset-4 transition-[text-decoration-thickness] hover:decoration-2"
@@ -243,12 +228,12 @@ export default function FAQ() {
               .
             </p>
             <p>
-              Ou écrivez-nous depuis la{' '}
+              {t('faq.orWriteBefore')}{' '}
               <Link
                 to="/contact"
                 className="text-ink underline decoration-gold decoration-1 underline-offset-4 transition-[text-decoration-thickness] hover:decoration-2"
               >
-                page contact
+                {t('faq.contactPage')}
               </Link>
               .
             </p>
@@ -256,10 +241,10 @@ export default function FAQ() {
 
           <div className="mt-7 flex flex-col gap-3">
             <Button to="/showroom" variant="secondary" size="md" full>
-              Voir le showroom
+              {t('faq.seeShowroom')}
             </Button>
             <Button to="/catalogue" variant="primary" size="md" full>
-              Explorer le catalogue
+              {t('faq.exploreCatalogue')}
             </Button>
           </div>
         </motion.aside>

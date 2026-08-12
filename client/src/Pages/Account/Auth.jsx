@@ -6,6 +6,7 @@ import { isValidEmail, isValidPhoneClient } from '../../lib/validate';
 import { Field } from '../../Components/UI/Field';
 import Button from '../../Components/UI/Button';
 import SectionDivider from '../../Components/Brand/SectionDivider';
+import { useI18n } from '../../lib/i18n';
 
 /**
  * Login and register.
@@ -38,6 +39,7 @@ export function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useI18n();
 
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
@@ -63,20 +65,20 @@ export function Login() {
 
   return (
     <AuthShell
-      title="Se connecter"
-      intro="Retrouvez vos commandes, vos favoris et vos adresses."
+      title={t('auth.login')}
+      intro={t('auth.loginIntro')}
       footer={
         <p className="text-base text-ink-muted">
-          Pas encore de compte ?{' '}
+          {t('auth.noAccount')}{' '}
           <Link to="/inscription" className="text-ink underline decoration-gold underline-offset-4">
-            Créer un compte
+            {t('auth.register')}
           </Link>
         </p>
       }
     >
       <form onSubmit={handleSubmit} noValidate className="mt-8 flex flex-col gap-5">
         <Field
-          label="Téléphone ou email"
+          label={t('auth.phoneOrEmail')}
           required
           type="text"
           inputMode="text"
@@ -88,7 +90,7 @@ export function Login() {
         />
 
         <Field
-          label="Mot de passe"
+          label={t('auth.password')}
           required
           type="password"
           autoComplete="current-password"
@@ -98,14 +100,14 @@ export function Login() {
         />
 
         <Button type="submit" variant="primary" size="lg" full disabled={loading}>
-          {loading ? 'Connexion' : 'Se connecter'}
+          {loading ? t('auth.loggingIn') : t('auth.login')}
         </Button>
       </form>
 
       <p className="mt-6 rounded-sm border border-greige bg-greige/25 px-4 py-3 text-sm leading-relaxed text-ink-muted">
-        Vous n&apos;avez pas besoin de compte pour commander.{' '}
+        {t('auth.guestNote')}{' '}
         <Link to="/catalogue" className="text-ink underline decoration-gold underline-offset-4">
-          Voir le catalogue
+          {t('common.seeAll')}
         </Link>
       </p>
     </AuthShell>
@@ -115,6 +117,7 @@ export function Login() {
 export function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   const [form, setForm] = useState({ nom: '', telephone: '', email: '', password: '' });
   const [errors, setErrors] = useState({});
@@ -131,12 +134,12 @@ export function Register() {
     setSubmitError(null);
 
     const next = {};
-    if (!form.nom.trim()) next.nom = 'Votre nom est requis';
+    if (!form.nom.trim()) next.nom = t('validation.nameRequired');
     if (!isValidPhoneClient(form.telephone)) {
-      next.telephone = 'Numéro invalide. Format : 05, 06 ou 07 suivi de 8 chiffres';
+      next.telephone = t('validation.phoneInvalid');
     }
-    if (form.password.length < 6) next.password = 'Au moins 6 caractères';
-    if (form.email && !isValidEmail(form.email)) next.email = 'Adresse email invalide';
+    if (form.password.length < 6) next.password = t('auth.passwordMinLength');
+    if (form.email && !isValidEmail(form.email)) next.email = t('validation.emailInvalid');
 
     setErrors(next);
     if (Object.keys(next).length) return;
@@ -153,13 +156,13 @@ export function Register() {
 
   return (
     <AuthShell
-      title="Créer un compte"
-      intro="Pour retrouver vos commandes et garder vos adresses d'une fois sur l'autre."
+      title={t('auth.register')}
+      intro={t('auth.registerIntro')}
       footer={
         <p className="text-base text-ink-muted">
-          Vous avez déjà un compte ?{' '}
+          {t('auth.hasAccount')}{' '}
           <Link to="/connexion" className="text-ink underline decoration-gold underline-offset-4">
-            Se connecter
+            {t('auth.login')}
           </Link>
         </p>
       }
@@ -175,7 +178,7 @@ export function Register() {
 
       <form onSubmit={handleSubmit} noValidate className="mt-8 flex flex-col gap-5">
         <Field
-          label="Nom et prénom"
+          label={t('checkout.name')}
           required
           autoComplete="name"
           value={form.nom}
@@ -184,7 +187,7 @@ export function Register() {
         />
 
         <Field
-          label="Téléphone"
+          label={t('checkout.phone')}
           required
           type="tel"
           inputMode="tel"
@@ -193,11 +196,11 @@ export function Register() {
           value={form.telephone}
           onChange={set('telephone')}
           error={errors.telephone}
-          hint="C'est votre identifiant de connexion."
+          hint={t('auth.phoneHint')}
         />
 
         <Field
-          label="Email (facultatif)"
+          label={t('checkout.email')}
           type="email"
           autoComplete="email"
           value={form.email}
@@ -206,18 +209,18 @@ export function Register() {
         />
 
         <Field
-          label="Mot de passe"
+          label={t('auth.password')}
           required
           type="password"
           autoComplete="new-password"
           value={form.password}
           onChange={set('password')}
           error={errors.password}
-          hint="6 caractères minimum."
+          hint={t('auth.passwordHint')}
         />
 
         <Button type="submit" variant="primary" size="lg" full disabled={loading}>
-          {loading ? 'Création' : 'Créer mon compte'}
+          {loading ? t('auth.registering') : t('auth.createAccount')}
         </Button>
       </form>
     </AuthShell>
