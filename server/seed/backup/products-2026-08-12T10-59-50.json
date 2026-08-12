@@ -1,0 +1,2152 @@
+[
+  {
+    "_id": "6a7ba05ff08048bb1227e7a6",
+    "ref": "LA CONNER",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e79f",
+    "couleurs": [
+      {
+        "nom": "Beige sable",
+        "hex": "#D8CDB8"
+      },
+      {
+        "nom": "Gris perle",
+        "hex": "#B9B7B0"
+      },
+      {
+        "nom": "Vert olive",
+        "hex": "#5A6350"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.247Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Angle réversible six places, assise profonde et dossier ferme. Le tissu bouclé est déhoussable sur les coussins d'assise. Structure en hêtre massif, suspension par sangles croisées.",
+    "dimensions": {
+      "largeur": 310,
+      "profondeur": 190,
+      "hauteur": 85,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/canape-d-angle-la-conner-01.jpg",
+        "alt": "Canapé d'angle La Conner",
+        "ordre": 0
+      },
+      {
+        "url": "/products/canape-d-angle-la-conner-02.jpg",
+        "alt": "Canapé d'angle La Conner, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/canape-d-angle-la-conner-03.jpg",
+        "alt": "Canapé d'angle La Conner, vue 3",
+        "ordre": 2
+      },
+      {
+        "url": "/products/canape-d-angle-la-conner-04.jpg",
+        "alt": "Canapé d'angle La Conner, vue 4",
+        "ordre": 3
+      }
+    ],
+    "isFeatured": true,
+    "isNouveau": true,
+    "materiaux": [
+      "Tissu bouclé",
+      "Bois massif",
+      "Mousse haute densité"
+    ],
+    "nom": "Canapé d'angle La Conner",
+    "prix": 289000,
+    "slug": "canape-d-angle-la-conner",
+    "updatedAt": "2026-08-11T22:22:30.153Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7a7",
+    "ref": "MONTEREY",
+    "__v": 0,
+    "ancienPrix": 398000,
+    "categoryId": "6a7ba05ef08048bb1227e79f",
+    "couleurs": [
+      {
+        "nom": "Bleu nuit",
+        "hex": "#2E3A4A"
+      },
+      {
+        "nom": "Taupe foncé",
+        "hex": "#7A6E60"
+      },
+      {
+        "nom": "Terracotta",
+        "hex": "#A9614A"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.324Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Trois pièces : un canapé trois places, un deux places et un fauteuil. Piètement en bois apparent, accoudoirs larges. Livré monté.",
+    "dimensions": {
+      "largeur": 220,
+      "profondeur": 95,
+      "hauteur": 88,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/ensemble-salon-monterey-01.jpg",
+        "alt": "Ensemble salon Monterey",
+        "ordre": 0
+      },
+      {
+        "url": "/products/ensemble-salon-monterey-02.jpg",
+        "alt": "Ensemble salon Monterey, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/ensemble-salon-monterey-03.jpg",
+        "alt": "Ensemble salon Monterey, vue 3",
+        "ordre": 2
+      }
+    ],
+    "isFeatured": true,
+    "isNouveau": false,
+    "materiaux": [
+      "Velours",
+      "Bois massif",
+      "Métal"
+    ],
+    "nom": "Ensemble salon Monterey",
+    "prix": 345000,
+    "slug": "ensemble-salon-monterey",
+    "updatedAt": "2026-08-11T22:22:30.227Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7a8",
+    "ref": "ASILAH",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e79f",
+    "couleurs": [
+      {
+        "nom": "Gris perle",
+        "hex": "#B9B7B0"
+      },
+      {
+        "nom": "Crème",
+        "hex": "#EDE5D6"
+      },
+      {
+        "nom": "Vert olive",
+        "hex": "#5A6350"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.384Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Ligne droite et piètement fin. Assise en mousse haute densité, dossier à coussins amovibles. Convient aux salons de taille moyenne.",
+    "dimensions": {
+      "largeur": 210,
+      "profondeur": 92,
+      "hauteur": 84,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/canape-trois-places-asilah-01.jpg",
+        "alt": "Canapé trois places Asilah",
+        "ordre": 0
+      },
+      {
+        "url": "/products/canape-trois-places-asilah-02.jpg",
+        "alt": "Canapé trois places Asilah, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/canape-trois-places-asilah-03.jpg",
+        "alt": "Canapé trois places Asilah, vue 3",
+        "ordre": 2
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Tissu",
+      "Bois massif"
+    ],
+    "nom": "Canapé trois places Asilah",
+    "prix": 178000,
+    "slug": "canape-trois-places-asilah",
+    "updatedAt": "2026-08-11T22:22:30.288Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7a9",
+    "ref": "BENSALEM",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e79f",
+    "couleurs": [
+      {
+        "nom": "Rouille",
+        "hex": "#96502F"
+      },
+      {
+        "nom": "Vert olive",
+        "hex": "#5A6350"
+      },
+      {
+        "nom": "Beige sable",
+        "hex": "#D8CDB8"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.449Z",
+    "delaiLivraison": "3 à 4 semaines",
+    "description": "Banquettes sur trois côtés avec coffres de rangement sous l'assise. Sculpture sur bois traditionnelle, tissu au choix. Fabriqué sur mesure aux dimensions de la pièce.",
+    "dimensions": {
+      "largeur": 400,
+      "profondeur": 300,
+      "hauteur": 80,
+      "unite": "cm"
+    },
+    "disponibilite": "SUR_COMMANDE",
+    "images": [
+      {
+        "url": "/products/salon-marocain-bensalem-01.jpg",
+        "alt": "Salon marocain Bensalem",
+        "ordre": 0
+      },
+      {
+        "url": "/products/salon-marocain-bensalem-02.jpg",
+        "alt": "Salon marocain Bensalem, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/salon-marocain-bensalem-03.jpg",
+        "alt": "Salon marocain Bensalem, vue 3",
+        "ordre": 2
+      },
+      {
+        "url": "/products/salon-marocain-bensalem-04.jpg",
+        "alt": "Salon marocain Bensalem, vue 4",
+        "ordre": 3
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Bois massif",
+      "Tissu",
+      "Mousse haute densité"
+    ],
+    "nom": "Salon marocain Bensalem",
+    "prix": 265000,
+    "slug": "salon-marocain-bensalem",
+    "updatedAt": "2026-08-11T22:22:30.347Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7aa",
+    "ref": "CADIZ",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e79f",
+    "couleurs": [
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      },
+      {
+        "nom": "Gris perle",
+        "hex": "#B9B7B0"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.507Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Couchage deux places par dépliage rapide, coffre de rangement pour la literie. Mécanisme métallique testé sur cycles.",
+    "dimensions": {
+      "largeur": 200,
+      "profondeur": 95,
+      "hauteur": 86,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/canape-convertible-cadiz-01.jpg",
+        "alt": "Canapé convertible Cadiz",
+        "ordre": 0
+      },
+      {
+        "url": "/products/canape-convertible-cadiz-02.jpg",
+        "alt": "Canapé convertible Cadiz, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Tissu",
+      "Métal",
+      "MDF"
+    ],
+    "nom": "Canapé convertible Cadiz",
+    "prix": 156000,
+    "slug": "canape-convertible-cadiz",
+    "updatedAt": "2026-08-11T22:22:30.403Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7ab",
+    "ref": "ORAN 7P",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e79f",
+    "couleurs": [
+      {
+        "nom": "Bleu nuit",
+        "hex": "#2E3A4A"
+      },
+      {
+        "nom": "Terracotta",
+        "hex": "#A9614A"
+      },
+      {
+        "nom": "Vert olive",
+        "hex": "#5A6350"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.564Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Fauteuil d'appoint à dossier haut, piètement en bois tourné. Se marie avec les ensembles Monterey et Asilah.",
+    "dimensions": {
+      "largeur": 78,
+      "profondeur": 82,
+      "hauteur": 98,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/fauteuil-oran-01.jpg",
+        "alt": "Fauteuil Oran",
+        "ordre": 0
+      },
+      {
+        "url": "/products/fauteuil-oran-02.jpg",
+        "alt": "Fauteuil Oran, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Velours",
+      "Bois massif"
+    ],
+    "nom": "Fauteuil Oran",
+    "prix": 68000,
+    "slug": "fauteuil-oran",
+    "updatedAt": "2026-08-11T22:22:30.458Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7ac",
+    "ref": "TIPAZA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e79f",
+    "couleurs": [
+      {
+        "nom": "Beige sable",
+        "hex": "#D8CDB8"
+      },
+      {
+        "nom": "Taupe foncé",
+        "hex": "#7A6E60"
+      },
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.624Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Angle cinq places avec méridienne à gauche ou à droite, à préciser à la commande. Coussins de dossier garnis en fibre siliconée.",
+    "dimensions": {
+      "largeur": 280,
+      "profondeur": 170,
+      "hauteur": 82,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/canape-d-angle-tipaza-01.jpg",
+        "alt": "Canapé d'angle Tipaza",
+        "ordre": 0
+      },
+      {
+        "url": "/products/canape-d-angle-tipaza-02.jpg",
+        "alt": "Canapé d'angle Tipaza, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/canape-d-angle-tipaza-03.jpg",
+        "alt": "Canapé d'angle Tipaza, vue 3",
+        "ordre": 2
+      }
+    ],
+    "isFeatured": true,
+    "isNouveau": false,
+    "materiaux": [
+      "Tissu",
+      "Bois massif",
+      "Mousse haute densité"
+    ],
+    "nom": "Canapé d'angle Tipaza",
+    "prix": 232000,
+    "slug": "canape-d-angle-tipaza",
+    "updatedAt": "2026-08-11T22:22:30.516Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7ad",
+    "ref": "SEVILLE",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e79f",
+    "couleurs": [
+      {
+        "nom": "Crème",
+        "hex": "#EDE5D6"
+      },
+      {
+        "nom": "Gris perle",
+        "hex": "#B9B7B0"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.683Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Méridienne d'appoint à accoudoir unique. Se place en bout de canapé ou seule sous une fenêtre.",
+    "dimensions": {
+      "largeur": 165,
+      "profondeur": 78,
+      "hauteur": 80,
+      "unite": "cm"
+    },
+    "disponibilite": "RUPTURE",
+    "images": [
+      {
+        "url": "/products/meridienne-seville-01.jpg",
+        "alt": "Méridienne Seville",
+        "ordre": 0
+      },
+      {
+        "url": "/products/meridienne-seville-02.jpg",
+        "alt": "Méridienne Seville, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Tissu bouclé",
+      "Bois massif"
+    ],
+    "nom": "Méridienne Seville",
+    "prix": 94000,
+    "slug": "meridienne-seville",
+    "updatedAt": "2026-08-11T22:22:30.573Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7ae",
+    "ref": "ALMERIA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a0",
+    "couleurs": [
+      {
+        "nom": "Noyer",
+        "hex": "#5C4433"
+      },
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.746Z",
+    "delaiLivraison": "7 à 10 jours",
+    "description": "Lit 160x200 avec tête de lit capitonnée, armoire quatre portes, commode et deux chevets. Placage noyer et poignées en métal brossé. Sommier inclus, matelas non inclus.",
+    "dimensions": {
+      "largeur": 250,
+      "profondeur": 220,
+      "hauteur": 220,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/chambre-complete-almeria-01.jpg",
+        "alt": "Chambre complète Almeria",
+        "ordre": 0
+      },
+      {
+        "url": "/products/chambre-complete-almeria-02.jpg",
+        "alt": "Chambre complète Almeria, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/chambre-complete-almeria-03.jpg",
+        "alt": "Chambre complète Almeria, vue 3",
+        "ordre": 2
+      },
+      {
+        "url": "/products/chambre-complete-almeria-04.jpg",
+        "alt": "Chambre complète Almeria, vue 4",
+        "ordre": 3
+      }
+    ],
+    "isFeatured": true,
+    "isNouveau": false,
+    "materiaux": [
+      "MDF",
+      "Placage bois",
+      "Métal",
+      "Tissu"
+    ],
+    "nom": "Chambre complète Almeria",
+    "prix": 385000,
+    "slug": "chambre-complete-almeria",
+    "updatedAt": "2026-08-11T22:22:30.632Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7af",
+    "ref": "NERJA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a0",
+    "couleurs": [
+      {
+        "nom": "Beige sable",
+        "hex": "#D8CDB8"
+      },
+      {
+        "nom": "Gris perle",
+        "hex": "#B9B7B0"
+      },
+      {
+        "nom": "Vert olive",
+        "hex": "#5A6350"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.805Z",
+    "delaiLivraison": "7 à 10 jours",
+    "description": "Lit king size à tête de lit haute et capitonnage vertical. Cadre sur pieds, sommier à lattes inclus. Matelas non inclus.",
+    "dimensions": {
+      "largeur": 196,
+      "profondeur": 216,
+      "hauteur": 130,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/lit-nerja-180x200-01.jpg",
+        "alt": "Lit Nerja 180x200",
+        "ordre": 0
+      },
+      {
+        "url": "/products/lit-nerja-180x200-02.jpg",
+        "alt": "Lit Nerja 180x200, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/lit-nerja-180x200-03.jpg",
+        "alt": "Lit Nerja 180x200, vue 3",
+        "ordre": 2
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": true,
+    "materiaux": [
+      "Bois massif",
+      "Tissu",
+      "Mousse haute densité"
+    ],
+    "nom": "Lit Nerja 180x200",
+    "prix": 168000,
+    "slug": "lit-nerja-180x200",
+    "updatedAt": "2026-08-11T22:22:30.690Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7b0",
+    "ref": "CORDOBA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a0",
+    "couleurs": [
+      {
+        "nom": "Noyer",
+        "hex": "#5C4433"
+      },
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      },
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.864Z",
+    "delaiLivraison": "7 à 10 jours",
+    "description": "Armoire six portes avec penderie, étagères et deux tiroirs intérieurs. Miroir sur les deux portes centrales. Montage à domicile compris.",
+    "dimensions": {
+      "largeur": 270,
+      "profondeur": 60,
+      "hauteur": 225,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/armoire-cordoba-six-portes-01.jpg",
+        "alt": "Armoire Cordoba six portes",
+        "ordre": 0
+      },
+      {
+        "url": "/products/armoire-cordoba-six-portes-02.jpg",
+        "alt": "Armoire Cordoba six portes, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "MDF",
+      "Placage bois",
+      "Verre"
+    ],
+    "nom": "Armoire Cordoba six portes",
+    "prix": 215000,
+    "slug": "armoire-cordoba-six-portes",
+    "updatedAt": "2026-08-11T22:22:30.749Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7b1",
+    "ref": "MERZOUGA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a0",
+    "couleurs": [
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      },
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.925Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Six tiroirs sur glissières métalliques à fermeture douce. Plateau en bois massif.",
+    "dimensions": {
+      "largeur": 120,
+      "profondeur": 45,
+      "hauteur": 85,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/commode-merzouga-01.jpg",
+        "alt": "Commode Merzouga",
+        "ordre": 0
+      },
+      {
+        "url": "/products/commode-merzouga-02.jpg",
+        "alt": "Commode Merzouga, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Bois massif",
+      "MDF",
+      "Métal"
+    ],
+    "nom": "Commode Merzouga",
+    "prix": 82000,
+    "slug": "commode-merzouga",
+    "updatedAt": "2026-08-11T22:22:30.809Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7b2",
+    "ref": "ESSAOUIRA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a0",
+    "couleurs": [
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      },
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      },
+      {
+        "nom": "Gris perle",
+        "hex": "#B9B7B0"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:18.981Z",
+    "delaiLivraison": "2 à 3 semaines",
+    "description": "Lit 90x190, armoire deux portes, bureau et chevet. Angles arrondis sur toutes les pièces. Se décline en trois teintes.",
+    "dimensions": {
+      "largeur": 200,
+      "profondeur": 190,
+      "hauteur": 190,
+      "unite": "cm"
+    },
+    "disponibilite": "SUR_COMMANDE",
+    "images": [
+      {
+        "url": "/products/chambre-enfant-essaouira-01.jpg",
+        "alt": "Chambre enfant Essaouira",
+        "ordre": 0
+      },
+      {
+        "url": "/products/chambre-enfant-essaouira-02.jpg",
+        "alt": "Chambre enfant Essaouira, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/chambre-enfant-essaouira-03.jpg",
+        "alt": "Chambre enfant Essaouira, vue 3",
+        "ordre": 2
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "MDF",
+      "Bois massif"
+    ],
+    "nom": "Chambre enfant Essaouira",
+    "prix": 198000,
+    "slug": "chambre-enfant-essaouira",
+    "updatedAt": "2026-08-11T22:22:30.869Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7b3",
+    "ref": "TAMANRA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a0",
+    "couleurs": [
+      {
+        "nom": "Noyer",
+        "hex": "#5C4433"
+      },
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      },
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.049Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Deux tiroirs et une niche ouverte. Vendu à l'unité.",
+    "dimensions": {
+      "largeur": 45,
+      "profondeur": 40,
+      "hauteur": 55,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/chevet-tamanra-01.jpg",
+        "alt": "Chevet Tamanra",
+        "ordre": 0
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "MDF",
+      "Placage bois"
+    ],
+    "nom": "Chevet Tamanra",
+    "prix": 24000,
+    "slug": "chevet-tamanra",
+    "updatedAt": "2026-08-11T22:22:30.935Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7b4",
+    "ref": "VALENCIA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a1",
+    "couleurs": [
+      {
+        "nom": "Noyer",
+        "hex": "#5C4433"
+      },
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.107Z",
+    "delaiLivraison": "7 à 10 jours",
+    "description": "Table extensible de huit à dix couverts. Plateau en bois massif sur piètement central en métal laqué. Rallonge intégrée sous le plateau.",
+    "dimensions": {
+      "largeur": 180,
+      "profondeur": 100,
+      "hauteur": 76,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/table-a-manger-valencia-01.jpg",
+        "alt": "Table à manger Valencia",
+        "ordre": 0
+      },
+      {
+        "url": "/products/table-a-manger-valencia-02.jpg",
+        "alt": "Table à manger Valencia, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/table-a-manger-valencia-03.jpg",
+        "alt": "Table à manger Valencia, vue 3",
+        "ordre": 2
+      }
+    ],
+    "isFeatured": true,
+    "isNouveau": false,
+    "materiaux": [
+      "Bois massif",
+      "Métal"
+    ],
+    "nom": "Table à manger Valencia",
+    "prix": 148000,
+    "slug": "table-a-manger-valencia",
+    "updatedAt": "2026-08-11T22:22:30.995Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7b5",
+    "ref": "CARRARE",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a1",
+    "couleurs": [
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      },
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.173Z",
+    "delaiLivraison": "3 à 4 semaines",
+    "description": "Plateau en marbre sur pied central en métal. Six couverts. Le veinage est propre à chaque plateau, aucune pièce n'est identique.",
+    "dimensions": {
+      "largeur": 160,
+      "profondeur": 90,
+      "hauteur": 75,
+      "unite": "cm"
+    },
+    "disponibilite": "SUR_COMMANDE",
+    "images": [
+      {
+        "url": "/products/table-a-manger-carrare-01.jpg",
+        "alt": "Table à manger Carrare",
+        "ordre": 0
+      },
+      {
+        "url": "/products/table-a-manger-carrare-02.jpg",
+        "alt": "Table à manger Carrare, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Marbre",
+      "Métal"
+    ],
+    "nom": "Table à manger Carrare",
+    "prix": 176000,
+    "slug": "table-a-manger-carrare",
+    "updatedAt": "2026-08-11T22:22:31.053Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7b6",
+    "ref": "GRANADA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a1",
+    "couleurs": [
+      {
+        "nom": "Beige sable",
+        "hex": "#D8CDB8"
+      },
+      {
+        "nom": "Vert olive",
+        "hex": "#5A6350"
+      },
+      {
+        "nom": "Bleu nuit",
+        "hex": "#2E3A4A"
+      },
+      {
+        "nom": "Terracotta",
+        "hex": "#A9614A"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.231Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Assise garnie et dossier arrondi, piètement en bois massif. Vendue à l'unité. Prévoir six à huit pièces pour une table Valencia.",
+    "dimensions": {
+      "largeur": 46,
+      "profondeur": 52,
+      "hauteur": 88,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/chaise-granada-01.jpg",
+        "alt": "Chaise Granada",
+        "ordre": 0
+      },
+      {
+        "url": "/products/chaise-granada-02.jpg",
+        "alt": "Chaise Granada, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Tissu",
+      "Bois massif"
+    ],
+    "nom": "Chaise Granada",
+    "prix": 16500,
+    "slug": "chaise-granada",
+    "updatedAt": "2026-08-11T22:22:31.107Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7b7",
+    "ref": "MALAGA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a1",
+    "couleurs": [
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      },
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.289Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Plateau en verre trempé sur structure en métal, tablette basse en bois. Angles adoucis.",
+    "dimensions": {
+      "largeur": 120,
+      "profondeur": 60,
+      "hauteur": 42,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/table-basse-malaga-01.jpg",
+        "alt": "Table basse Malaga",
+        "ordre": 0
+      },
+      {
+        "url": "/products/table-basse-malaga-02.jpg",
+        "alt": "Table basse Malaga, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Verre trempé",
+      "Métal",
+      "Bois massif"
+    ],
+    "nom": "Table basse Malaga",
+    "prix": 58000,
+    "slug": "table-basse-malaga",
+    "updatedAt": "2026-08-11T22:22:31.164Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7b8",
+    "ref": "TANGER",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a1",
+    "couleurs": [
+      {
+        "nom": "Noyer",
+        "hex": "#5C4433"
+      },
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      },
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.348Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Deux tables gigognes rondes de hauteurs différentes. Se rangent l'une sous l'autre.",
+    "dimensions": {
+      "largeur": 70,
+      "profondeur": 70,
+      "hauteur": 45,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/table-basse-tanger-lot-de-deux-01.jpg",
+        "alt": "Table basse Tanger, lot de deux",
+        "ordre": 0
+      },
+      {
+        "url": "/products/table-basse-tanger-lot-de-deux-02.jpg",
+        "alt": "Table basse Tanger, lot de deux, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": true,
+    "materiaux": [
+      "Bois massif",
+      "Métal"
+    ],
+    "nom": "Table basse Tanger, lot de deux",
+    "prix": 46000,
+    "slug": "table-basse-tanger-lot-de-deux",
+    "updatedAt": "2026-08-11T22:22:31.221Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7b9",
+    "ref": "RONDA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a1",
+    "couleurs": [
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      },
+      {
+        "nom": "Noyer",
+        "hex": "#5C4433"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.408Z",
+    "delaiLivraison": "7 à 10 jours",
+    "description": "Quatre à six couverts sur un plateau rond et un pied tulipe. Convient aux pièces étroites.",
+    "dimensions": {
+      "largeur": 120,
+      "profondeur": 120,
+      "hauteur": 75,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/table-de-repas-ronde-ronda-01.jpg",
+        "alt": "Table de repas ronde Ronda",
+        "ordre": 0
+      },
+      {
+        "url": "/products/table-de-repas-ronde-ronda-02.jpg",
+        "alt": "Table de repas ronde Ronda, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "MDF",
+      "Placage bois",
+      "Métal"
+    ],
+    "nom": "Table de repas ronde Ronda",
+    "prix": 98000,
+    "slug": "table-de-repas-ronde-ronda",
+    "updatedAt": "2026-08-11T22:22:31.279Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7ba",
+    "ref": "HORIZON",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a2",
+    "couleurs": [
+      {
+        "nom": "Noyer",
+        "hex": "#5C4433"
+      },
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      },
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.474Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Banc de 200 cm à deux portes battantes et une niche centrale ventilée. Passage de câbles à l'arrière. Pour écrans jusqu'à 75 pouces.",
+    "dimensions": {
+      "largeur": 200,
+      "profondeur": 40,
+      "hauteur": 45,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/meuble-tv-horizon-01.jpg",
+        "alt": "Meuble TV Horizon",
+        "ordre": 0
+      },
+      {
+        "url": "/products/meuble-tv-horizon-02.jpg",
+        "alt": "Meuble TV Horizon, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/meuble-tv-horizon-03.jpg",
+        "alt": "Meuble TV Horizon, vue 3",
+        "ordre": 2
+      }
+    ],
+    "isFeatured": true,
+    "isNouveau": false,
+    "materiaux": [
+      "MDF",
+      "Placage bois",
+      "Métal"
+    ],
+    "nom": "Meuble TV Horizon",
+    "prix": 78000,
+    "slug": "meuble-tv-horizon",
+    "updatedAt": "2026-08-11T22:22:31.341Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7bb",
+    "ref": "ANDALOUS",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a2",
+    "couleurs": [
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      },
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.534Z",
+    "delaiLivraison": "2 à 3 semaines",
+    "description": "Composition murale avec banc TV, colonnes de rangement et étagères suspendues. Éclairage LED en option, à préciser à la commande.",
+    "dimensions": {
+      "largeur": 280,
+      "profondeur": 40,
+      "hauteur": 190,
+      "unite": "cm"
+    },
+    "disponibilite": "SUR_COMMANDE",
+    "images": [
+      {
+        "url": "/products/ensemble-mural-andalous-01.jpg",
+        "alt": "Ensemble mural Andalous",
+        "ordre": 0
+      },
+      {
+        "url": "/products/ensemble-mural-andalous-02.jpg",
+        "alt": "Ensemble mural Andalous, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/ensemble-mural-andalous-03.jpg",
+        "alt": "Ensemble mural Andalous, vue 3",
+        "ordre": 2
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "MDF",
+      "Verre trempé",
+      "Métal"
+    ],
+    "nom": "Ensemble mural Andalous",
+    "prix": 124000,
+    "slug": "ensemble-mural-andalous",
+    "updatedAt": "2026-08-11T22:22:31.397Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7bc",
+    "ref": "LOFT 40",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a2",
+    "couleurs": [
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      },
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.592Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Banc compact à deux tiroirs sur piètement métallique fin. Pour écrans jusqu'à 55 pouces.",
+    "dimensions": {
+      "largeur": 140,
+      "profondeur": 38,
+      "hauteur": 48,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/meuble-tv-loft-01.jpg",
+        "alt": "Meuble TV Loft",
+        "ordre": 0
+      },
+      {
+        "url": "/products/meuble-tv-loft-02.jpg",
+        "alt": "Meuble TV Loft, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "MDF",
+      "Métal"
+    ],
+    "nom": "Meuble TV Loft",
+    "prix": 42000,
+    "slug": "meuble-tv-loft",
+    "updatedAt": "2026-08-11T22:22:31.460Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7bd",
+    "ref": "BEJAIA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a2",
+    "couleurs": [
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      },
+      {
+        "nom": "Noyer",
+        "hex": "#5C4433"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.649Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Quatre portes cannelées et un plateau en bois massif. Charnières à fermeture douce.",
+    "dimensions": {
+      "largeur": 180,
+      "profondeur": 42,
+      "hauteur": 52,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/meuble-tv-bejaia-01.jpg",
+        "alt": "Meuble TV Bejaia",
+        "ordre": 0
+      },
+      {
+        "url": "/products/meuble-tv-bejaia-02.jpg",
+        "alt": "Meuble TV Bejaia, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Bois massif",
+      "MDF"
+    ],
+    "nom": "Meuble TV Bejaia",
+    "prix": 64000,
+    "slug": "meuble-tv-bejaia",
+    "updatedAt": "2026-08-11T22:22:31.516Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7be",
+    "ref": "STUDIO 12",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a2",
+    "couleurs": [
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      },
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      },
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.706Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Banc suspendu à deux abattants, fixations murales fournies. Libère le sol dans les petites pièces.",
+    "dimensions": {
+      "largeur": 150,
+      "profondeur": 35,
+      "hauteur": 30,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/meuble-tv-suspendu-studio-01.jpg",
+        "alt": "Meuble TV suspendu Studio",
+        "ordre": 0
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "MDF"
+    ],
+    "nom": "Meuble TV suspendu Studio",
+    "prix": 38000,
+    "slug": "meuble-tv-suspendu-studio",
+    "updatedAt": "2026-08-11T22:22:31.577Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7bf",
+    "ref": "ALHAMBRA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a3",
+    "couleurs": [
+      {
+        "nom": "Noyer",
+        "hex": "#5C4433"
+      },
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.765Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Console étroite à deux tiroirs et tablette basse. Se pose dans un couloir sans le rétrécir.",
+    "dimensions": {
+      "largeur": 110,
+      "profondeur": 35,
+      "hauteur": 80,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/console-d-entree-alhambra-01.jpg",
+        "alt": "Console d'entrée Alhambra",
+        "ordre": 0
+      },
+      {
+        "url": "/products/console-d-entree-alhambra-02.jpg",
+        "alt": "Console d'entrée Alhambra, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Bois massif",
+      "Métal"
+    ],
+    "nom": "Console d'entrée Alhambra",
+    "prix": 52000,
+    "slug": "console-d-entree-alhambra",
+    "updatedAt": "2026-08-11T22:22:31.637Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7c0",
+    "ref": "LUNA 90",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a3",
+    "couleurs": [
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      },
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.824Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Miroir rond de 90 cm à cadre en métal fin. Fixations murales fournies.",
+    "dimensions": {
+      "largeur": 90,
+      "profondeur": 4,
+      "hauteur": 90,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/miroir-rond-luna-01.jpg",
+        "alt": "Miroir rond Luna",
+        "ordre": 0
+      },
+      {
+        "url": "/products/miroir-rond-luna-02.jpg",
+        "alt": "Miroir rond Luna, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": true,
+    "materiaux": [
+      "Verre",
+      "Métal"
+    ],
+    "nom": "Miroir rond Luna",
+    "prix": 28000,
+    "slug": "miroir-rond-luna",
+    "updatedAt": "2026-08-11T22:22:31.692Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7c1",
+    "ref": "MIRAMAR",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a3",
+    "couleurs": [
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      },
+      {
+        "nom": "Noyer",
+        "hex": "#5C4433"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.882Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Coiffeuse avec miroir, trois tiroirs et un tabouret assorti. Le miroir se démonte pour le transport.",
+    "dimensions": {
+      "largeur": 100,
+      "profondeur": 40,
+      "hauteur": 140,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/coiffeuse-miramar-01.jpg",
+        "alt": "Coiffeuse Miramar",
+        "ordre": 0
+      },
+      {
+        "url": "/products/coiffeuse-miramar-02.jpg",
+        "alt": "Coiffeuse Miramar, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/coiffeuse-miramar-03.jpg",
+        "alt": "Coiffeuse Miramar, vue 3",
+        "ordre": 2
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "MDF",
+      "Verre",
+      "Tissu"
+    ],
+    "nom": "Coiffeuse Miramar",
+    "prix": 78000,
+    "slug": "coiffeuse-miramar",
+    "updatedAt": "2026-08-11T22:22:31.752Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7c2",
+    "ref": "PORTO",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a3",
+    "couleurs": [
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      },
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:19.943Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Miroir de 170 cm, à poser contre un mur ou à fixer. Cale antidérapante à la base.",
+    "dimensions": {
+      "largeur": 60,
+      "profondeur": 3,
+      "hauteur": 170,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/miroir-porto-plein-pied-01.jpg",
+        "alt": "Miroir Porto plein pied",
+        "ordre": 0
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Verre",
+      "Métal"
+    ],
+    "nom": "Miroir Porto plein pied",
+    "prix": 34000,
+    "slug": "miroir-porto-plein-pied",
+    "updatedAt": "2026-08-11T22:22:31.811Z"
+  },
+  {
+    "_id": "6a7ba060f08048bb1227e7c3",
+    "ref": "SAHEL",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ef08048bb1227e7a3",
+    "couleurs": [
+      {
+        "nom": "Blanc cassé",
+        "hex": "#EFEBE3"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:20.004Z",
+    "delaiLivraison": "3 à 4 semaines",
+    "description": "Plateau en marbre sur piètement en métal doré. Une pièce d'entrée, pas un meuble de rangement.",
+    "dimensions": {
+      "largeur": 120,
+      "profondeur": 38,
+      "hauteur": 82,
+      "unite": "cm"
+    },
+    "disponibilite": "SUR_COMMANDE",
+    "images": [
+      {
+        "url": "/products/console-sahel-en-marbre-01.jpg",
+        "alt": "Console Sahel en marbre",
+        "ordre": 0
+      },
+      {
+        "url": "/products/console-sahel-en-marbre-02.jpg",
+        "alt": "Console Sahel en marbre, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Marbre",
+      "Métal"
+    ],
+    "nom": "Console Sahel en marbre",
+    "prix": 94000,
+    "slug": "console-sahel-en-marbre",
+    "updatedAt": "2026-08-11T22:22:31.869Z"
+  },
+  {
+    "_id": "6a7ba061f08048bb1227e7c4",
+    "ref": "PALMA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ff08048bb1227e7a4",
+    "couleurs": [
+      {
+        "nom": "Gris perle",
+        "hex": "#B9B7B0"
+      },
+      {
+        "nom": "Beige sable",
+        "hex": "#D8CDB8"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:20.064Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Canapé deux places, deux fauteuils et une table basse en résine tressée sur structure aluminium. Coussins déhoussables en tissu traité anti-UV.",
+    "dimensions": {
+      "largeur": 160,
+      "profondeur": 75,
+      "hauteur": 70,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/salon-de-jardin-palma-01.jpg",
+        "alt": "Salon de jardin Palma",
+        "ordre": 0
+      },
+      {
+        "url": "/products/salon-de-jardin-palma-02.jpg",
+        "alt": "Salon de jardin Palma, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/salon-de-jardin-palma-03.jpg",
+        "alt": "Salon de jardin Palma, vue 3",
+        "ordre": 2
+      }
+    ],
+    "isFeatured": true,
+    "isNouveau": false,
+    "materiaux": [
+      "Résine tressée",
+      "Aluminium",
+      "Tissu"
+    ],
+    "nom": "Salon de jardin Palma",
+    "prix": 186000,
+    "slug": "salon-de-jardin-palma",
+    "updatedAt": "2026-08-11T22:22:31.932Z"
+  },
+  {
+    "_id": "6a7ba061f08048bb1227e7c5",
+    "ref": "IBIZA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ff08048bb1227e7a4",
+    "couleurs": [
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      },
+      {
+        "nom": "Beige sable",
+        "hex": "#D8CDB8"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:20.131Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Table six places et six chaises empilables en aluminium. Plateau en verre trempé.",
+    "dimensions": {
+      "largeur": 180,
+      "profondeur": 90,
+      "hauteur": 75,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/ensemble-repas-jardin-ibiza-01.jpg",
+        "alt": "Ensemble repas jardin Ibiza",
+        "ordre": 0
+      },
+      {
+        "url": "/products/ensemble-repas-jardin-ibiza-02.jpg",
+        "alt": "Ensemble repas jardin Ibiza, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Aluminium",
+      "Verre trempé",
+      "Résine tressée"
+    ],
+    "nom": "Ensemble repas jardin Ibiza",
+    "prix": 142000,
+    "slug": "ensemble-repas-jardin-ibiza",
+    "updatedAt": "2026-08-11T22:22:31.992Z"
+  },
+  {
+    "_id": "6a7ba061f08048bb1227e7c6",
+    "ref": "SIDI FREDJ",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ff08048bb1227e7a4",
+    "couleurs": [
+      {
+        "nom": "Gris perle",
+        "hex": "#B9B7B0"
+      },
+      {
+        "nom": "Crème",
+        "hex": "#EDE5D6"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:20.191Z",
+    "delaiLivraison": "5 à 8 jours",
+    "description": "Dossier inclinable sur cinq positions, roulettes à l'arrière. Vendu par deux.",
+    "dimensions": {
+      "largeur": 200,
+      "profondeur": 70,
+      "hauteur": 35,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/bain-de-soleil-sidi-fredj-01.jpg",
+        "alt": "Bain de soleil Sidi Fredj",
+        "ordre": 0
+      },
+      {
+        "url": "/products/bain-de-soleil-sidi-fredj-02.jpg",
+        "alt": "Bain de soleil Sidi Fredj, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Résine tressée",
+      "Aluminium",
+      "Tissu"
+    ],
+    "nom": "Bain de soleil Sidi Fredj",
+    "prix": 86000,
+    "slug": "bain-de-soleil-sidi-fredj",
+    "updatedAt": "2026-08-11T22:22:32.047Z"
+  },
+  {
+    "_id": "6a7ba061f08048bb1227e7c7",
+    "ref": "ZERALDA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ff08048bb1227e7a4",
+    "couleurs": [
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      },
+      {
+        "nom": "Beige sable",
+        "hex": "#D8CDB8"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:20.250Z",
+    "delaiLivraison": "2 à 3 semaines",
+    "description": "Angle huit places avec table basse, en résine tressée sur structure aluminium. Modulable : les éléments se séparent.",
+    "dimensions": {
+      "largeur": 300,
+      "profondeur": 210,
+      "hauteur": 68,
+      "unite": "cm"
+    },
+    "disponibilite": "SUR_COMMANDE",
+    "images": [
+      {
+        "url": "/products/salon-de-jardin-zeralda-01.jpg",
+        "alt": "Salon de jardin Zeralda",
+        "ordre": 0
+      },
+      {
+        "url": "/products/salon-de-jardin-zeralda-02.jpg",
+        "alt": "Salon de jardin Zeralda, vue 2",
+        "ordre": 1
+      },
+      {
+        "url": "/products/salon-de-jardin-zeralda-03.jpg",
+        "alt": "Salon de jardin Zeralda, vue 3",
+        "ordre": 2
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Résine tressée",
+      "Aluminium",
+      "Tissu"
+    ],
+    "nom": "Salon de jardin Zeralda",
+    "prix": 224000,
+    "slug": "salon-de-jardin-zeralda",
+    "updatedAt": "2026-08-11T22:22:32.106Z"
+  },
+  {
+    "_id": "6a7ba061f08048bb1227e7c8",
+    "ref": "ATLAS 200",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ff08048bb1227e7a5",
+    "couleurs": [
+      {
+        "nom": "Beige sable",
+        "hex": "#D8CDB8"
+      },
+      {
+        "nom": "Gris perle",
+        "hex": "#B9B7B0"
+      },
+      {
+        "nom": "Vert olive",
+        "hex": "#5A6350"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:20.312Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Tapis à poils courts, motif géométrique discret. Dos antidérapant. Se nettoie à sec.",
+    "dimensions": {
+      "largeur": 200,
+      "profondeur": 290,
+      "hauteur": 1,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/tapis-atlas-200x290-01.jpg",
+        "alt": "Tapis Atlas 200x290",
+        "ordre": 0
+      },
+      {
+        "url": "/products/tapis-atlas-200x290-02.jpg",
+        "alt": "Tapis Atlas 200x290, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Polypropylène"
+    ],
+    "nom": "Tapis Atlas 200x290",
+    "prix": 48000,
+    "slug": "tapis-atlas-200x290",
+    "updatedAt": "2026-08-11T22:22:32.165Z"
+  },
+  {
+    "_id": "6a7ba061f08048bb1227e7c9",
+    "ref": "SOLEIL",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ff08048bb1227e7a5",
+    "couleurs": [
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:20.378Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Suspension en rotin tressé, diamètre 50 cm. Douille E27, ampoule non fournie.",
+    "dimensions": {
+      "largeur": 50,
+      "profondeur": 50,
+      "hauteur": 40,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/suspension-soleil-01.jpg",
+        "alt": "Suspension Soleil",
+        "ordre": 0
+      },
+      {
+        "url": "/products/suspension-soleil-02.jpg",
+        "alt": "Suspension Soleil, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": true,
+    "materiaux": [
+      "Rotin",
+      "Métal"
+    ],
+    "nom": "Suspension Soleil",
+    "prix": 22000,
+    "slug": "suspension-soleil",
+    "updatedAt": "2026-08-11T22:22:32.223Z"
+  },
+  {
+    "_id": "6a7ba061f08048bb1227e7ca",
+    "ref": "DJEMILA",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ff08048bb1227e7a5",
+    "couleurs": [
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      },
+      {
+        "nom": "Crème",
+        "hex": "#EDE5D6"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:20.443Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Lampadaire à arc, abat-jour en tissu et base en marbre. Interrupteur au pied.",
+    "dimensions": {
+      "largeur": 55,
+      "profondeur": 30,
+      "hauteur": 165,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/lampadaire-djemila-01.jpg",
+        "alt": "Lampadaire Djemila",
+        "ordre": 0
+      },
+      {
+        "url": "/products/lampadaire-djemila-02.jpg",
+        "alt": "Lampadaire Djemila, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Métal",
+      "Marbre",
+      "Tissu"
+    ],
+    "nom": "Lampadaire Djemila",
+    "prix": 32000,
+    "slug": "lampadaire-djemila",
+    "updatedAt": "2026-08-11T22:22:32.284Z"
+  },
+  {
+    "_id": "6a7ba061f08048bb1227e7cb",
+    "ref": "TASSILI",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ff08048bb1227e7a5",
+    "couleurs": [
+      {
+        "nom": "Crème",
+        "hex": "#EDE5D6"
+      },
+      {
+        "nom": "Terracotta",
+        "hex": "#A9614A"
+      },
+      {
+        "nom": "Vert olive",
+        "hex": "#5A6350"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:20.504Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Trois vases en céramique émaillée de hauteurs différentes. Finition mate.",
+    "dimensions": {
+      "largeur": 18,
+      "profondeur": 18,
+      "hauteur": 35,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/vase-tassili-lot-de-trois-01.jpg",
+        "alt": "Vase Tassili, lot de trois",
+        "ordre": 0
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Céramique"
+    ],
+    "nom": "Vase Tassili, lot de trois",
+    "prix": 15500,
+    "slug": "vase-tassili-lot-de-trois",
+    "updatedAt": "2026-08-11T22:22:32.344Z"
+  },
+  {
+    "_id": "6a7ba061f08048bb1227e7cc",
+    "ref": "KABYLIE",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ff08048bb1227e7a5",
+    "couleurs": [
+      {
+        "nom": "Crème",
+        "hex": "#EDE5D6"
+      },
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:20.566Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Tissage plat à motif berbère, laine mélangée. Réversible.",
+    "dimensions": {
+      "largeur": 160,
+      "profondeur": 230,
+      "hauteur": 1,
+      "unite": "cm"
+    },
+    "disponibilite": "EN_STOCK",
+    "images": [
+      {
+        "url": "/products/tapis-kabylie-160x230-01.jpg",
+        "alt": "Tapis Kabylie 160x230",
+        "ordre": 0
+      },
+      {
+        "url": "/products/tapis-kabylie-160x230-02.jpg",
+        "alt": "Tapis Kabylie 160x230, vue 2",
+        "ordre": 1
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Laine mélangée"
+    ],
+    "nom": "Tapis Kabylie 160x230",
+    "prix": 36000,
+    "slug": "tapis-kabylie-160x230",
+    "updatedAt": "2026-08-11T22:22:32.401Z"
+  },
+  {
+    "_id": "6a7ba061f08048bb1227e7cd",
+    "ref": "MIROIR SOLEIL",
+    "__v": 0,
+    "ancienPrix": null,
+    "categoryId": "6a7ba05ff08048bb1227e7a5",
+    "couleurs": [
+      {
+        "nom": "Chêne clair",
+        "hex": "#C4A882"
+      },
+      {
+        "nom": "Anthracite",
+        "hex": "#3A3A3C"
+      }
+    ],
+    "createdAt": "2026-08-11T22:21:20.624Z",
+    "delaiLivraison": "3 à 5 jours",
+    "description": "Miroir décoratif à rayons en métal, diamètre total 80 cm. Se pose au-dessus d'une console.",
+    "dimensions": {
+      "largeur": 80,
+      "profondeur": 4,
+      "hauteur": 80,
+      "unite": "cm"
+    },
+    "disponibilite": "RUPTURE",
+    "images": [
+      {
+        "url": "/products/miroir-soleil-decoratif-01.jpg",
+        "alt": "Miroir soleil décoratif",
+        "ordre": 0
+      }
+    ],
+    "isFeatured": false,
+    "isNouveau": false,
+    "materiaux": [
+      "Métal",
+      "Verre"
+    ],
+    "nom": "Miroir soleil décoratif",
+    "prix": 18500,
+    "slug": "miroir-soleil-decoratif",
+    "updatedAt": "2026-08-11T22:22:32.460Z"
+  },
+  {
+    "_id": "6a7ba4c48aeee0451f5b922a",
+    "ref": "SOMETHING",
+    "nom": "asd",
+    "slug": "asd",
+    "description": "sad",
+    "categoryId": "6a7ba05ef08048bb1227e79f",
+    "prix": 555555,
+    "ancienPrix": null,
+    "dimensions": {
+      "largeur": 60,
+      "profondeur": 60,
+      "hauteur": 60,
+      "unite": "cm"
+    },
+    "materiaux": [
+      "Velours",
+      "Bois massif"
+    ],
+    "couleurs": [
+      {
+        "nom": "aasd",
+        "hex": "#5c3c00"
+      },
+      {
+        "nom": "dsda",
+        "hex": "#ffa600"
+      }
+    ],
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/or3nkupa/image/upload/v1786489164/evora-home/yftwnwun7gu11o4fi6ds.png",
+        "alt": "",
+        "ordre": 0
+      },
+      {
+        "url": "https://res.cloudinary.com/or3nkupa/image/upload/v1786490148/evora-home/tzkw6hfbg4tlwsprnmla.png",
+        "alt": "",
+        "ordre": 1
+      },
+      {
+        "url": "https://res.cloudinary.com/or3nkupa/image/upload/v1786490148/evora-home/w9ismd1g2lhrrisuhzl2.png",
+        "alt": "",
+        "ordre": 2
+      }
+    ],
+    "disponibilite": "EN_STOCK",
+    "delaiLivraison": "5",
+    "isFeatured": true,
+    "isNouveau": true,
+    "createdAt": "2026-08-11T22:40:04.699Z",
+    "updatedAt": "2026-08-12T10:47:50.567Z",
+    "__v": 3
+  }
+]

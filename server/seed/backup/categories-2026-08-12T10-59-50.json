@@ -1,0 +1,86 @@
+[
+  {
+    "_id": "6a7ba05ef08048bb1227e79f",
+    "slug": "salons",
+    "__v": 0,
+    "createdAt": "2026-08-11T22:21:17.798Z",
+    "description": "Canapés d'angle, ensembles trois pièces et fauteuils. Assises en tissu ou en velours, structures en bois massif.",
+    "image": "https://res.cloudinary.com/or3nkupa/image/upload/v1786488067/evora-home/jbwhsnz8suwoyfw5hkjt.png",
+    "isActive": true,
+    "nom": "Salons",
+    "ordre": 1,
+    "updatedAt": "2026-08-11T22:41:07.928Z"
+  },
+  {
+    "_id": "6a7ba05ef08048bb1227e7a0",
+    "slug": "chambres",
+    "__v": 0,
+    "createdAt": "2026-08-11T22:21:17.875Z",
+    "description": "Lits, armoires, commodes et chevets. Ensembles complets ou pièces séparées, en placage ou en bois massif.",
+    "image": "/products/categories/chambres.jpg",
+    "isActive": true,
+    "nom": "Chambres",
+    "ordre": 2,
+    "updatedAt": "2026-08-11T22:22:29.808Z"
+  },
+  {
+    "_id": "6a7ba05ef08048bb1227e7a1",
+    "slug": "tables-et-chaises",
+    "__v": 0,
+    "createdAt": "2026-08-11T22:21:17.932Z",
+    "description": "Tables à manger fixes ou extensibles, tables basses et chaises. Plateaux en bois, en verre trempé et en marbre.",
+    "image": "/products/categories/tables-et-chaises.jpg",
+    "isActive": true,
+    "nom": "Tables & Chaises",
+    "ordre": 3,
+    "updatedAt": "2026-08-11T22:22:29.862Z"
+  },
+  {
+    "_id": "6a7ba05ef08048bb1227e7a2",
+    "slug": "meubles-tv",
+    "__v": 0,
+    "createdAt": "2026-08-11T22:21:17.989Z",
+    "description": "Bancs TV et ensembles muraux, avec rangement fermé et passage de câbles.",
+    "image": "/products/categories/meubles-tv.jpg",
+    "isActive": true,
+    "nom": "Meubles TV",
+    "ordre": 4,
+    "updatedAt": "2026-08-11T22:22:29.917Z"
+  },
+  {
+    "_id": "6a7ba05ef08048bb1227e7a3",
+    "slug": "consoles-et-miroirs",
+    "__v": 0,
+    "createdAt": "2026-08-11T22:21:18.045Z",
+    "description": "Consoles d'entrée, coiffeuses et miroirs. Pour les entrées et les couloirs.",
+    "image": "/products/categories/consoles-et-miroirs.jpg",
+    "isActive": true,
+    "nom": "Consoles & Miroirs",
+    "ordre": 5,
+    "updatedAt": "2026-08-11T22:22:29.978Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7a4",
+    "slug": "salon-de-jardin",
+    "__v": 0,
+    "createdAt": "2026-08-11T22:21:18.102Z",
+    "description": "Ensembles de terrasse et de jardin en résine tressée et en aluminium, avec coussins déhoussables.",
+    "image": "/products/categories/salon-de-jardin.jpg",
+    "isActive": true,
+    "nom": "Salon de Jardin",
+    "ordre": 6,
+    "updatedAt": "2026-08-11T22:22:30.037Z"
+  },
+  {
+    "_id": "6a7ba05ff08048bb1227e7a5",
+    "slug": "decoration",
+    "__v": 0,
+    "createdAt": "2026-08-11T22:21:18.160Z",
+    "description": "Tapis, luminaires, vases et objets. Les finitions qui terminent une pièce.",
+    "image": "/products/categories/decoration.jpg",
+    "isActive": true,
+    "nom": "Décoration",
+    "ordre": 7,
+    "updatedAt": "2026-08-11T22:22:30.094Z"
+  }
+]

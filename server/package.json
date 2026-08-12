@@ -9,7 +9,8 @@
     "seed": "node seed/seed.js",
     "verify": "node seed/verify.js",
     "smoke": "node seed/smoke.js",
-
+    "reseed": "node seed/reseed-catalogue.js",
+    "check-images": "node seed/check-images.js"
   },
   "keywords": [],
   "author": "",
