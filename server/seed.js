@@ -16,15 +16,15 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
-import Category from '../Models/Category.js';
-import Product from '../Models/Product.js';
-import Wilaya from '../Models/Wilaya.js';
-import User from '../Models/User.js';
-import Settings, { SINGLETON_ID } from '../Models/Settings.js';
+import Category from './Models/Category.js';
+import Product from './Models/Product.js';
+import Wilaya from './Models/Wilaya.js';
+import User from './Models/User.js';
+import Settings, { SINGLETON_ID } from './Models/Settings.js';
 
-import { CATEGORIES, PRODUITS } from './catalogue.js';
-import { WILAYAS } from './wilayas.js';
-import { slugify } from '../utils/slugify.js';
+import { CATEGORIES, PRODUITS } from './seed/catalogue.js';
+import { WILAYAS } from './seed/wilayas.js';
+import { slugify } from './utils/slugify.js';
 
 dotenv.config();
 
@@ -109,6 +109,11 @@ async function seedWilayas() {
   console.log(`  wilayas: ${WILAYAS.length} (${res.upsertedCount} nouvelles)`);
 }
 
+async function syncSeedIndexes() {
+  await Promise.all([Category.syncIndexes(), Product.syncIndexes(), Wilaya.syncIndexes()]);
+  console.log('  indexes synchronisés');
+}
+
 async function seedSettings() {
   await Settings.findByIdAndUpdate(
     SINGLETON_ID,
@@ -122,6 +127,7 @@ async function seedSettings() {
         horaires: 'Samedi au jeudi, 9h00 à 18h00. Vendredi fermé.',
         instagram: 'evorahomealgeria',
         facebook: '',
+        tiktok: '',
         heroTitle: "L'élégance prend forme chez vous",
         heroSubtitle:
           'Meuble et article de décoration. Showroom à El Khroub, livraison dans les 58 wilayas.',
@@ -150,6 +156,7 @@ async function seedAdmin() {
   const admin = new User({
     nom: 'Evora Home',
     telephone: process.env.ADMIN_PHONE || '0540870382',
+    email: process.env.ADMIN_EMAIL?.trim().toLowerCase() || '',
     role: 'ADMIN',
     passwordHash: password,
   });
@@ -171,6 +178,8 @@ async function main() {
     await Promise.all([Category.deleteMany({}), Product.deleteMany({}), Wilaya.deleteMany({})]);
     console.log('Catalogue et wilayas vidés (commandes et comptes conservés)');
   }
+
+  await syncSeedIndexes();
 
   console.log('Seed:');
   const categories = await seedCategories();

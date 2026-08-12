@@ -20,6 +20,7 @@ const FALLBACK = {
   horaires: fallbackContact.horaires,
   instagram: fallbackContact.instagram,
   facebook: fallbackContact.facebook,
+  tiktok: '',
   heroTitle: brand.tagline,
   heroSubtitle: 'Meuble et article de décoration. Showroom à El Khroub, livraison dans les 58 wilayas.',
 };
@@ -29,10 +30,12 @@ export function SettingsProvider({ children }) {
 
   useEffect(() => {
     const controller = new AbortController();
+    let active = true;
+
     api
       .settings(controller.signal)
       .then((data) => {
-        if (!data) return;
+        if (!active || !data) return;
         // Merge rather than replace: an empty field in the database should not
         // wipe out a working fallback.
         setSettings((prev) => {
@@ -43,8 +46,14 @@ export function SettingsProvider({ children }) {
           return merged;
         });
       })
-      .catch(() => {});
-    return () => controller.abort();
+      .catch((err) => {
+        if (!active || err.name === 'AbortError') return;
+      });
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
   }, []);
 
   const value = useMemo(() => ({ settings, setSettings }), [settings]);

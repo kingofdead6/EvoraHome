@@ -119,14 +119,15 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
   const removeImage = (index) =>
     setForm((p) => ({ ...p, images: p.images.filter((_, i) => i !== index) }));
 
-  const addImagePath = () => {
-    const url = form.newImagePath?.trim();
-    if (!url) return;
-    setForm((p) => ({
-      ...p,
-      images: [...p.images, { url, alt: '', ordre: p.images.length }],
-      newImagePath: '',
-    }));
+  const removePendingFile = (index) =>
+    setFiles((prev) => prev.filter((_, i) => i !== index));
+
+  const setMateriauxText = (text) => {
+    const list = text
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean);
+    setForm((p) => ({ ...p, materiaux: list }));
   };
 
   async function handleSubmit(e) {
@@ -273,24 +274,13 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
           {/* Materials */}
           <fieldset className="border-0 p-0">
             <legend className="mb-2 text-[12px] uppercase tracking-[0.12em] text-ink-muted">Matériaux</legend>
-            <div className="flex flex-wrap gap-1.5">
-              {MATERIAUX_SUGGESTIONS.map((m) => {
-                const selected = form.materiaux.includes(m);
-                return (
-                  <button
-                    key={m}
-                    type="button"
-                    onClick={() => toggleMateriau(m)}
-                    aria-pressed={selected}
-                    className={`min-h-[36px] rounded-sm border px-2.5 text-[12px] transition-colors ${
-                      selected ? 'border-gold bg-greige/40 text-ink' : 'border-greige text-ink-muted hover:border-sand'
-                    }`}
-                  >
-                    {m}
-                  </button>
-                );
-              })}
-            </div>
+            <AdminTextArea
+              label="Liste des matériaux (séparés par une virgule)"
+              rows={3}
+              value={form.materiaux.join(', ')}
+              onChange={(e) => setMateriauxText(e.target.value)}
+              placeholder="Tissu, velours, bois massif, métal"
+            />
           </fieldset>
 
           {/* Colours */}
@@ -392,23 +382,39 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
                   type="file"
                   accept="image/*"
                   multiple
-                  onChange={(e) => setFiles([...e.target.files])}
+                  onChange={(e) => setFiles((prev) => [...prev, ...Array.from(e.target.files)])}
                   className="min-h-[44px] rounded-sm border border-greige bg-cream px-3 py-2 text-sm text-ink file:mr-3 file:rounded-sm file:border file:border-greige file:bg-cream file:px-3 file:py-1.5 file:text-sm file:text-ink"
                 />
               </label>
 
-              <div className="flex items-end gap-2">
-                <AdminInput
-                  label="Ou chemin d'une photo déjà déposée"
-                  value={form.newImagePath || ''}
-                  onChange={(e) => setForm((p) => ({ ...p, newImagePath: e.target.value }))}
-                  placeholder="/products/mon-produit-01.jpg"
-                  className="flex-1"
-                />
-                <Button onClick={addImagePath} variant="secondary" size="sm">
-                  Ajouter
-                </Button>
-              </div>
+              {files.length ? (
+                <div className="grid gap-2 sm:grid-cols-3">
+                  {files.map((file, index) => (
+                    <div key={`${file.name}-${index}`} className="flex items-center gap-2 rounded-sm border border-greige bg-cream p-2">
+                      <div className="h-16 w-16 overflow-hidden rounded-sm border border-greige bg-greige/20">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={file.name}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 text-sm text-ink">
+                        <p className="truncate font-medium">{file.name}</p>
+                        <p className="text-xs text-ink-muted">{Math.round(file.size / 1024)} KB</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removePendingFile(index)}
+                        aria-label="Retirer le fichier"
+                        className="text-ink-muted hover:text-[#8C2F1F]"
+                      >
+                        <Trash2 size={18} strokeWidth={1.5} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+
             </div>
           </fieldset>
 

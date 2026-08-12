@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../../lib/auth';
-import { isValidPhoneClient } from '../../lib/validate';
+import { isValidEmail, isValidPhoneClient } from '../../lib/validate';
 import { Field } from '../../Components/UI/Field';
 import Button from '../../Components/UI/Button';
 import SectionDivider from '../../Components/Brand/SectionDivider';
@@ -39,7 +39,7 @@ export function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [telephone, setTelephone] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -50,10 +50,10 @@ export function Login() {
     setLoading(true);
 
     try {
-      const account = await login({ telephone, password });
-      // Admins land in the admin, customers land where they were headed.
+      const account = await login({ identifier, password });
+      // Admins and super admins land in the admin panel.
       const destination =
-        account.role === 'ADMIN' ? '/admin' : location.state?.from || '/compte';
+        ['ADMIN', 'SUPER_ADMIN'].includes(account.role) ? '/admin' : location.state?.from || '/compte';
       navigate(destination, { replace: true });
     } catch (err) {
       setError(err.message);
@@ -76,14 +76,15 @@ export function Login() {
     >
       <form onSubmit={handleSubmit} noValidate className="mt-8 flex flex-col gap-5">
         <Field
-          label="Téléphone"
+          label="Téléphone ou email"
           required
-          type="tel"
-          inputMode="tel"
-          autoComplete="tel"
-          placeholder="0X XX XX XX XX"
-          value={telephone}
-          onChange={(e) => setTelephone(e.target.value)}
+          type="text"
+          inputMode="text"
+          autoComplete="username"
+          placeholder="05... ou email@example.com"
+          value={identifier}
+          onChange={(e) => setIdentifier(e.target.value)}
+          error={error}
         />
 
         <Field
@@ -135,6 +136,7 @@ export function Register() {
       next.telephone = 'Numéro invalide. Format : 05, 06 ou 07 suivi de 8 chiffres';
     }
     if (form.password.length < 6) next.password = 'Au moins 6 caractères';
+    if (form.email && !isValidEmail(form.email)) next.email = 'Adresse email invalide';
 
     setErrors(next);
     if (Object.keys(next).length) return;
@@ -200,6 +202,7 @@ export function Register() {
           autoComplete="email"
           value={form.email}
           onChange={set('email')}
+          error={errors.email}
         />
 
         <Field

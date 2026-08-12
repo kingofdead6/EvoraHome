@@ -6,6 +6,8 @@
  * carrying the French message the server sent, so components can render
  * `err.message` directly to the customer without checking shapes.
  */
+// const API_BASE_URL = "http://localhost:5000/api";
+// 
 
 import { API_BASE_URL } from '../../api.js';
 
@@ -14,7 +16,8 @@ import { API_BASE_URL } from '../../api.js';
  * in one file. VITE_API_URL overrides it when you want to point a local build
  * at a local server; leave it unset and you get production.
  */
-const BASE = import.meta.env.VITE_API_URL || API_BASE_URL;
+const BASE = API_BASE_URL;
+
 
 export class ApiError extends Error {
   constructor(message, status) {
@@ -25,10 +28,13 @@ export class ApiError extends Error {
 }
 
 async function request(path, { method = 'GET', body, signal, isForm = false } = {}) {
+  const url = `${BASE}${path}`;
+  console.debug('[API] request', { method, url, body, isForm });
+
   let response;
 
   try {
-    response = await fetch(`${BASE}${path}`, {
+    response = await fetch(url, {
       method,
       credentials: 'include',
       headers: isForm ? undefined : { 'Content-Type': 'application/json' },
@@ -36,8 +42,8 @@ async function request(path, { method = 'GET', body, signal, isForm = false } = 
       signal,
     });
   } catch (err) {
+    console.error('[API] fetch failed', { method, url, err });
     if (err.name === 'AbortError') throw err;
-    // A dropped mobile connection is the common case here, not a server fault.
     throw new ApiError('Connexion impossible. Vérifiez votre connexion internet.', 0);
   }
 
@@ -51,9 +57,11 @@ async function request(path, { method = 'GET', body, signal, isForm = false } = 
   }
 
   if (!response.ok) {
+    console.error('[API] response error', { method, url, status: response.status, payload });
     throw new ApiError(payload?.message || 'Une erreur est survenue', response.status);
   }
 
+  console.debug('[API] response success', { method, url, status: response.status, payload });
   return payload;
 }
 

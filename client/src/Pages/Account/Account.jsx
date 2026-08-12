@@ -46,6 +46,7 @@ export function AccountLayout() {
           <h1 className="font-display text-xl tracking-[0.1em] text-ink sm:text-2xl">Mon compte</h1>
           <p className="mt-2 text-base text-ink-muted">
             {user?.nom} · <span className="tabular-nums">{formatPhone(user?.telephone)}</span>
+            {user?.email ? ` · ${user.email}` : ''}
           </p>
         </div>
 

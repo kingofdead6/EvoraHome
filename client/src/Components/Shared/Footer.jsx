@@ -24,9 +24,11 @@ const CATEGORIES = [
   { slug: 'decoration', nom: 'Décoration' },
 ];
 
-function FooterHeading({ children }) {
+function FooterHeading({ children, ...props }) {
   return (
-    <h2 className="mb-4 font-sans text-[12px] uppercase tracking-[0.2em] text-sand">{children}</h2>
+    <h2 {...props} className="mb-4 font-sans text-[12px] uppercase tracking-[0.2em] text-sand">
+      {children}
+    </h2>
   );
 }
 
@@ -48,9 +50,16 @@ export default function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {/* Brand */}
           <div className="lg:pr-8">
-            <p className="font-display text-lg tracking-[0.18em] text-cream">Evora Home</p>
-            <p className="mt-3 text-sm leading-relaxed text-sand">{brand.tagline}</p>
-            <p className="mt-1 text-sm text-sand">{brand.descriptor}</p>
+            <div className="flex items-center gap-3">
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-sm border border-sand/25 bg-olive/20 text-gold">
+                <EvoraTree size={22} />
+              </span>
+              <div>
+                <p className="font-display text-lg tracking-[0.18em] text-cream">Evora Home</p>
+                <p className="text-sm text-sand">{brand.descriptor}</p>
+              </div>
+            </div>
+            <p className="mt-4 text-sm leading-relaxed text-sand">{brand.tagline}</p>
           </div>
 
           {/* Catalogue */}
@@ -75,7 +84,8 @@ export default function Footer() {
             <FooterHeading id="footer-maison">La maison</FooterHeading>
             <ul className="flex flex-col gap-2.5">
               {[
-                { to: '/showroom', label: 'Notre showroom' },
+                    { to: '/showroom', label: 'Notre showroom' },
+                { to: '/faq', label: 'FAQ' },
                 { to: '/contact', label: 'Nous contacter' },
                 { to: '/compte/commandes', label: 'Suivre ma commande' },
                 { to: '/livraison', label: 'Livraison et paiement' },
@@ -150,6 +160,18 @@ export default function Footer() {
                   className="flex h-11 w-11 items-center justify-center rounded-sm border border-sand/25 text-sand transition-colors duration-200 hover:border-gold hover:text-cream"
                 >
                   <Facebook size={17} strokeWidth={1.5} />
+                </a>
+              ) : null}
+
+              {settings.tiktok ? (
+                <a
+                  href={`https://tiktok.com/@${settings.tiktok}`}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="TikTok"
+                  className="flex h-11 w-11 items-center justify-center rounded-sm border border-sand/25 text-sand transition-colors duration-200 hover:border-gold hover:text-cream"
+                >
+                  <span className="text-[18px] font-black">t</span>
                 </a>
               ) : null}
             </div>

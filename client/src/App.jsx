@@ -13,10 +13,7 @@ import Footer from './Components/Shared/Footer';
 import CartDrawer from './Components/Shared/CartDrawer';
 import { Loading } from './Components/UI/States';
 
-// Home ships in the entry chunk: it is the landing page and the LCP page, so
-// a second round trip to fetch it would be the wrong trade. Everything else is
-// split, because a customer on mobile data should not download the checkout,
-// the account area and the admin in order to look at a sofa.
+
 import Home from './Pages/Home';
 
 const Catalogue = lazy(() => import('./Pages/Catalogue'));
@@ -47,6 +44,7 @@ const AdminApp = lazy(() => import('./Pages/Admin/AdminApp'));
 // anime.js is only ever used by the intro, so it loads with it rather than
 // sitting in the entry chunk for every visit that never shows it.
 const Intro = lazy(() => import('./Components/Shared/Intro'));
+const FAQ = lazy(() => import('./Pages/FAQ'));
 
 /** Scroll to the top on navigation, except when the browser is restoring. */
 function ScrollToTop() {
@@ -151,6 +149,7 @@ function AnimatedRoutes({ onOpenCart }) {
                   <Route path="/showroom" element={<Showroom />} />
                   <Route path="/livraison" element={<Navigate to="/showroom#livraison" replace />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/faq" element={<FAQ />} />
 
                   <Route path="/connexion" element={<Login />} />
                   <Route path="/inscription" element={<Register />} />

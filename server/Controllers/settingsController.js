@@ -18,6 +18,7 @@ const EDITABLE = [
   'horaires',
   'instagram',
   'facebook',
+  'tiktok',
   'heroTitle',
   'heroSubtitle',
 ];
