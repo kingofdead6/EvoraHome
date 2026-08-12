@@ -102,7 +102,19 @@ furniture rather than parcels (2 000 DA locally up to 15 000 DA in the deep
 south). The client must set their real tariff in the admin before launch.
 Re-running the seed never overwrites tuned fees.
 
-**No product photography.** Every image slot renders an empty greige frame.
+**Photography in the seed is stock, and it is temporary.** Every product,
+category and showroom slot now resolves to a real photograph on the Unsplash
+CDN, declared in `server/seed/images.js`, so a freshly seeded database looks
+like a furniture catalogue instead of forty empty greige frames. `DESIGN.md`
+rules stock photography out of the final build and that still stands: this is
+scaffolding for demos, reviews and staging.
+
+Two commands matter here. `npm run check:images` (server) HEADs every URL and
+names the key to fix in `seed/images.js` for any that no longer resolve; run it
+before a launch. And once the client's own photography arrives, drop the files
+into `client/public/products/` under the naming below and re-run the seed with
+`USE_LOCAL_PHOTOS=1`, which switches every slot back to local paths with no
+code change.
 
 **Two deliberate deviations from the brief**, both because following it
 literally would have made the site worse:
@@ -153,6 +165,9 @@ bad file to confirm it is not silently passing. `taste-skill` and
    anywhere it is used directly.
 7. **Confirmation** that `0540870382` is the WhatsApp number, and their
    Facebook page URL if they have one.
+
+Until then the seed's stock photography stands in, so nothing on the site is
+an empty frame while you wait.
 
 Alternatively the client can upload photos through the admin, which needs
 Cloudinary credentials (below). Dropping files into `public/products/` needs no

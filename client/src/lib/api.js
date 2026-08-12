@@ -6,12 +6,14 @@
  * carrying the French message the server sent, so components can render
  * `err.message` directly to the customer without checking shapes.
  */
-// const API_BASE_URL = "http://localhost:5000/api";
-// 
+// VITE_API_URL is what the deployment sets (see HANDOVER.md). The literal is
+// the fallback for a build that ships without it, so an unset variable on the
+// host degrades to the production API rather than to a broken storefront.
+const BASE = import.meta.env.VITE_API_URL || 'https://evorahome.onrender.com/api';
 
-
-const API_BASE_URL = "https://evorahome.onrender.com/api";
-const BASE = API_BASE_URL;
+// Request logging is a development aid. It printed every body, including the
+// password on /auth/login, into the console of every customer's browser.
+const DEBUG = import.meta.env.DEV;
 
 export class ApiError extends Error {
   constructor(message, status) {
@@ -23,7 +25,7 @@ export class ApiError extends Error {
 
 async function request(path, { method = 'GET', body, signal, isForm = false } = {}) {
   const url = `${BASE}${path}`;
-  console.debug('[API] request', { method, url, body, isForm });
+  if (DEBUG) console.debug('[API] request', { method, url });
 
   let response;
 
@@ -36,7 +38,7 @@ async function request(path, { method = 'GET', body, signal, isForm = false } = 
       signal,
     });
   } catch (err) {
-    console.error('[API] fetch failed', { method, url, err });
+    if (DEBUG) console.error('[API] fetch failed', { method, url, err });
     if (err.name === 'AbortError') throw err;
     throw new ApiError('Connexion impossible. Vérifiez votre connexion internet.', 0);
   }
@@ -51,11 +53,11 @@ async function request(path, { method = 'GET', body, signal, isForm = false } = 
   }
 
   if (!response.ok) {
-    console.error('[API] response error', { method, url, status: response.status, payload });
+    if (DEBUG) console.error('[API] response error', { method, url, status: response.status });
     throw new ApiError(payload?.message || 'Une erreur est survenue', response.status);
   }
 
-  console.debug('[API] response success', { method, url, status: response.status, payload });
+  if (DEBUG) console.debug('[API] response success', { method, url, status: response.status });
   return payload;
 }
 

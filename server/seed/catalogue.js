@@ -464,6 +464,7 @@ export const PRODUITS = [
     couleurs: c('noyer', 'blancCasse'),
     disponibilite: 'EN_STOCK',
     delaiLivraison: '3 à 5 jours',
+    isFeatured: true,
   },
   {
     ref: 'LUNA 90',
@@ -589,6 +590,7 @@ export const PRODUITS = [
     couleurs: c('beigeSable', 'grisPerle', 'vertOlive'),
     disponibilite: 'EN_STOCK',
     delaiLivraison: '3 à 5 jours',
+    isFeatured: true,
   },
   {
     ref: 'SOLEIL',

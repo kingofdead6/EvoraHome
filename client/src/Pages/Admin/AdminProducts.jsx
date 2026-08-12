@@ -287,41 +287,65 @@ function ProductEditor({ product, categories, onClose, onSaved }) {
           <fieldset className="border-0 p-0">
             <legend className="mb-2 text-[12px] uppercase tracking-[0.12em] text-ink-muted">Coloris</legend>
 
-            <div className="flex flex-col gap-2">
-              {form.couleurs.map((couleur, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <div key={i} className="flex items-center gap-2">
-                  <input
-                    type="color"
-                    value={couleur.hex}
-                    onChange={(e) => setCouleur(i, 'hex', e.target.value)}
-                    aria-label="Couleur"
-                    className="h-11 w-12 shrink-0 cursor-pointer rounded-sm border border-greige bg-cream p-1"
-                  />
-                  <input
-                    type="text"
-                    value={couleur.nom}
-                    onChange={(e) => setCouleur(i, 'nom', e.target.value)}
-                    placeholder="Nom du coloris"
-                    aria-label="Nom du coloris"
-                    className="min-h-[44px] flex-1 rounded-sm border border-greige bg-cream px-3 text-base text-ink focus:border-gold focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeCouleur(i)}
-                    aria-label="Retirer ce coloris"
-                    className="flex h-11 w-11 shrink-0 items-center justify-center text-ink-muted hover:text-[#8C2F1F]"
-                  >
-                    <Trash2 size={16} strokeWidth={1.5} />
-                  </button>
-                </div>
-              ))}
-            </div>
+            {form.couleurs.length ? (
+              <ul className="flex flex-col divide-y divide-greige rounded-sm border border-greige">
+                {form.couleurs.map((couleur, i) => (
+                  // Rows are keyed by position on purpose. A colour has no id
+                  // until it is saved and its name is edited character by
+                  // character, so keying on the name would remount the input
+                  // and drop focus on every keystroke.
+                  // eslint-disable-next-line react/no-array-index-key
+                  <li key={i} className="flex items-center gap-2 p-2">
+                    <label className="relative shrink-0">
+                      <span className="sr-only">Teinte du coloris {i + 1}</span>
+                      <input
+                        type="color"
+                        value={couleur.hex}
+                        onChange={(e) => setCouleur(i, 'hex', e.target.value)}
+                        className="h-11 w-12 cursor-pointer rounded-sm border border-greige bg-cream p-1"
+                      />
+                    </label>
 
-            <Button onClick={addCouleur} variant="secondary" size="sm" className="mt-2">
+                    <input
+                      type="text"
+                      value={couleur.nom}
+                      onChange={(e) => setCouleur(i, 'nom', e.target.value)}
+                      placeholder="Nom du coloris, par exemple Beige sable"
+                      aria-label={`Nom du coloris ${i + 1}`}
+                      className="min-h-[44px] min-w-0 flex-1 rounded-sm border border-greige bg-cream px-3 text-base text-ink focus:border-gold focus:outline-none"
+                    />
+
+                    <span className="hidden shrink-0 text-[12px] uppercase tracking-[0.1em] tabular-nums text-ink-muted sm:inline">
+                      {couleur.hex}
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={() => removeCouleur(i)}
+                      aria-label={`Retirer le coloris ${i + 1}`}
+                      className="flex h-11 w-11 shrink-0 items-center justify-center text-ink-muted hover:text-[#8C2F1F]"
+                    >
+                      <Trash2 size={16} strokeWidth={1.5} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-ink-muted">
+                Aucun coloris. Ajoutez-en un pour que le client puisse choisir sur la fiche produit.
+              </p>
+            )}
+
+            <Button onClick={addCouleur} variant="secondary" size="sm" className="mt-3">
               <Plus size={15} strokeWidth={1.5} />
               Ajouter un coloris
             </Button>
+
+            {form.couleurs.some((c) => !c.nom.trim()) ? (
+              <p className="mt-2 text-sm text-ink-muted">
+                Un coloris sans nom n&apos;est pas enregistré.
+              </p>
+            ) : null}
           </fieldset>
 
           {/* Images */}

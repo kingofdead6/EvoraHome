@@ -3,9 +3,11 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../../lib/auth';
 import { isValidEmail, isValidPhoneClient } from '../../lib/validate';
+import { brand } from '../../brand';
 import { Field } from '../../Components/UI/Field';
 import Button from '../../Components/UI/Button';
-import SectionDivider from '../../Components/Brand/SectionDivider';
+
+import LogoMark from '../../assets/LogoMark.webp';
 
 /**
  * Login and register.
@@ -16,20 +18,57 @@ import SectionDivider from '../../Components/Brand/SectionDivider';
  *
  * Both pages carry a visible line saying an account is not needed to order,
  * because a customer who lands here from the checkout must not conclude they
- * are blocked.
+ * are blocked. On desktop that line is the whole left-hand column: it is the
+ * most important sentence on the page and it should not be a footnote under
+ * the submit button.
  */
 
 function AuthShell({ title, intro, children, footer }) {
   return (
-    <div className="mx-auto max-w-md px-4 pb-20 pt-12 sm:px-6">
-      <h1 className="font-display text-xl tracking-[0.1em] text-ink">{title}</h1>
-      <p className="mt-3 text-base leading-relaxed text-ink-muted">{intro}</p>
+    <div className="mx-auto max-w-[1400px] px-4 pb-20 pt-10 sm:px-6 lg:px-10 lg:pt-16">
+      <div className="mx-auto grid max-w-4xl gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16">
+        {/* The form */}
+        <div className="order-2 lg:order-1">
+          <img
+            src={LogoMark}
+            alt=""
+            aria-hidden="true"
+            width={56}
+            height={56}
+            className="h-14 w-14 rounded-sm border border-gold/35 object-cover"
+          />
 
-      {children}
+          <h1 className="mt-5 font-display text-xl tracking-[0.1em] text-ink sm:text-2xl">{title}</h1>
+          <span aria-hidden="true" className="mt-4 block h-px w-12 bg-gold" />
+          <p className="mt-4 max-w-md text-base leading-relaxed text-ink-muted">{intro}</p>
 
-      <SectionDivider className="mt-10" />
+          {children}
 
-      <div className="mt-8 text-center">{footer}</div>
+          <div className="mt-8 border-t border-greige pt-6">{footer}</div>
+        </div>
+
+        {/* The reassurance column. Olive, so it reads as the shop speaking. */}
+        <aside className="order-1 self-start rounded-sm border border-greige bg-olive p-5 text-cream sm:p-6 lg:order-2">
+          <p className="font-display text-base tracking-[0.12em] text-cream">
+            Pas besoin de compte pour commander
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-sand">
+            La commande passe sans inscription, en quelques champs, et le paiement se fait à la
+            livraison. Un compte sert seulement à retrouver vos commandes, vos favoris et vos
+            adresses.
+          </p>
+
+          <div className="mt-5">
+            <Button to="/catalogue" variant="onOlive" size="md" full>
+              Voir le catalogue
+            </Button>
+          </div>
+
+          <p className="mt-5 border-t border-sand/20 pt-4 text-[12px] uppercase tracking-[0.14em] text-sand">
+            {brand.descriptor}
+          </p>
+        </aside>
+      </div>
     </div>
   );
 }
@@ -52,8 +91,9 @@ export function Login() {
     try {
       const account = await login({ identifier, password });
       // Admins and super admins land in the admin panel.
-      const destination =
-        ['ADMIN', 'SUPER_ADMIN'].includes(account.role) ? '/admin' : location.state?.from || '/compte';
+      const destination = ['ADMIN', 'SUPER_ADMIN'].includes(account.role)
+        ? '/admin'
+        : location.state?.from || '/compte';
       navigate(destination, { replace: true });
     } catch (err) {
       setError(err.message);
@@ -74,7 +114,7 @@ export function Login() {
         </p>
       }
     >
-      <form onSubmit={handleSubmit} noValidate className="mt-8 flex flex-col gap-5">
+      <form onSubmit={handleSubmit} noValidate className="mt-8 flex max-w-md flex-col gap-5">
         <Field
           label="Téléphone ou email"
           required
@@ -101,13 +141,6 @@ export function Login() {
           {loading ? 'Connexion' : 'Se connecter'}
         </Button>
       </form>
-
-      <p className="mt-6 rounded-sm border border-greige bg-greige/25 px-4 py-3 text-sm leading-relaxed text-ink-muted">
-        Vous n&apos;avez pas besoin de compte pour commander.{' '}
-        <Link to="/catalogue" className="text-ink underline decoration-gold underline-offset-4">
-          Voir le catalogue
-        </Link>
-      </p>
     </AuthShell>
   );
 }
@@ -167,13 +200,13 @@ export function Register() {
       {submitError ? (
         <div
           role="alert"
-          className="mt-6 rounded-sm border border-[#8C2F1F]/40 bg-[#8C2F1F]/5 px-4 py-3 text-base text-[#8C2F1F]"
+          className="mt-6 max-w-md rounded-sm border border-[#8C2F1F]/40 bg-[#8C2F1F]/5 px-4 py-3 text-base text-[#8C2F1F]"
         >
           {submitError}
         </div>
       ) : null}
 
-      <form onSubmit={handleSubmit} noValidate className="mt-8 flex flex-col gap-5">
+      <form onSubmit={handleSubmit} noValidate className="mt-8 flex max-w-md flex-col gap-5">
         <Field
           label="Nom et prénom"
           required

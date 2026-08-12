@@ -24,30 +24,19 @@ import Settings, { SINGLETON_ID } from './Models/Settings.js';
 
 import { CATEGORIES, PRODUITS } from './seed/catalogue.js';
 import { WILAYAS } from './seed/wilayas.js';
+import { PRODUCT_PHOTOS, galleryFor, categoryImage } from './seed/images.js';
 import { slugify } from './utils/slugify.js';
 
 dotenv.config();
 
 const RESET = process.argv.includes('--reset');
 
-/**
- * Image paths follow /products/<slug>-NN.jpg. The client drops real photos in
- * using that convention and nothing in the code changes.
- */
-function buildImages(slug, count, nom) {
-  return Array.from({ length: count }, (_, i) => ({
-    url: `/products/${slug}-${String(i + 1).padStart(2, '0')}.jpg`,
-    alt: i === 0 ? nom : `${nom}, vue ${i + 1}`,
-    ordre: i,
-  }));
-}
-
 async function seedCategories() {
   const bySlug = new Map();
   for (const cat of CATEGORIES) {
     const doc = await Category.findOneAndUpdate(
       { slug: cat.slug },
-      { $set: { ...cat, isActive: true } },
+      { $set: { ...cat, image: categoryImage(cat.slug), isActive: true } },
       { new: true, upsert: true, setDefaultsOnInsert: true }
     );
     bySlug.set(cat.slug, doc);
@@ -75,7 +64,7 @@ async function seedProducts(categoriesBySlug) {
           slug,
           categoryId: category._id,
           dimensions: { ...p.dimensions, unite: 'cm' },
-          images: buildImages(slug, nbImages, p.nom),
+          images: galleryFor(PRODUCT_PHOTOS[p.ref], nbImages, p.nom, slug),
           ancienPrix: p.ancienPrix ?? null,
           isFeatured: Boolean(p.isFeatured),
           isNouveau: Boolean(p.isNouveau),

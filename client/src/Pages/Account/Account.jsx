@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { User, Package, Heart, MapPin, LogOut } from 'lucide-react';
 
 import api from '../../lib/api';
 import { useAuth } from '../../lib/auth';
 import { formatPrice, formatDate, formatPhone } from '../../lib/format';
 
-import ProductImage from '../../Components/UI/ProductImage';
 import ProductGrid from '../../Components/Products/ProductGrid';
 import Button from '../../Components/UI/Button';
 import Badge from '../../Components/UI/Badge';
@@ -17,6 +17,10 @@ import { Loading, EmptyState, ErrorState } from '../../Components/UI/States';
  *
  * Everything here is a convenience. None of it is required to buy anything, and
  * no page in this tree ever appears in a checkout flow.
+ *
+ * The navigation is a rail on desktop and a scrolling row of tabs on a phone.
+ * A rail is what lets the four sections read as one place rather than as four
+ * pages that happen to share a heading.
  */
 
 const STATUT_LABEL = {
@@ -29,25 +33,77 @@ const STATUT_LABEL = {
 };
 
 const TABS = [
-  { to: '/compte', label: 'Mon profil', end: true },
-  { to: '/compte/commandes', label: 'Mes commandes' },
-  { to: '/compte/favoris', label: 'Mes favoris' },
-  { to: '/compte/adresses', label: 'Mes adresses' },
+  { to: '/compte', label: 'Mon profil', short: 'Profil', Icon: User, end: true },
+  { to: '/compte/commandes', label: 'Mes commandes', short: 'Commandes', Icon: Package },
+  { to: '/compte/favoris', label: 'Mes favoris', short: 'Favoris', Icon: Heart },
+  { to: '/compte/adresses', label: 'Mes adresses', short: 'Adresses', Icon: MapPin },
 ];
+
+/** A titled panel. The only container shape used in this tree. */
+export function Panel({ title, description, children, className = '' }) {
+  return (
+    <section className={`rounded-sm border border-greige p-5 sm:p-6 ${className}`}>
+      {title ? (
+        <header className="mb-5">
+          <h2 className="font-display text-base tracking-[0.12em] text-ink">{title}</h2>
+          {description ? <p className="mt-2 text-sm leading-relaxed text-ink-muted">{description}</p> : null}
+        </header>
+      ) : null}
+      {children}
+    </section>
+  );
+}
+
+/** Feedback under a form. One line, never a toast that has already gone. */
+function FormStatus({ status }) {
+  if (!status) return null;
+  return (
+    <p
+      role="status"
+      className={`rounded-sm border px-3 py-2 text-sm ${
+        status.ok ? 'border-greige bg-greige/25 text-ink' : 'border-[#8C2F1F]/40 bg-[#8C2F1F]/5 text-[#8C2F1F]'
+      }`}
+    >
+      {status.message}
+    </p>
+  );
+}
 
 export function AccountLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  const initials = (user?.nom || '')
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase();
+
   return (
     <div className="mx-auto max-w-[1400px] px-4 pb-20 pt-8 sm:px-6 lg:px-10">
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="font-display text-xl tracking-[0.1em] text-ink sm:text-2xl">Mon compte</h1>
-          <p className="mt-2 text-base text-ink-muted">
-            {user?.nom} · <span className="tabular-nums">{formatPhone(user?.telephone)}</span>
-            {user?.email ? ` · ${user.email}` : ''}
-          </p>
+      {/* Identity card. The name and the phone number are the two things a
+          customer checks before trusting that this is their account. */}
+      <header className="flex flex-col gap-5 rounded-sm border border-greige bg-greige/20 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="flex min-w-0 items-center gap-4">
+          <span
+            aria-hidden="true"
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-sm border border-gold/45 bg-cream font-display text-base tracking-[0.08em] text-gold-deep"
+          >
+            {initials || 'EH'}
+          </span>
+
+          <div className="min-w-0">
+            <p className="text-[12px] uppercase tracking-[0.18em] text-ink-muted">Mon compte</p>
+            <h1 className="mt-1 truncate font-display text-lg tracking-[0.1em] text-ink sm:text-xl">
+              {user?.nom}
+            </h1>
+            <p className="mt-1 truncate text-sm text-ink-muted">
+              <span className="tabular-nums">{formatPhone(user?.telephone)}</span>
+              {user?.email ? ` · ${user.email}` : ''}
+            </p>
+          </div>
         </div>
 
         <Button
@@ -57,33 +113,44 @@ export function AccountLayout() {
           }}
           variant="secondary"
           size="sm"
+          className="shrink-0 self-start sm:self-auto"
         >
+          <LogOut size={15} strokeWidth={1.5} />
           Se déconnecter
         </Button>
       </header>
 
-      <nav aria-label="Sections du compte" className="-mx-4 mt-8 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-        <ul className="flex w-max gap-2 border-b border-greige pb-0">
-          {TABS.map((tab) => (
-            <li key={tab.to}>
-              <NavLink
-                to={tab.to}
-                end={tab.end}
-                className={({ isActive }) =>
-                  `flex min-h-[44px] items-center whitespace-nowrap border-b-2 px-3 text-sm uppercase tracking-[0.1em] transition-colors duration-200 ${
-                    isActive ? 'border-gold text-ink' : 'border-transparent text-ink-muted hover:text-ink'
-                  }`
-                }
-              >
-                {tab.label}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <div className="mt-8 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-12">
+        {/* Rail on desktop, scrolling tabs on a phone. */}
+        <nav aria-label="Sections du compte" className="-mx-4 overflow-x-auto px-4 lg:mx-0 lg:overflow-visible lg:px-0">
+          <ul className="flex w-max gap-1 border-b border-greige lg:w-auto lg:flex-col lg:gap-0 lg:border-b-0 lg:border-l lg:border-greige">
+            {TABS.map((tab) => (
+              <li key={tab.to}>
+                <NavLink
+                  to={tab.to}
+                  end={tab.end}
+                  className={({ isActive }) =>
+                    [
+                      'flex min-h-[44px] items-center gap-2.5 whitespace-nowrap px-3 text-sm uppercase tracking-[0.1em] transition-colors duration-200',
+                      'border-b-2 lg:border-b-0 lg:border-l-2 lg:-ml-px lg:min-h-[48px]',
+                      isActive
+                        ? 'border-gold text-ink'
+                        : 'border-transparent text-ink-muted hover:border-greige hover:text-ink',
+                    ].join(' ')
+                  }
+                >
+                  <tab.Icon size={16} strokeWidth={1.5} aria-hidden="true" className="shrink-0" />
+                  <span className="lg:hidden">{tab.short}</span>
+                  <span className="hidden lg:inline">{tab.label}</span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
-      <div className="mt-10">
-        <Outlet />
+        <div className="min-w-0">
+          <Outlet />
+        </div>
       </div>
     </div>
   );
@@ -121,72 +188,64 @@ export function Profile() {
   }
 
   return (
-    <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-      <form onSubmit={saveProfile} noValidate className="flex max-w-md flex-col gap-5">
-        <h2 className="font-display text-base tracking-[0.12em] text-ink">Vos informations</h2>
+    <div className="grid gap-6 xl:grid-cols-2">
+      <Panel title="Vos informations" description="Ce que nous inscrivons sur le bon de livraison.">
+        <form onSubmit={saveProfile} noValidate className="flex flex-col gap-5">
+          <Field
+            label="Nom et prénom"
+            value={form.nom}
+            onChange={(e) => setForm((p) => ({ ...p, nom: e.target.value }))}
+          />
 
-        <Field
-          label="Nom et prénom"
-          value={form.nom}
-          onChange={(e) => setForm((p) => ({ ...p, nom: e.target.value }))}
-        />
+          <Field
+            label="Email (facultatif)"
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+          />
 
-        <Field
-          label="Email (facultatif)"
-          type="email"
-          value={form.email}
-          onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
-        />
+          <div className="rounded-sm border border-greige bg-greige/20 px-3 py-3">
+            <span className="text-[12px] uppercase tracking-[0.14em] text-ink-muted">Téléphone</span>
+            <p className="mt-1 text-base tabular-nums text-ink">{formatPhone(user?.telephone)}</p>
+            <p className="mt-1 text-sm leading-relaxed text-ink-muted">
+              Votre identifiant de connexion. Appelez-nous pour le modifier.
+            </p>
+          </div>
 
-        <div className="flex flex-col gap-2">
-          <span className="text-sm uppercase tracking-[0.12em] text-ink-muted">Téléphone</span>
-          <p className="text-base tabular-nums text-ink">{formatPhone(user?.telephone)}</p>
-          <p className="text-sm text-ink-muted">
-            Votre identifiant de connexion. Appelez-nous pour le modifier.
-          </p>
-        </div>
+          <Button type="submit" variant="primary" size="md" className="self-start">
+            Enregistrer
+          </Button>
 
-        <Button type="submit" variant="primary" size="md" className="self-start">
-          Enregistrer
-        </Button>
+          <FormStatus status={status} />
+        </form>
+      </Panel>
 
-        {status ? (
-          <p role="status" className={`text-sm ${status.ok ? 'text-ink' : 'text-[#8C2F1F]'}`}>
-            {status.message}
-          </p>
-        ) : null}
-      </form>
+      <Panel title="Mot de passe">
+        <form onSubmit={savePassword} noValidate className="flex flex-col gap-5">
+          <Field
+            label="Mot de passe actuel"
+            type="password"
+            autoComplete="current-password"
+            value={passwords.currentPassword}
+            onChange={(e) => setPasswords((p) => ({ ...p, currentPassword: e.target.value }))}
+          />
 
-      <form onSubmit={savePassword} noValidate className="flex max-w-md flex-col gap-5">
-        <h2 className="font-display text-base tracking-[0.12em] text-ink">Mot de passe</h2>
+          <Field
+            label="Nouveau mot de passe"
+            type="password"
+            autoComplete="new-password"
+            hint="6 caractères minimum."
+            value={passwords.newPassword}
+            onChange={(e) => setPasswords((p) => ({ ...p, newPassword: e.target.value }))}
+          />
 
-        <Field
-          label="Mot de passe actuel"
-          type="password"
-          autoComplete="current-password"
-          value={passwords.currentPassword}
-          onChange={(e) => setPasswords((p) => ({ ...p, currentPassword: e.target.value }))}
-        />
+          <Button type="submit" variant="secondary" size="md" className="self-start">
+            Modifier le mot de passe
+          </Button>
 
-        <Field
-          label="Nouveau mot de passe"
-          type="password"
-          autoComplete="new-password"
-          hint="6 caractères minimum."
-          value={passwords.newPassword}
-          onChange={(e) => setPasswords((p) => ({ ...p, newPassword: e.target.value }))}
-        />
-
-        <Button type="submit" variant="secondary" size="md" className="self-start">
-          Modifier le mot de passe
-        </Button>
-
-        {passwordStatus ? (
-          <p role="status" className={`text-sm ${passwordStatus.ok ? 'text-ink' : 'text-[#8C2F1F]'}`}>
-            {passwordStatus.message}
-          </p>
-        ) : null}
-      </form>
+          <FormStatus status={passwordStatus} />
+        </form>
+      </Panel>
     </div>
   );
 }
@@ -205,7 +264,7 @@ export function Orders() {
     return () => controller.abort();
   }, []);
 
-  if (state.loading) return <Loading />;
+  if (state.loading) return <Loading className="min-h-[24rem]" />;
   if (state.error) return <ErrorState message={state.error} />;
 
   if (!state.orders.length) {
@@ -222,24 +281,28 @@ export function Orders() {
   return (
     <ul className="flex flex-col gap-4">
       {state.orders.map((order) => (
-        <li key={order._id} className="rounded-sm border border-greige p-4 sm:p-5">
-          <div className="flex flex-wrap items-start justify-between gap-3">
+        <li key={order._id} className="overflow-hidden rounded-sm border border-greige">
+          <div className="flex flex-wrap items-start justify-between gap-3 border-b border-greige bg-greige/20 px-4 py-3.5 sm:px-5">
             <div>
               <p className="font-display text-base tracking-[0.12em] text-ink">{order.numero}</p>
               <p className="mt-1 text-sm text-ink-muted">{formatDate(order.createdAt)}</p>
             </div>
 
-            <Badge tone={order.statut === 'ANNULEE' ? 'muted' : 'neutral'}>
+            <Badge tone={order.statut === 'ANNULEE' ? 'muted' : 'gold'}>
               {STATUT_LABEL[order.statut] || order.statut}
             </Badge>
           </div>
 
-          <ul className="mt-4 flex flex-col gap-2 border-t border-greige pt-4">
+          <ul className="flex flex-col divide-y divide-greige px-4 sm:px-5">
             {order.items.map((item) => (
-              <li key={`${item.ref}-${item.couleur}`} className="flex justify-between gap-4 text-sm">
+              <li key={`${item.ref}-${item.couleur}`} className="flex justify-between gap-4 py-3 text-sm">
                 <span className="min-w-0 flex-1 text-ink">
-                  {item.quantite} x {item.nom}
-                  <span className="text-ink-muted"> · Réf {item.ref}</span>
+                  <span className="tabular-nums text-ink-muted">{item.quantite} x </span>
+                  {item.nom}
+                  <span className="block text-[12px] uppercase tracking-[0.12em] text-ink-muted">
+                    Réf {item.ref}
+                    {item.couleur ? ` · ${item.couleur}` : ''}
+                  </span>
                 </span>
                 <span className="shrink-0 tabular-nums text-ink">
                   {formatPrice(item.prix * item.quantite)}
@@ -248,9 +311,10 @@ export function Orders() {
             ))}
           </ul>
 
-          <div className="mt-4 flex items-baseline justify-between border-t border-greige pt-4">
-            <span className="text-base text-ink-muted">
-              Total · livraison {order.modeLivraison === 'STOP_DESK' ? 'point de retrait' : 'à domicile'}
+          <div className="flex flex-wrap items-baseline justify-between gap-2 border-t border-greige px-4 py-4 sm:px-5">
+            <span className="text-sm text-ink-muted">
+              Total · livraison{' '}
+              {order.modeLivraison === 'STOP_DESK' ? 'point de retrait' : 'à domicile'}
             </span>
             <span className="text-lg tabular-nums text-gold-deep">{formatPrice(order.total)}</span>
           </div>
@@ -274,7 +338,7 @@ export function Favourites() {
     return () => controller.abort();
   }, []);
 
-  if (state.loading) return <Loading />;
+  if (state.loading) return <Loading className="min-h-[24rem]" />;
   if (state.error) return <ErrorState message={state.error} />;
 
   if (!state.products.length) {
@@ -288,7 +352,7 @@ export function Favourites() {
     );
   }
 
-  return <ProductGrid products={state.products} />;
+  return <ProductGrid products={state.products} columns={3} />;
 }
 
 export function Addresses() {
@@ -329,23 +393,17 @@ export function Addresses() {
   const wilayaName = (id) => wilayas.find((w) => String(w._id) === String(id))?.nom || '';
 
   return (
-    <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-      <div>
-        <h2 className="font-display text-base tracking-[0.12em] text-ink">Vos adresses</h2>
-
+    <div className="grid gap-6 xl:grid-cols-2">
+      <Panel title="Vos adresses" description="Elles préremplissent le formulaire de commande.">
         {user?.adresses?.length ? (
-          <ul className="mt-5 flex flex-col gap-3">
+          <ul className="flex flex-col gap-3">
             {user.adresses.map((address) => (
               <li key={address._id} className="rounded-sm border border-greige p-4">
                 <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-base text-ink">
+                  <div className="min-w-0">
+                    <p className="flex flex-wrap items-center gap-2 text-base text-ink">
                       {address.libelle}
-                      {address.isDefault ? (
-                        <Badge tone="gold" className="ml-2">
-                          Par défaut
-                        </Badge>
-                      ) : null}
+                      {address.isDefault ? <Badge tone="gold">Par défaut</Badge> : null}
                     </p>
                     <p className="mt-1 text-sm leading-relaxed text-ink-muted">
                       {address.adresse ? `${address.adresse}, ` : ''}
@@ -353,7 +411,12 @@ export function Addresses() {
                     </p>
                   </div>
 
-                  <Button onClick={() => removeAddress(address._id)} variant="ghost" size="sm">
+                  <Button
+                    onClick={() => removeAddress(address._id)}
+                    variant="ghost"
+                    size="sm"
+                    className="shrink-0"
+                  >
                     Retirer
                   </Button>
                 </div>
@@ -361,54 +424,54 @@ export function Addresses() {
             ))}
           </ul>
         ) : (
-          <p className="mt-5 text-base text-ink-muted">
+          <p className="text-base leading-relaxed text-ink-muted">
             Aucune adresse enregistrée. Ajoutez-en une pour préremplir vos prochaines commandes.
           </p>
         )}
-      </div>
+      </Panel>
 
-      <form onSubmit={addAddress} noValidate className="flex max-w-md flex-col gap-5">
-        <h2 className="font-display text-base tracking-[0.12em] text-ink">Ajouter une adresse</h2>
+      <Panel title="Ajouter une adresse">
+        <form onSubmit={addAddress} noValidate className="flex flex-col gap-5">
+          <Field
+            label="Libellé"
+            placeholder="Domicile, bureau..."
+            value={form.libelle}
+            onChange={(e) => setForm((p) => ({ ...p, libelle: e.target.value }))}
+          />
 
-        <Field
-          label="Libellé"
-          placeholder="Domicile, bureau..."
-          value={form.libelle}
-          onChange={(e) => setForm((p) => ({ ...p, libelle: e.target.value }))}
-        />
+          <Select
+            label="Wilaya"
+            required
+            value={form.wilayaId}
+            onChange={(e) => setForm((p) => ({ ...p, wilayaId: e.target.value }))}
+          >
+            <option value="">Choisissez votre wilaya</option>
+            {wilayas.map((w) => (
+              <option key={w._id} value={w._id}>
+                {String(w.code).padStart(2, '0')} - {w.nom}
+              </option>
+            ))}
+          </Select>
 
-        <Select
-          label="Wilaya"
-          required
-          value={form.wilayaId}
-          onChange={(e) => setForm((p) => ({ ...p, wilayaId: e.target.value }))}
-        >
-          <option value="">Choisissez votre wilaya</option>
-          {wilayas.map((w) => (
-            <option key={w._id} value={w._id}>
-              {String(w.code).padStart(2, '0')} - {w.nom}
-            </option>
-          ))}
-        </Select>
+          <Field
+            label="Commune"
+            required
+            value={form.commune}
+            onChange={(e) => setForm((p) => ({ ...p, commune: e.target.value }))}
+          />
 
-        <Field
-          label="Commune"
-          required
-          value={form.commune}
-          onChange={(e) => setForm((p) => ({ ...p, commune: e.target.value }))}
-        />
+          <Field
+            label="Adresse"
+            value={form.adresse}
+            onChange={(e) => setForm((p) => ({ ...p, adresse: e.target.value }))}
+            error={error}
+          />
 
-        <Field
-          label="Adresse"
-          value={form.adresse}
-          onChange={(e) => setForm((p) => ({ ...p, adresse: e.target.value }))}
-          error={error}
-        />
-
-        <Button type="submit" variant="primary" size="md" className="self-start">
-          Ajouter
-        </Button>
-      </form>
+          <Button type="submit" variant="primary" size="md" className="self-start">
+            Ajouter
+          </Button>
+        </form>
+      </Panel>
     </div>
   );
 }

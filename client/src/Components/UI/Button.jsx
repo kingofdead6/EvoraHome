@@ -70,8 +70,16 @@ export default function Button({
   }
 
   const Component = as || 'button';
+
+  // A bare <button> inside a <form> defaults to type="submit". Every secondary
+  // action rendered through this component then submitted the form it happened
+  // to sit in: "Ajouter un coloris" in the product editor saved and closed the
+  // panel the moment it was pressed, which read as the new colour row being
+  // thrown away. Default to "button" and let callers opt in to submitting.
+  const type = Component === 'button' ? rest.type || 'button' : rest.type;
+
   return (
-    <Component className={classes} {...rest}>
+    <Component {...rest} type={type} className={classes}>
       {children}
     </Component>
   );

@@ -22,6 +22,7 @@ import { normalisePhone, isValidPhone } from '../Models/User.js';
 
 import { CATEGORIES, PRODUITS } from './catalogue.js';
 import { WILAYAS } from './wilayas.js';
+import { PRODUCT_PHOTOS, CATEGORY_PHOTOS, galleryFor } from './images.js';
 import { slugify } from '../utils/slugify.js';
 
 let failures = 0;
@@ -75,11 +76,7 @@ for (const p of PRODUITS) {
     slug,
     categoryId: fakeCategoryId,
     dimensions: { ...p.dimensions, unite: 'cm' },
-    images: Array.from({ length: nbImages }, (_, i) => ({
-      url: `/products/${slug}-${String(i + 1).padStart(2, '0')}.jpg`,
-      alt: p.nom,
-      ordre: i,
-    })),
+    images: galleryFor(PRODUCT_PHOTOS[p.ref], nbImages, p.nom, slug),
   });
   validate(`produit ${p.ref}`, doc);
 
@@ -125,6 +122,21 @@ for (const d of ['EN_STOCK', 'SUR_COMMANDE', 'RUPTURE']) {
 // A single-image product must exist: the gallery has to hold up without a strip.
 if (!PRODUITS.some((p) => p.nbImages === 1)) fail('aucun produit à une seule image');
 else ok('produits à une seule image présents');
+
+// Every product and every category must have a photograph declared. A missing
+// entry here is what puts an empty greige frame on the storefront.
+console.log('\nPhotographies');
+const sansPhoto = PRODUITS.filter((p) => !PRODUCT_PHOTOS[p.ref]).map((p) => p.ref);
+if (sansPhoto.length) fail(`produits sans photo: ${sansPhoto.join(', ')}`);
+else ok(`${PRODUITS.length} produits avec une photo`);
+
+const catsSansPhoto = CATEGORIES.filter((c) => !CATEGORY_PHOTOS[c.slug]).map((c) => c.slug);
+if (catsSansPhoto.length) fail(`catégories sans photo: ${catsSansPhoto.join(', ')}`);
+else ok(`${CATEGORIES.length} catégories avec une photo`);
+
+// Two products sharing a photograph reads as a copy-paste error on the grid.
+checkUnique('photos produit', Object.values(PRODUCT_PHOTOS));
+checkUnique('photos catégorie', Object.values(CATEGORY_PHOTOS));
 
 console.log('\nWilayas');
 for (const w of WILAYAS) validate(`wilaya ${w.code} ${w.nom}`, new Wilaya(w));
