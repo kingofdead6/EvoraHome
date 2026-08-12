@@ -217,6 +217,11 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
   }
 
   order.statut = statut;
+  order.historique.push({
+    statut,
+    date: new Date(),
+    par: req.user?.nom || '',
+  });
   await order.save();
   return res.json(order);
 });

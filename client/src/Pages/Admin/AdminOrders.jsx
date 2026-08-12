@@ -10,6 +10,7 @@ import { PageHeader, Panel, TableWrap, Th, Td, AdminTextArea, StatusLine } from 
 import Button from '../../Components/UI/Button';
 import Badge from '../../Components/UI/Badge';
 import { Loading, ErrorState, EmptyState } from '../../Components/UI/States';
+import OrderTracker from '../../Components/Orders/OrderTracker';
 
 /**
  * Orders.
@@ -288,14 +289,23 @@ function OrderDetail({ order, onClose, onStatusChange, settings }) {
 
           {/* Status transitions */}
           <section>
-            <h3 className="text-[12px] uppercase tracking-[0.15em] text-ink-muted">Statut</h3>
+            <h3 className="text-[12px] uppercase tracking-[0.15em] text-ink-muted">Suivi</h3>
+
+            <OrderTracker
+              statut={order.statut}
+              historique={order.historique}
+              className="mt-3 rounded-sm border border-greige px-3 py-4"
+            />
 
             {transitions.length === 0 ? (
-              <p className="mt-2 text-sm text-ink-muted">
+              <p className="mt-3 text-sm text-ink-muted">
                 Cette commande est {STATUT_LABEL[order.statut].toLowerCase()}. Aucun changement possible.
               </p>
             ) : (
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <span className="mr-1 text-[12px] uppercase tracking-[0.12em] text-ink-muted">
+                  Faire passer à
+                </span>
                 {transitions.map((statut) => (
                   <Button
                     key={statut}

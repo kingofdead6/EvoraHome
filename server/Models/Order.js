@@ -22,6 +22,24 @@ const itemSchema = new mongoose.Schema(
   { _id: false }
 );
 
+/**
+ * One entry per status change, in the order they happened.
+ *
+ * Without this the order knows it is EXPEDIEE but not when it was confirmed or
+ * how long it sat in preparation, so neither the admin nor the customer can
+ * answer "where is my order and how long has it been there". `_id` is off: these
+ * are append-only log lines, never addressed individually.
+ */
+const historiqueSchema = new mongoose.Schema(
+  {
+    statut: { type: String, enum: STATUTS, required: true },
+    date: { type: Date, default: Date.now },
+    // Blank for the automatic NOUVELLE entry written at checkout.
+    par: { type: String, trim: true, default: '' },
+  },
+  { _id: false }
+);
+
 const orderSchema = new mongoose.Schema(
   {
     // Human-readable, spoken over the phone: EVH-2026-0001.
@@ -53,6 +71,12 @@ const orderSchema = new mongoose.Schema(
 
     modeLivraison: { type: String, enum: MODES_LIVRAISON, required: true },
     statut: { type: String, enum: STATUTS, default: 'NOUVELLE', index: true },
+
+    // The trail behind `statut`. Seeded with NOUVELLE when the order is placed.
+    historique: {
+      type: [historiqueSchema],
+      default: () => [{ statut: 'NOUVELLE', date: new Date() }],
+    },
 
     noteClient: { type: String, trim: true, default: '' },
     noteInterne: { type: String, trim: true, default: '' },

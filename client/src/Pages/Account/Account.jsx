@@ -12,6 +12,7 @@ import Button from '../../Components/UI/Button';
 import Badge from '../../Components/UI/Badge';
 import { Field, Select } from '../../Components/UI/Field';
 import { Loading, EmptyState, ErrorState } from '../../Components/UI/States';
+import OrderTracker from '../../Components/Orders/OrderTracker';
 
 /**
  * The account area. Layout plus the four sub-pages.
@@ -288,6 +289,14 @@ export function Orders() {
               {STATUT_LABEL[order.statut] || order.statut}
             </Badge>
           </div>
+
+          {/* Where the order is now. The single most common reason a customer
+              opens this page at all. */}
+          <OrderTracker
+            statut={order.statut}
+            historique={order.historique}
+            className="mt-4 border-t border-greige pt-4"
+          />
 
           <ul className="mt-4 flex flex-col gap-2 border-t border-greige pt-4">
             {order.items.map((item) => (
