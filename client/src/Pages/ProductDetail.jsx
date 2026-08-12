@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Heart, Minus, Plus, Check } from 'lucide-react';
+import { Heart, Minus, Plus, Check, Search, Truck, ShieldCheck } from 'lucide-react';
 
 import api from '../lib/api';
 import { useCart } from '../lib/cart';
 import { useAuth } from '../lib/auth';
 import { useSettings } from '../lib/settings';
-import { formatPrice } from '../lib/format';
+import { formatPhone, toInternational } from '../lib/format';
 import { whatsappProductLink } from '../brand';
 
 import ProductImage from '../Components/UI/ProductImage';
+import ZoomImage from '../Components/Products/ZoomImage';
 import Price from '../Components/UI/Price';
 import Button from '../Components/UI/Button';
 import { AvailabilityBadge } from '../Components/UI/Badge';
@@ -32,9 +33,13 @@ import { EASE_OUT, useReducedMotion } from '../lib/motion';
  * Gallery. Crossfade between images, never a slide.
  *
  * The crossfade happens by re-keying a single image inside the frame rather
- * than stacking a second one on top of ProductImage's. Two elements pointing at
- * the same URL made every photo download twice and left the overlay showing a
+ * than stacking a second one on top of it. Two elements pointing at the same
+ * URL made every photo download twice and left the overlay showing a
  * broken-image glyph whenever the file was missing.
+ *
+ * The main frame magnifies under the cursor. The thumbnails deliberately do
+ * not: a zoom on an 80px tile shows nothing, and the hover would fight the
+ * click that selects it.
  */
 function Gallery({ images, nom }) {
   const [index, setIndex] = useState(0);
@@ -44,7 +49,7 @@ function Gallery({ images, nom }) {
   const current = ordered[index];
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 lg:sticky lg:top-24 lg:self-start">
       <div className="relative">
         <AnimatePresence initial={false} mode="popLayout">
           <motion.div
@@ -53,12 +58,22 @@ function Gallery({ images, nom }) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.28, ease: EASE_OUT }}
           >
-            <ProductImage
+            <ZoomImage
               src={current?.url}
               alt={current?.alt || nom}
               priority
               sizes="(min-width: 1024px) 50vw, 100vw"
-            />
+            >
+              {/* Only shown where the interaction exists. It disappears while
+                  zooming so it never sits on top of what is being inspected. */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-3 right-3 hidden items-center gap-1.5 rounded-xs bg-forest/80 px-2.5 py-1.5 font-sans text-[11px] uppercase tracking-[0.14em] text-cream opacity-100 transition-opacity duration-300 [@media(hover:hover)]:flex"
+              >
+                <Search size={13} strokeWidth={1.6} />
+                Survolez pour agrandir
+              </span>
+            </ZoomImage>
           </motion.div>
         </AnimatePresence>
       </div>
@@ -66,7 +81,7 @@ function Gallery({ images, nom }) {
       {/* A single-image product gets no thumbnail strip. A strip of one is a
           control that does nothing. */}
       {ordered.length > 1 ? (
-        <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
+        <div className="grid grid-cols-5 gap-2 sm:grid-cols-6">
           {ordered.map((image, i) => (
             <button
               key={image.url}
@@ -92,10 +107,22 @@ function Gallery({ images, nom }) {
   );
 }
 
+/** A section heading inside the detail column. */
+function SpecHeading({ children, ...props }) {
+  return (
+    <h2 {...props} className="font-sans text-[12px] uppercase tracking-[0.18em] text-ink-muted">
+      {children}
+    </h2>
+  );
+}
+
 /**
  * The dimensions spec block. Three figures in a row, large, tabular. Not a
  * 10-row table with a hairline under every line: that is the laziest possible
  * layout for a spec sheet and it reads as filler.
+ *
+ * The figures share one bordered box divided by hairlines rather than sitting
+ * in three separate boxes, so they read as one measurement of one object.
  */
 function Dimensions({ dimensions }) {
   if (!dimensions) return null;
@@ -109,15 +136,19 @@ function Dimensions({ dimensions }) {
   if (!rows.length) return null;
 
   return (
-    <section aria-labelledby="dimensions-heading" className="border-t border-greige pt-6">
-      <h2 id="dimensions-heading" className="text-[12px] uppercase tracking-[0.18em] text-ink-muted">
-        Dimensions
-      </h2>
+    <section aria-labelledby="dimensions-heading">
+      <SpecHeading id="dimensions-heading">Dimensions</SpecHeading>
 
-      <dl className="mt-4 grid grid-cols-3 gap-3">
+      <dl
+        className={`mt-4 grid gap-px overflow-hidden rounded-sm border border-greige bg-greige ${
+          rows.length === 3 ? 'grid-cols-3' : rows.length === 2 ? 'grid-cols-2' : 'grid-cols-1'
+        }`}
+      >
         {rows.map((row) => (
-          <div key={row.label} className="rounded-sm border border-greige px-3 py-4 text-center">
-            <dt className="text-[12px] uppercase tracking-[0.12em] text-ink-muted">{row.label}</dt>
+          <div key={row.label} className="bg-cream px-3 py-4 text-center">
+            <dt className="font-sans text-[12px] uppercase tracking-[0.12em] text-ink-muted">
+              {row.label}
+            </dt>
             <dd className="mt-1.5 font-sans text-xl tabular-nums text-ink">
               {row.value}
               <span className="ml-1 text-sm text-ink-muted">{dimensions.unite || 'cm'}</span>
@@ -126,6 +157,40 @@ function Dimensions({ dimensions }) {
         ))}
       </dl>
     </section>
+  );
+}
+
+/**
+ * The two promises that decide whether somebody orders: how it is paid and how
+ * it arrives. They were previously one grey paragraph at the very bottom of the
+ * column, which is where text goes to not be read.
+ */
+function Reassurance({ delai }) {
+  const items = [
+    {
+      icon: ShieldCheck,
+      title: 'Paiement à la livraison',
+      body: 'Vous payez en espèces au moment où vous recevez la pièce.',
+    },
+    {
+      icon: Truck,
+      title: delai ? `Livraison sous ${delai}` : 'Livraison dans les 58 wilayas',
+      body: 'Les frais dépendent de votre wilaya et sont affichés avant la confirmation.',
+    },
+  ];
+
+  return (
+    <ul className="flex flex-col gap-px overflow-hidden rounded-sm border border-greige bg-greige">
+      {items.map(({ icon: Icon, title, body }) => (
+        <li key={title} className="flex gap-3 bg-cream p-4">
+          <Icon size={17} strokeWidth={1.5} className="mt-0.5 shrink-0 text-gold" />
+          <div>
+            <p className="text-base leading-snug text-ink">{title}</p>
+            <p className="mt-1 text-sm leading-relaxed text-ink-muted">{body}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -223,7 +288,7 @@ export default function ProductDetail() {
       <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
         <Gallery images={product.images} nom={product.nom} />
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8">
           <header className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center gap-3">
               <span className="font-sans text-[12px] uppercase tracking-[0.22em] text-gold-deep">
@@ -232,48 +297,33 @@ export default function ProductDetail() {
               <AvailabilityBadge disponibilite={product.disponibilite} />
             </div>
 
-            <h1 className="font-display text-xl leading-tight tracking-[0.06em] text-ink sm:text-2xl">
+            <h1 className="font-display text-[clamp(1.35rem,3vw,2rem)] leading-[1.2] tracking-[0.06em] text-ink">
               {product.nom}
             </h1>
 
-            <Price value={product.prix} ancienPrix={product.ancienPrix} size="lg" />
+            <span aria-hidden="true" className="mt-1 block h-px w-12 bg-gold" />
 
-            {product.delaiLivraison ? (
-              <p className="text-sm text-ink-muted">Livraison sous {product.delaiLivraison}</p>
-            ) : null}
+            <Price
+              value={product.prix}
+              ancienPrix={product.ancienPrix}
+              size="lg"
+              className="mt-2"
+            />
           </header>
 
           {product.description ? (
             <p className="max-w-prose text-base leading-relaxed text-ink">{product.description}</p>
           ) : null}
 
-          <Dimensions dimensions={product.dimensions} />
-
-          {/* Materials */}
-          {product.materiaux?.length ? (
-            <section aria-labelledby="materiaux-heading" className="border-t border-greige pt-6">
-              <h2 id="materiaux-heading" className="text-[12px] uppercase tracking-[0.18em] text-ink-muted">
-                Matériaux
-              </h2>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {product.materiaux.map((m) => (
-                  <li
-                    key={m}
-                    className="rounded-xs border border-greige px-2.5 py-1 text-sm text-ink"
-                  >
-                    {m}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ) : null}
-
-          {/* Colours */}
+          {/* Colours sit with the buy controls rather than in the spec list,
+              because choosing one is part of ordering, not part of reading. */}
           {product.couleurs?.length ? (
-            <fieldset className="border-0 border-t border-greige p-0 pt-6">
-              <legend className="text-[12px] uppercase tracking-[0.18em] text-ink-muted">
+            <fieldset className="border-0 p-0">
+              <legend className="font-sans text-[12px] uppercase tracking-[0.18em] text-ink-muted">
                 Coloris
-                {couleur ? <span className="ml-2 normal-case tracking-normal text-ink">{couleur}</span> : null}
+                {couleur ? (
+                  <span className="ml-2 normal-case tracking-normal text-ink">{couleur}</span>
+                ) : null}
               </legend>
 
               <div className="mt-3 flex flex-wrap gap-2">
@@ -304,15 +354,15 @@ export default function ProductDetail() {
           ) : null}
 
           {/* Buy */}
-          <div className="flex flex-col gap-3 border-t border-greige pt-6">
+          <div className="flex flex-col gap-3">
             {rupture ? (
-              <p className="rounded-sm border border-greige bg-greige/25 px-4 py-3 text-base text-ink">
+              <p className="rounded-sm border border-greige bg-greige/25 px-4 py-3 text-base leading-relaxed text-ink">
                 Cette pièce est en rupture. Appelez-nous au{' '}
                 <a
-                  href={`tel:+213${String(settings.telephone).replace(/\D/g, '').slice(1)}`}
-                  className="text-gold-deep underline decoration-gold underline-offset-4"
+                  href={`tel:+${toInternational(settings.telephone)}`}
+                  className="tabular-nums text-gold-deep underline decoration-gold decoration-1 underline-offset-4"
                 >
-                  {settings.telephone}
+                  {formatPhone(settings.telephone)}
                 </a>{' '}
                 pour connaître le prochain arrivage.
               </p>
@@ -330,7 +380,10 @@ export default function ProductDetail() {
                       <Minus size={16} strokeWidth={1.5} />
                     </button>
 
-                    <span className="w-10 text-center text-base tabular-nums text-ink" aria-live="polite">
+                    <span
+                      className="w-10 text-center text-base tabular-nums text-ink"
+                      aria-live="polite"
+                    >
                       {quantite}
                     </span>
 
@@ -385,11 +438,29 @@ export default function ProductDetail() {
                 {favourite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
               </button>
             ) : null}
+          </div>
 
-            <p className="text-sm leading-relaxed text-ink-muted">
-              Paiement à la livraison. Les frais de livraison dépendent de votre wilaya et sont
-              affichés avant la confirmation de la commande.
-            </p>
+          <Reassurance delai={product.delaiLivraison} />
+
+          {/* Specs last: whoever is still reading wants the numbers. */}
+          <div className="flex flex-col gap-6 border-t border-greige pt-8">
+            <Dimensions dimensions={product.dimensions} />
+
+            {product.materiaux?.length ? (
+              <section aria-labelledby="materiaux-heading">
+                <SpecHeading id="materiaux-heading">Matériaux</SpecHeading>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {product.materiaux.map((m) => (
+                    <li
+                      key={m}
+                      className="rounded-xs border border-greige px-2.5 py-1 text-sm text-ink"
+                    >
+                      {m}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
           </div>
         </div>
       </div>

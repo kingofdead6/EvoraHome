@@ -198,6 +198,45 @@
   }
 }
 
+/* ── The offset product grid ──────────────────────────────────────────────────
+   The featured grid runs on two baselines rather than one: even-numbered cards
+   drop by a fixed offset so a row of four reads as an arrangement instead of a
+   spreadsheet. This is the one place on the site that breaks the strict grid,
+   and it earns it because eight near-identical 4:5 frames in a flat row is the
+   single most catalogue-looking thing a furniture site can do.
+
+   The offset is a translate rather than a margin so it never changes the height
+   of the row box: the cards move visually, the grid still reserves exactly the
+   space it always did, and nothing below the section shifts.
+
+   The breakpoint is 1024px, not 768px, because that is where this grid goes to
+   four columns. Applying the offset to the two-column layout below it would
+   push the last card most of a screen below the fold for no gain.            */
+
+@media (min-width: 1024px) {
+  .grid-editorial > *:nth-child(even) {
+    transform: translateY(3.5rem);
+  }
+
+  /* The trailing offset would otherwise hang below the section's padding and
+     collide with whatever follows. */
+  .grid-editorial {
+    margin-bottom: 3.5rem;
+  }
+}
+
+/* The offset is decoration, and decoration that moves content is exactly what
+   this setting asks us to drop. */
+@media (prefers-reduced-motion: reduce) {
+  .grid-editorial > *:nth-child(even) {
+    transform: none;
+  }
+
+  .grid-editorial {
+    margin-bottom: 0;
+  }
+}
+
 /* ── Reduced motion ───────────────────────────────────────────────────────────
    Global floor. Individual components still branch on useReducedMotion() so
    that entrances resolve to their final state rather than being skipped

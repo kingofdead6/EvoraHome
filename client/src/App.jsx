@@ -182,7 +182,12 @@ function AnimatedRoutes({ onOpenCart }) {
 
 function Shell() {
   const [cartOpen, setCartOpen] = useState(false);
-  useSmoothScroll();
+  const { pathname } = useLocation();
+
+  // The admin scrolls an inner <main>, not the window. Lenis drives the window
+  // only, so leaving it on there swallowed the wheel and the admin could not be
+  // scrolled at all.
+  useSmoothScroll(!pathname.startsWith('/admin'));
 
   return (
     <>

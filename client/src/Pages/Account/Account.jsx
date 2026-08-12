@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import api from '../../lib/api';
 import { useAuth } from '../../lib/auth';
 import { formatPrice, formatDate, formatPhone } from '../../lib/format';
+import { EASE_OUT, gridContainer, gridItem, useReducedMotion } from '../../lib/motion';
 
-import ProductImage from '../../Components/UI/ProductImage';
 import ProductGrid from '../../Components/Products/ProductGrid';
 import Button from '../../Components/UI/Button';
 import Badge from '../../Components/UI/Badge';
@@ -38,6 +39,8 @@ const TABS = [
 export function AccountLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const reduced = useReducedMotion();
 
   return (
     <div className="mx-auto max-w-[1400px] px-4 pb-20 pt-8 sm:px-6 lg:px-10">
@@ -82,10 +85,59 @@ export function AccountLayout() {
         </ul>
       </nav>
 
+      {/*
+        Only the panel animates. The header and the tab bar above it are part of
+        the frame, not the content: re-running their entrance on every tab click
+        would make the whole page twitch each time somebody looks at a second
+        thing, which is exactly the kind of motion that stops reading as polish.
+
+        Keyed on the pathname so switching tabs is what triggers the swap. `mode
+        ="wait"` lets the outgoing panel finish before the incoming one starts,
+        so the two never overlap and the column height only settles once.
+      */}
       <div className="mt-10">
-        <Outlet />
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={pathname}
+            initial={reduced ? false : { opacity: 0, transform: 'translateY(10px)' }}
+            animate={{ opacity: 1, transform: 'translateY(0px)' }}
+            exit={reduced ? undefined : { opacity: 0, transform: 'translateY(-6px)' }}
+            transition={{ duration: 0.26, ease: EASE_OUT }}
+          >
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
+  );
+}
+
+/**
+ * A save confirmation or error.
+ *
+ * Fades and slides rather than appearing, because the message often lands
+ * below the fold of the customer's attention: movement is what tells them the
+ * button did anything at all.
+ */
+function StatusMessage({ status }) {
+  const reduced = useReducedMotion();
+
+  return (
+    <AnimatePresence mode="wait">
+      {status ? (
+        <motion.p
+          key={status.message}
+          role="status"
+          initial={reduced ? false : { opacity: 0, transform: 'translateY(-4px)' }}
+          animate={{ opacity: 1, transform: 'translateY(0px)' }}
+          exit={reduced ? undefined : { opacity: 0 }}
+          transition={{ duration: 0.24, ease: EASE_OUT }}
+          className={`text-sm ${status.ok ? 'text-gold-deep' : 'text-[#8C2F1F]'}`}
+        >
+          {status.message}
+        </motion.p>
+      ) : null}
+    </AnimatePresence>
   );
 }
 
@@ -150,11 +202,7 @@ export function Profile() {
           Enregistrer
         </Button>
 
-        {status ? (
-          <p role="status" className={`text-sm ${status.ok ? 'text-ink' : 'text-[#8C2F1F]'}`}>
-            {status.message}
-          </p>
-        ) : null}
+        <StatusMessage status={status} />
       </form>
 
       <form onSubmit={savePassword} noValidate className="flex max-w-md flex-col gap-5">
@@ -181,11 +229,7 @@ export function Profile() {
           Modifier le mot de passe
         </Button>
 
-        {passwordStatus ? (
-          <p role="status" className={`text-sm ${passwordStatus.ok ? 'text-ink' : 'text-[#8C2F1F]'}`}>
-            {passwordStatus.message}
-          </p>
-        ) : null}
+        <StatusMessage status={passwordStatus} />
       </form>
     </div>
   );
@@ -220,9 +264,20 @@ export function Orders() {
   }
 
   return (
-    <ul className="flex flex-col gap-4">
+    // Staggered so a long order history arrives as a list being dealt out
+    // rather than as a wall appearing at once.
+    <motion.ul
+      initial="hidden"
+      animate="visible"
+      variants={gridContainer}
+      className="flex flex-col gap-4"
+    >
       {state.orders.map((order) => (
-        <li key={order._id} className="rounded-sm border border-greige p-4 sm:p-5">
+        <motion.li
+          key={order._id}
+          variants={gridItem}
+          className="rounded-sm border border-greige p-4 transition-colors duration-300 hover:border-sand sm:p-5"
+        >
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="font-display text-base tracking-[0.12em] text-ink">{order.numero}</p>
@@ -254,9 +309,9 @@ export function Orders() {
             </span>
             <span className="text-lg tabular-nums text-gold-deep">{formatPrice(order.total)}</span>
           </div>
-        </li>
+        </motion.li>
       ))}
-    </ul>
+    </motion.ul>
   );
 }
 
@@ -293,6 +348,7 @@ export function Favourites() {
 
 export function Addresses() {
   const { user, setUser } = useAuth();
+  const reduced = useReducedMotion();
   const [wilayas, setWilayas] = useState([]);
   const [form, setForm] = useState({ libelle: '', wilayaId: '', commune: '', adresse: '' });
   const [error, setError] = useState(null);
@@ -334,31 +390,44 @@ export function Addresses() {
         <h2 className="font-display text-base tracking-[0.12em] text-ink">Vos adresses</h2>
 
         {user?.adresses?.length ? (
+          // AnimatePresence so a removed address collapses out instead of
+          // vanishing between two paints, which otherwise leaves the customer
+          // unsure whether the right one was deleted.
           <ul className="mt-5 flex flex-col gap-3">
-            {user.adresses.map((address) => (
-              <li key={address._id} className="rounded-sm border border-greige p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-base text-ink">
-                      {address.libelle}
-                      {address.isDefault ? (
-                        <Badge tone="gold" className="ml-2">
-                          Par défaut
-                        </Badge>
-                      ) : null}
-                    </p>
-                    <p className="mt-1 text-sm leading-relaxed text-ink-muted">
-                      {address.adresse ? `${address.adresse}, ` : ''}
-                      {address.commune}, {wilayaName(address.wilayaId)}
-                    </p>
-                  </div>
+            <AnimatePresence initial={false}>
+              {user.adresses.map((address) => (
+                <motion.li
+                  key={address._id}
+                  layout
+                  initial={reduced ? false : { opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={reduced ? undefined : { opacity: 0, height: 0 }}
+                  transition={{ duration: 0.28, ease: EASE_OUT }}
+                  className="overflow-hidden"
+                >
+                  <div className="flex items-start justify-between gap-3 rounded-sm border border-greige p-4">
+                    <div>
+                      <p className="text-base text-ink">
+                        {address.libelle}
+                        {address.isDefault ? (
+                          <Badge tone="gold" className="ml-2">
+                            Par défaut
+                          </Badge>
+                        ) : null}
+                      </p>
+                      <p className="mt-1 text-sm leading-relaxed text-ink-muted">
+                        {address.adresse ? `${address.adresse}, ` : ''}
+                        {address.commune}, {wilayaName(address.wilayaId)}
+                      </p>
+                    </div>
 
-                  <Button onClick={() => removeAddress(address._id)} variant="ghost" size="sm">
-                    Retirer
-                  </Button>
-                </div>
-              </li>
-            ))}
+                    <Button onClick={() => removeAddress(address._id)} variant="ghost" size="sm">
+                      Retirer
+                    </Button>
+                  </div>
+                </motion.li>
+              ))}
+            </AnimatePresence>
           </ul>
         ) : (
           <p className="mt-5 text-base text-ink-muted">

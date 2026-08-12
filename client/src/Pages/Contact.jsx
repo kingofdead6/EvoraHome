@@ -1,16 +1,151 @@
 import { useState } from 'react';
-import { Phone, MapPin, Instagram, MessageCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Phone, MapPin, Instagram, MessageCircle, ArrowUpRight, Clock } from 'lucide-react';
 
 import api from '../lib/api';
 import { useSettings } from '../lib/settings';
 import { formatPhone, toInternational } from '../lib/format';
 import { whatsappLink } from '../brand';
 import { isValidPhoneClient, isValidEmail } from '../lib/validate';
+import {
+  revealVariants,
+  revealTransition,
+  viewportOnce,
+  gridContainer,
+  gridItem,
+  wordContainer,
+  wordItem,
+  EASE_OUT,
+  useReducedMotion,
+} from '../lib/motion';
 
 import { Field, TextArea } from '../Components/UI/Field';
 import Button from '../Components/UI/Button';
 import SectionDivider from '../Components/Brand/SectionDivider';
 import EvoraTree from '../Components/Brand/EvoraTree';
+
+/**
+ * The showroom on Google Maps.
+ *
+ * `MAP_EMBED` is the client's own place embed. `MAP_LINK` targets the same
+ * place by its Google place ID rather than by a name search, so the button and
+ * the embed always land on the same pin — a search for "Evora Home El Khroub"
+ * is at the mercy of whatever else Google decides matches that day.
+ */
+const MAP_EMBED =
+  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3652.194825139573!2d6.690830099999999' +
+  '!3d36.273198799999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2' +
+  '!1s0x12f173005725becf%3A0x198dbf7d732f828d!2sEvora%20Home!5e1!3m2!1sen!2sdz' +
+  '!4v1786530306340!5m2!1sen!2sdz';
+
+const MAP_LINK =
+  'https://www.google.com/maps/search/?api=1&query=Evora%20Home' +
+  '&query_place_id=ChIJz748VwBzsRIRjYIvc33vjRk';
+
+/** Words rise out of a clipped line. Matches the other pages' headings. */
+function WordReveal({ text, className = '' }) {
+  const reduced = useReducedMotion();
+  if (reduced) return <span className={className}>{text}</span>;
+
+  const words = text.split(' ');
+
+  return (
+    <motion.span
+      initial="hidden"
+      animate="visible"
+      variants={wordContainer}
+      className={className}
+      aria-label={text}
+    >
+      {words.map((word, i) => (
+        <span
+          // eslint-disable-next-line react/no-array-index-key
+          key={i}
+          aria-hidden="true"
+          className="inline-flex overflow-hidden pb-[0.12em] align-bottom"
+        >
+          <motion.span variants={wordItem} className="inline-block">
+            {word}
+          </motion.span>
+          {i < words.length - 1 ? <span className="inline-block">&nbsp;</span> : null}
+        </span>
+      ))}
+    </motion.span>
+  );
+}
+
+function Reveal({ children, className = '', delay = 0 }) {
+  const reduced = useReducedMotion();
+
+  return (
+    <motion.div
+      initial={reduced ? false : 'hidden'}
+      whileInView={reduced ? undefined : 'visible'}
+      viewport={viewportOnce}
+      variants={revealVariants}
+      transition={{ ...revealTransition, delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/**
+ * One direct channel.
+ *
+ * Rendered as a link when there is somewhere to go and a plain div otherwise,
+ * because the showroom address is a fact rather than an action and a card that
+ * looks clickable but is not is worse than one that never pretended.
+ */
+function ChannelCard({ icon: Icon, label, value, href, external }) {
+  const interactive = Boolean(href);
+  const Component = interactive ? 'a' : 'div';
+
+  return (
+    <motion.div variants={gridItem}>
+      <Component
+        {...(interactive
+          ? {
+              href,
+              ...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {}),
+            }
+          : {})}
+        className={`group relative flex h-full min-h-[124px] flex-col justify-between overflow-hidden rounded-sm border border-greige bg-cream p-5 ${
+          interactive ? 'transition-colors duration-300 hover:border-gold' : ''
+        }`}
+      >
+        <span className="flex items-start justify-between">
+          <Icon size={18} strokeWidth={1.5} className="text-gold" />
+          {interactive ? (
+            <ArrowUpRight
+              size={16}
+              strokeWidth={1.5}
+              aria-hidden="true"
+              className="text-ink-muted transition-transform duration-300 ease-out-strong motion-safe:[@media(hover:hover)]:group-hover:-translate-y-0.5 motion-safe:[@media(hover:hover)]:group-hover:translate-x-0.5"
+            />
+          ) : null}
+        </span>
+
+        <span className="mt-6 block">
+          <span className="block font-sans text-[12px] uppercase tracking-[0.18em] text-ink-muted">
+            {label}
+          </span>
+          <span className="mt-1.5 block text-base leading-snug text-ink">{value}</span>
+        </span>
+
+        {/* The gold hairline that draws in along the base on hover, the same
+            signature the product cards use. */}
+        {interactive ? (
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-gold transition-transform duration-300 ease-out-strong motion-safe:[@media(hover:hover)]:group-hover:scale-x-100"
+          />
+        ) : null}
+      </Component>
+    </motion.div>
+  );
+}
 
 /**
  * Contact.
@@ -21,6 +156,7 @@ import EvoraTree from '../Components/Brand/EvoraTree';
  */
 export default function Contact() {
   const settings = useSettings();
+  const reduced = useReducedMotion();
 
   const [form, setForm] = useState({ nom: '', telephone: '', email: '', sujet: '', message: '' });
   const [errors, setErrors] = useState({});
@@ -59,171 +195,245 @@ export default function Contact() {
     }
   }
 
+  const channels = [
+    {
+      icon: Phone,
+      label: 'Téléphone',
+      value: formatPhone(settings.telephone),
+      href: `tel:+${toInternational(settings.telephone)}`,
+    },
+    {
+      icon: MessageCircle,
+      label: 'WhatsApp',
+      value: 'Écrire un message',
+      href: whatsappLink('Bonjour Evora Home,', settings.whatsapp),
+      external: true,
+    },
+    settings.instagram
+      ? {
+          icon: Instagram,
+          label: 'Instagram',
+          value: `@${settings.instagram}`,
+          href: `https://instagram.com/${settings.instagram}`,
+          external: true,
+        }
+      : null,
+    { icon: MapPin, label: 'Showroom', value: settings.adresse },
+  ].filter(Boolean);
+
   return (
     <div className="mx-auto max-w-[1400px] px-4 pb-20 pt-10 sm:px-6 lg:px-10">
-      <h1 className="font-display text-xl tracking-[0.1em] text-ink sm:text-2xl">Nous contacter</h1>
-      <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-muted">
-        Pour une question sur une pièce, un délai ou une commande sur mesure, le plus rapide reste
-        le téléphone.
-      </p>
+      {/* Header */}
+      <motion.div
+        initial={reduced ? false : { opacity: 0, transform: 'translateY(16px)' }}
+        animate={{ opacity: 1, transform: 'translateY(0px)' }}
+        transition={{ duration: 0.5, ease: EASE_OUT }}
+        className="max-w-2xl"
+      >
+        <p className="font-sans text-[12px] uppercase tracking-[0.28em] text-gold-deep">
+          Nous contacter
+        </p>
+
+        <h1 className="mt-4 font-display text-[clamp(1.5rem,4vw,2.5rem)] leading-[1.15] tracking-[0.08em] text-ink">
+          <WordReveal text="Parlons de votre projet" />
+        </h1>
+
+        <span aria-hidden="true" className="mt-6 block h-px w-16 bg-gold" />
+
+        <p className="mt-6 text-base leading-relaxed text-ink-muted sm:text-lg">
+          Pour une question sur une pièce, un délai ou une commande sur mesure, le plus rapide
+          reste le téléphone. Nous répondons pendant les heures d&apos;ouverture.
+        </p>
+
+        <p className="mt-4 inline-flex items-center gap-2.5 text-base text-ink-muted">
+          <Clock size={16} strokeWidth={1.5} className="shrink-0 text-gold" />
+          {settings.horaires}
+        </p>
+      </motion.div>
 
       {/* Direct channels */}
-      <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <a
-          href={`tel:+${toInternational(settings.telephone)}`}
-          className="group flex min-h-[96px] flex-col justify-between rounded-sm border border-greige p-4 transition-colors duration-200 hover:border-gold"
-        >
-          <Phone size={18} strokeWidth={1.5} className="text-gold" />
-          <span>
-            <span className="block text-[12px] uppercase tracking-[0.15em] text-ink-muted">Téléphone</span>
-            <span className="mt-1 block text-base tabular-nums text-ink">
-              {formatPhone(settings.telephone)}
-            </span>
-          </span>
-        </a>
-
-        <a
-          href={whatsappLink('Bonjour Evora Home,', settings.whatsapp)}
-          target="_blank"
-          rel="noreferrer noopener"
-          className="group flex min-h-[96px] flex-col justify-between rounded-sm border border-greige p-4 transition-colors duration-200 hover:border-gold"
-        >
-          <MessageCircle size={18} strokeWidth={1.5} className="text-gold" />
-          <span>
-            <span className="block text-[12px] uppercase tracking-[0.15em] text-ink-muted">WhatsApp</span>
-            <span className="mt-1 block text-base text-ink">Écrire un message</span>
-          </span>
-        </a>
-
-        {settings.instagram ? (
-          <a
-            href={`https://instagram.com/${settings.instagram}`}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="group flex min-h-[96px] flex-col justify-between rounded-sm border border-greige p-4 transition-colors duration-200 hover:border-gold"
-          >
-            <Instagram size={18} strokeWidth={1.5} className="text-gold" />
-            <span>
-              <span className="block text-[12px] uppercase tracking-[0.15em] text-ink-muted">Instagram</span>
-              <span className="mt-1 block text-base text-ink">@{settings.instagram}</span>
-            </span>
-          </a>
-        ) : null}
-
-        <div className="flex min-h-[96px] flex-col justify-between rounded-sm border border-greige p-4">
-          <MapPin size={18} strokeWidth={1.5} className="text-gold" />
-          <span>
-            <span className="block text-[12px] uppercase tracking-[0.15em] text-ink-muted">Showroom</span>
-            <span className="mt-1 block text-base leading-snug text-ink">{settings.adresse}</span>
-          </span>
-        </div>
-      </div>
+      <motion.div
+        initial={reduced ? false : 'hidden'}
+        whileInView={reduced ? undefined : 'visible'}
+        viewport={viewportOnce}
+        variants={gridContainer}
+        className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        {channels.map((c) => (
+          <ChannelCard key={c.label} {...c} />
+        ))}
+      </motion.div>
 
       <SectionDivider className="mt-16" />
 
       <div className="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-16">
         {/* Form */}
-        <div>
+        <Reveal>
           <h2 className="font-display text-base tracking-[0.12em] text-ink">Nous écrire</h2>
+          <span aria-hidden="true" className="mt-4 block h-px w-10 bg-gold" />
 
-          {sent ? (
-            <div className="mt-6 flex flex-col items-start gap-4 rounded-sm border border-gold/50 p-6">
-              <EvoraTree size={56} className="text-sand" />
-              <div>
-                <p className="font-display text-base text-ink">Message envoyé</p>
-                <p className="mt-2 text-base leading-relaxed text-ink-muted">
-                  Nous vous répondons sur le numéro que vous avez indiqué. Pour une réponse
-                  immédiate, appelez-nous.
-                </p>
-              </div>
-              <Button
-                onClick={() => {
-                  setSent(false);
-                  setForm({ nom: '', telephone: '', email: '', sujet: '', message: '' });
-                }}
-                variant="secondary"
-                size="sm"
+          {/* The success panel and the form swap in place rather than one
+              replacing the other on the next paint. */}
+          <AnimatePresence mode="wait" initial={false}>
+            {sent ? (
+              <motion.div
+                key="sent"
+                initial={reduced ? false : { opacity: 0, transform: 'translateY(10px)' }}
+                animate={{ opacity: 1, transform: 'translateY(0px)' }}
+                exit={reduced ? undefined : { opacity: 0 }}
+                transition={{ duration: 0.35, ease: EASE_OUT }}
+                className="mt-6 flex flex-col items-start gap-4 rounded-sm border border-gold/50 bg-olive/4 p-6"
               >
-                Écrire un autre message
-              </Button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} noValidate className="mt-6 flex flex-col gap-5">
-              {submitError ? (
-                <div
-                  role="alert"
-                  className="rounded-sm border border-[#8C2F1F]/40 bg-[#8C2F1F]/5 px-4 py-3 text-base text-[#8C2F1F]"
+                <motion.div
+                  initial={reduced ? false : { opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: reduced ? 0 : 0.1, ease: EASE_OUT }}
                 >
-                  {submitError}
+                  <EvoraTree size={56} className="text-sand" />
+                </motion.div>
+
+                <div>
+                  <p className="font-display text-base tracking-[0.12em] text-ink">Message envoyé</p>
+                  <p className="mt-2 text-base leading-relaxed text-ink-muted">
+                    Nous vous répondons sur le numéro que vous avez indiqué. Pour une réponse
+                    immédiate, appelez-nous.
+                  </p>
                 </div>
-              ) : null}
 
-              <Field
-                label="Nom et prénom"
-                required
-                autoComplete="name"
-                value={form.nom}
-                onChange={set('nom')}
-                error={errors.nom}
-              />
+                <Button
+                  onClick={() => {
+                    setSent(false);
+                    setForm({ nom: '', telephone: '', email: '', sujet: '', message: '' });
+                  }}
+                  variant="secondary"
+                  size="sm"
+                >
+                  Écrire un autre message
+                </Button>
+              </motion.div>
+            ) : (
+              <motion.form
+                key="form"
+                onSubmit={handleSubmit}
+                noValidate
+                initial={reduced ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={reduced ? undefined : { opacity: 0 }}
+                transition={{ duration: 0.25, ease: EASE_OUT }}
+                className="mt-6 flex flex-col gap-5"
+              >
+                <AnimatePresence>
+                  {submitError ? (
+                    <motion.div
+                      role="alert"
+                      initial={reduced ? false : { opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={reduced ? undefined : { opacity: 0, height: 0 }}
+                      transition={{ duration: 0.28, ease: EASE_OUT }}
+                      className="overflow-hidden"
+                    >
+                      <p className="rounded-sm border border-[#8C2F1F]/40 bg-[#8C2F1F]/5 px-4 py-3 text-base text-[#8C2F1F]">
+                        {submitError}
+                      </p>
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
 
-              <Field
-                label="Téléphone"
-                required
-                type="tel"
-                inputMode="tel"
-                autoComplete="tel"
-                placeholder="0X XX XX XX XX"
-                value={form.telephone}
-                onChange={set('telephone')}
-                error={errors.telephone}
-              />
+                <Field
+                  label="Nom et prénom"
+                  required
+                  autoComplete="name"
+                  value={form.nom}
+                  onChange={set('nom')}
+                  error={errors.nom}
+                />
 
-              <Field
-                label="Email (facultatif)"
-                type="email"
-                autoComplete="email"
-                value={form.email}
-                onChange={set('email')}
-                error={errors.email}
-              />
+                <Field
+                  label="Téléphone"
+                  required
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  placeholder="0X XX XX XX XX"
+                  value={form.telephone}
+                  onChange={set('telephone')}
+                  error={errors.telephone}
+                />
 
-              <Field label="Sujet" value={form.sujet} onChange={set('sujet')} />
+                <Field
+                  label="Email (facultatif)"
+                  type="email"
+                  autoComplete="email"
+                  value={form.email}
+                  onChange={set('email')}
+                  error={errors.email}
+                />
 
-              <TextArea
-                label="Message"
-                required
-                rows={5}
-                value={form.message}
-                onChange={set('message')}
-                error={errors.message}
-              />
+                <Field label="Sujet" value={form.sujet} onChange={set('sujet')} />
 
-              <Button type="submit" variant="primary" size="lg" disabled={loading} className="self-start">
-                {loading ? 'Envoi' : 'Envoyer le message'}
-              </Button>
-            </form>
-          )}
-        </div>
+                <TextArea
+                  label="Message"
+                  required
+                  rows={5}
+                  value={form.message}
+                  onChange={set('message')}
+                  error={errors.message}
+                />
+
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  disabled={loading}
+                  className="self-start"
+                >
+                  {loading ? 'Envoi…' : 'Envoyer le message'}
+                </Button>
+              </motion.form>
+            )}
+          </AnimatePresence>
+        </Reveal>
 
         {/* Map */}
-        <div>
+        <Reveal delay={0.08}>
           <h2 className="font-display text-base tracking-[0.12em] text-ink">Nous trouver</h2>
+          <span aria-hidden="true" className="mt-4 block h-px w-10 bg-gold" />
 
+          {/* The client's own Google Maps place, not a bounding box around El
+              Khroub. It resolves to the Evora Home pin, so "Ouvrir dans Maps"
+              and the embed agree with each other. */}
           <div className="mt-6 overflow-hidden rounded-sm border border-greige">
             <iframe
               title="Emplacement du showroom Evora Home à El Khroub"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=6.85%2C36.24%2C6.93%2C36.30&layer=mapnik"
-              className="h-[22rem] w-full border-0 lg:h-[28rem]"
+              src={MAP_EMBED}
+              className="h-[22rem] w-full border-0 lg:h-[26rem]"
               loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
             />
           </div>
 
-          <p className="mt-3 text-sm leading-relaxed text-ink-muted">
+          <p className="mt-4 text-base leading-relaxed text-ink-muted">
             {settings.adresse}. Appelez-nous en arrivant, nous vous guidons sur les derniers mètres.
           </p>
-        </div>
+
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+            <Button
+              href={`https://www.google.com/maps/search/${encodeURIComponent(
+                `Evora Home ${settings.adresse}`
+              )}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              variant="secondary"
+              size="md"
+            >
+              Ouvrir dans Maps
+            </Button>
+            <Button to="/showroom" variant="secondary" size="md">
+              Voir le showroom
+            </Button>
+          </div>
+        </Reveal>
       </div>
     </div>
   );

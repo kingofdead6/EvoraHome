@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Phone, MapPin } from 'lucide-react';
+import { Phone, MapPin, ArrowRight } from 'lucide-react';
 
 import api from '../lib/api';
 import { useSettings } from '../lib/settings';
@@ -13,10 +13,57 @@ import ProductGrid from '../Components/Products/ProductGrid';
 import ProductImage from '../Components/UI/ProductImage';
 import Button from '../Components/UI/Button';
 import { ProductGridSkeleton } from '../Components/UI/States';
-import { revealVariants, revealTransition, viewportOnce, useReducedMotion } from '../lib/motion';
+import {
+  revealVariants,
+  revealTransition,
+  viewportOnce,
+  wordContainer,
+  wordItem,
+  useReducedMotion,
+} from '../lib/motion';
 
 import HeroBg from '../assets/HeroBg.png';
 import ShowroomImage from '../assets/ShopImg.png';
+/**
+ * A heading whose words rise out of a clipped line, one after the next.
+ *
+ * Each word gets its own overflow-hidden span so the mask is the line box
+ * itself. The whole string stays in the DOM as one text node per word, so a
+ * screen reader still reads "Les pièces du moment" and not four fragments.
+ */
+function WordReveal({ text, className = '' }) {
+  const reduced = useReducedMotion();
+
+  if (reduced) return <span className={className}>{text}</span>;
+
+  return (
+    <motion.span
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewportOnce}
+      variants={wordContainer}
+      className={className}
+      aria-label={text}
+    >
+      {text.split(' ').map((word, i) => (
+        <span
+          // eslint-disable-next-line react/no-array-index-key
+          key={i}
+          aria-hidden="true"
+          // inline-flex keeps the mask tight to the line box; the padding gives
+          // the descenders somewhere to live so they are not clipped at rest.
+          className="inline-flex overflow-hidden pb-[0.12em] align-bottom"
+        >
+          <motion.span variants={wordItem} className="inline-block">
+            {word}
+          </motion.span>
+          {i < text.split(' ').length - 1 ? <span className="inline-block">&nbsp;</span> : null}
+        </span>
+      ))}
+    </motion.span>
+  );
+}
+
 function Reveal({ children, className = '', as: Component = motion.div }) {
   const reduced = useReducedMotion();
   return (
@@ -196,6 +243,78 @@ function Categories({ categories, loading }) {
   );
 }
 
+/**
+ * Featured products — the section the page is built around.
+ *
+ * The header follows the editorial pattern: a tracked eyebrow, a display
+ * heading two steps larger than the section headings above it, and a "shop all"
+ * link parked on the baseline at the right. On a phone that link moves below the
+ * heading and becomes a full-width tap target rather than a cramped corner one,
+ * and the grid falls back to the two-column browse the rest of the site uses.
+ */
+function FeaturedProducts({ featured, loading }) {
+  return (
+    <section className="mx-auto max-w-[1400px] px-4 py-20 sm:px-6 lg:px-10 lg:py-28">
+      <Reveal className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-10">
+        <div className="max-w-xl">
+          <p className="font-sans text-[12px] uppercase tracking-[0.28em] text-gold-deep">
+            Sélection
+          </p>
+
+          <h2 className="mt-4 font-display text-[clamp(1.5rem,4vw,2.5rem)] leading-[1.15] tracking-[0.1em] text-ink">
+            <WordReveal text="Les pièces du moment" />
+          </h2>
+
+          {/* The gold hairline that the rest of the site uses to mark a heading. */}
+          <span aria-hidden="true" className="mt-6 block h-px w-16 bg-gold" />
+
+          <p className="mt-6 text-base leading-relaxed text-ink-muted">
+            Les pièces que nous montrons en premier au showroom, choisies pour la matière autant
+            que pour la ligne.
+          </p>
+        </div>
+
+        <Link
+          to="/catalogue"
+          className="group inline-flex min-h-[44px] shrink-0 items-center gap-3 self-start text-sm uppercase tracking-[0.15em] text-ink sm:self-auto sm:pb-1"
+        >
+          <span className="underline decoration-gold decoration-1 underline-offset-4 transition-[text-decoration-thickness] group-hover:decoration-2">
+            Tout le catalogue
+          </span>
+          <ArrowRight
+            size={16}
+            strokeWidth={1.5}
+            aria-hidden="true"
+            className="text-gold-deep transition-transform duration-300 ease-out-strong motion-safe:[@media(hover:hover)]:group-hover:translate-x-1"
+          />
+        </Link>
+      </Reveal>
+
+      <div className="mt-12 lg:mt-16">
+        {loading ? (
+          <ProductGridSkeleton count={8} />
+        ) : featured.length ? (
+          <ProductGrid products={featured} offset parallax />
+        ) : (
+          <p className="text-base text-ink-muted">
+            Le catalogue arrive. Appelez-nous en attendant, nous avons tout en showroom.
+          </p>
+        )}
+      </div>
+
+      {/* On a phone the header link sits far above the fold by the time the
+          customer has scrolled eight cards, so the exit repeats at the bottom. */}
+      {!loading && featured.length ? (
+        <Reveal className="mt-12 flex justify-center sm:hidden">
+          <Button to="/catalogue" variant="secondary" size="md" full>
+            Tout le catalogue
+          </Button>
+        </Reveal>
+      ) : null}
+    </section>
+  );
+}
+
 /** The olive band. The physical shop is what makes an Algerian customer trust a site. */
 function ShowroomBand({ settings }) {
   return (
@@ -307,35 +426,7 @@ export default function Home() {
 
       <SectionDivider className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10" />
 
-      <section className="mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
-        <Reveal className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h2 className="font-display text-xl tracking-[0.12em] text-ink sm:text-2xl">Sélection</h2>
-            <p className="mt-3 max-w-lg text-base text-ink-muted">
-              Les pièces que nous montrons en premier au showroom.
-            </p>
-          </div>
-
-          <Link
-            to="/catalogue"
-            className="inline-flex min-h-[44px] items-center text-sm uppercase tracking-[0.15em] text-ink underline decoration-gold decoration-1 underline-offset-4 transition-[text-decoration-thickness] hover:decoration-2"
-          >
-            Tout le catalogue
-          </Link>
-        </Reveal>
-
-        <div className="mt-10">
-          {loading ? (
-            <ProductGridSkeleton count={8} />
-          ) : featured.length ? (
-            <ProductGrid products={featured} />
-          ) : (
-            <p className="text-base text-ink-muted">
-              Le catalogue arrive. Appelez-nous en attendant, nous avons tout en showroom.
-            </p>
-          )}
-        </div>
-      </section>
+      <FeaturedProducts featured={featured} loading={loading} />
 
       <ShowroomBand settings={settings} />
 

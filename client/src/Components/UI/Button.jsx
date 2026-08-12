@@ -70,8 +70,20 @@ export default function Button({
   }
 
   const Component = as || 'button';
+
   return (
-    <Component className={classes} {...rest}>
+    <Component
+      // A bare <button> inside a <form> defaults to type="submit", so every
+      // secondary action placed in a form — "add a colour", "cancel" — silently
+      // submitted it. Defaulting to "button" makes submitting opt-in, which is
+      // the safe direction: a missed type="submit" is a button that does
+      // nothing and is noticed immediately, while a missed type="button" saves
+      // a half-filled record and closes the form. Callers that mean to submit
+      // pass type="submit" and it overrides this via {...rest}.
+      {...(Component === 'button' ? { type: 'button' } : null)}
+      className={classes}
+      {...rest}
+    >
       {children}
     </Component>
   );

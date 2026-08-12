@@ -42,11 +42,12 @@ export function Loading({ label = 'Chargement', className = 'min-h-[calc(100dvh-
  */
 export function ProductGridSkeleton({ count = 8 }) {
   return (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4 lg:gap-x-6">
+    <div className="grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-12">
       {Array.from({ length: count }).map((_, i) => (
         // eslint-disable-next-line react/no-array-index-key
         <div key={i} className="flex flex-col gap-3">
-          <div className="aspect-[4/5] animate-pulse rounded-sm border border-greige bg-greige/40" />
+          <div className="aspect-product animate-pulse rounded-sm border border-greige bg-greige/40" />
+          {/* Matches the card's stack: ref line, two-line name, price. */}
           <div className="h-3 w-1/3 animate-pulse rounded-xs bg-greige/60" />
           <div className="h-4 w-4/5 animate-pulse rounded-xs bg-greige/60" />
           <div className="h-4 w-1/2 animate-pulse rounded-xs bg-greige/60" />

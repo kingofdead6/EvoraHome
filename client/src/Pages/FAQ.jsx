@@ -1,39 +1,179 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus } from 'lucide-react';
+
 import { useSettings } from '../lib/settings';
+import { formatPhone, toInternational } from '../lib/format';
+import {
+  revealVariants,
+  revealTransition,
+  viewportOnce,
+  wordContainer,
+  wordItem,
+  EASE_OUT,
+  useReducedMotion,
+} from '../lib/motion';
+
 import Button from '../Components/UI/Button';
 import SectionDivider from '../Components/Brand/SectionDivider';
 
 const FAQ_ITEMS = [
   {
-    question: 'Comment puis-je commander une pièce ?', 
+    question: 'Comment puis-je commander une pièce ?',
     answer:
       'Parcourez le catalogue, ouvrez la page de la pièce qui vous intéresse et ajoutez-la au panier. Vous pouvez aussi commander via WhatsApp depuis la page produit.',
   },
   {
-    question: 'Est-ce que vous livrez dans toutes les wilayas ?', 
+    question: 'Est-ce que vous livrez dans toutes les wilayas ?',
     answer:
       'Oui, nous livrons dans les 58 wilayas. Les frais exacts sont affichés avant la confirmation de la commande.',
   },
   {
-    question: 'Puis-je voir les pièces avant de commander ?', 
+    question: 'Puis-je voir les pièces avant de commander ?',
     answer:
       'Oui. Notre showroom à El Khroub est ouvert six jours sur sept. Venez toucher les tissus et comparer les coloris en personne.',
   },
   {
-    question: 'Comment choisir la bonne couleur ou le bon tissu ?', 
+    question: 'Comment choisir la bonne couleur ou le bon tissu ?',
     answer:
       'Les photos donnent une idée, mais l’éclairage varie. Nous recommandons de venir au showroom ou de demander un échantillon avant de confirmer votre commande.',
   },
   {
-    question: 'Comment puis-je suivre ma commande ?', 
+    question: 'Comment puis-je suivre ma commande ?',
     answer:
       'Vous pouvez suivre votre commande depuis votre compte client sous “Mes commandes”. Si vous n’avez pas encore de compte, contactez-nous via WhatsApp ou téléphone.',
   },
 ];
 
+/** Words rise out of a clipped line. Matches the home and showroom headings. */
+function WordReveal({ text, className = '' }) {
+  const reduced = useReducedMotion();
+  if (reduced) return <span className={className}>{text}</span>;
+
+  const words = text.split(' ');
+
+  return (
+    <motion.span
+      initial="hidden"
+      animate="visible"
+      variants={wordContainer}
+      className={className}
+      aria-label={text}
+    >
+      {words.map((word, i) => (
+        <span
+          // eslint-disable-next-line react/no-array-index-key
+          key={i}
+          aria-hidden="true"
+          className="inline-flex overflow-hidden pb-[0.12em] align-bottom"
+        >
+          <motion.span variants={wordItem} className="inline-block">
+            {word}
+          </motion.span>
+          {i < words.length - 1 ? <span className="inline-block">&nbsp;</span> : null}
+        </span>
+      ))}
+    </motion.span>
+  );
+}
+
+/**
+ * One question.
+ *
+ * This replaces the native <details>, which snaps open with no transition and
+ * cannot be animated: `height: auto` is not interpolable in CSS and the element
+ * has no intermediate state to hook. Framer measures the panel and animates to
+ * its real height, so the answer slides rather than appearing.
+ *
+ * The accessible contract of <details> is rebuilt by hand: the trigger is a
+ * real <button> carrying aria-expanded and aria-controls, and the panel is
+ * labelled by it. Only one item is open at a time, which keeps the column from
+ * growing past a screen and makes the motion legible.
+ */
+function Question({ item, isOpen, onToggle, index }) {
+  const reduced = useReducedMotion();
+  const panelId = `faq-panel-${index}`;
+  const buttonId = `faq-button-${index}`;
+
+  return (
+    <motion.div
+      initial={reduced ? false : 'hidden'}
+      whileInView={reduced ? undefined : 'visible'}
+      viewport={viewportOnce}
+      variants={revealVariants}
+      transition={{ ...revealTransition, delay: index * 0.06 }}
+      className={`rounded-sm border bg-cream transition-colors duration-300 ${
+        isOpen ? 'border-gold' : 'border-greige'
+      }`}
+    >
+      <h3>
+        <button
+          id={buttonId}
+          type="button"
+          onClick={onToggle}
+          aria-expanded={isOpen}
+          aria-controls={panelId}
+          className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left sm:px-6"
+        >
+          <span
+            className={`font-sans text-base leading-snug transition-colors duration-200 sm:text-lg ${
+              isOpen ? 'text-gold-deep' : 'text-ink'
+            }`}
+          >
+            {item.question}
+          </span>
+
+          {/* A plus that rotates into a minus. Cheaper to read than a chevron
+              and it never looks like a back arrow at small sizes. */}
+          <motion.span
+            aria-hidden="true"
+            animate={reduced ? undefined : { rotate: isOpen ? 135 : 0 }}
+            transition={{ duration: 0.3, ease: EASE_OUT }}
+            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-sm border transition-colors duration-200 ${
+              isOpen ? 'border-gold text-gold-deep' : 'border-greige text-ink-muted'
+            }`}
+          >
+            <Plus size={16} strokeWidth={1.5} />
+          </motion.span>
+        </button>
+      </h3>
+
+      <AnimatePresence initial={false}>
+        {isOpen ? (
+          <motion.div
+            key="panel"
+            id={panelId}
+            role="region"
+            aria-labelledby={buttonId}
+            initial={reduced ? false : { height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={reduced ? undefined : { height: 0, opacity: 0 }}
+            transition={{
+              height: { duration: 0.34, ease: EASE_OUT },
+              // Opacity trails the height slightly so the text does not appear
+              // before there is room for it.
+              opacity: { duration: 0.24, ease: EASE_OUT, delay: isOpen ? 0.06 : 0 },
+            }}
+            className="overflow-hidden"
+          >
+            <div className="px-5 pb-5 sm:px-6 sm:pb-6">
+              <span aria-hidden="true" className="mb-4 block h-px w-10 bg-gold" />
+              <p className="text-base leading-relaxed text-ink-muted">{item.answer}</p>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
 export default function FAQ() {
   const settings = useSettings();
+  // Open the first question by default: an accordion where everything is shut
+  // gives a first-time visitor nothing to read and no clue what a row does.
+  const [openIndex, setOpenIndex] = useState(0);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -41,53 +181,88 @@ export default function FAQ() {
 
   return (
     <div className="mx-auto max-w-[1400px] px-4 pb-20 pt-8 sm:px-6 lg:px-10">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <motion.div
+        initial={reduced ? false : { opacity: 0, transform: 'translateY(16px)' }}
+        animate={{ opacity: 1, transform: 'translateY(0px)' }}
+        transition={{ duration: 0.5, ease: EASE_OUT }}
+        className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
+      >
         <div>
-          <p className="font-sans text-[12px] uppercase tracking-[0.28em] text-ink-muted">
+          <p className="font-sans text-[12px] uppercase tracking-[0.28em] text-gold-deep">
             Questions fréquentes
           </p>
-          <h1 className="mt-4 max-w-2xl font-display text-3xl tracking-[0.04em] text-ink sm:text-4xl">
-            Tout ce qu’il faut savoir avant de commander.
+
+          <h1 className="mt-4 max-w-2xl font-display text-3xl leading-[1.15] tracking-[0.04em] text-ink sm:text-4xl">
+            <WordReveal text="Tout ce qu’il faut savoir avant de commander." />
           </h1>
         </div>
-        <Button to="/contact" variant="onOlive" size="lg">
+
+        <Button to="/contact" variant="secondary" size="lg">
           Nous contacter
         </Button>
-      </div>
+      </motion.div>
 
       <SectionDivider className="my-10" />
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <div className="space-y-4">
-          {FAQ_ITEMS.map((item) => (
-            <details key={item.question} className="group rounded-sm border border-greige bg-cream p-6 open:shadow-[0_0_0_1px_rgba(180,150,70,0.25)]">
-              <summary className="cursor-pointer text-lg font-semibold text-ink transition-colors duration-200 group-open:text-gold">
-                {item.question}
-              </summary>
-              <p className="mt-4 text-base leading-relaxed text-ink-muted">{item.answer}</p>
-            </details>
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-8">
+        <div className="flex flex-col gap-3">
+          {FAQ_ITEMS.map((item, i) => (
+            <Question
+              key={item.question}
+              item={item}
+              index={i}
+              isOpen={openIndex === i}
+              onToggle={() => setOpenIndex(openIndex === i ? -1 : i)}
+            />
           ))}
         </div>
 
-        <aside className="rounded-sm border border-greige bg-olive/10 p-6 text-ink">
-          <p className="text-sm uppercase tracking-[0.18em] text-ink-muted">Besoin d’aide rapide ?</p>
-          <div className="mt-4 space-y-4 text-base leading-relaxed">
+        <motion.aside
+          initial={reduced ? false : 'hidden'}
+          whileInView={reduced ? undefined : 'visible'}
+          viewport={viewportOnce}
+          variants={revealVariants}
+          transition={{ ...revealTransition, delay: 0.1 }}
+          className="h-fit rounded-sm border border-greige bg-olive/[0.06] p-6 lg:sticky lg:top-24"
+        >
+          <p className="font-sans text-[12px] uppercase tracking-[0.18em] text-ink-muted">
+            Besoin d’aide rapide ?
+          </p>
+
+          <span aria-hidden="true" className="mt-4 block h-px w-10 bg-gold" />
+
+          <div className="mt-5 flex flex-col gap-3 text-base leading-relaxed text-ink">
             <p>
-              Appelez-nous au <a href={`tel:+${settings.telephone.replace(/\D/g, '')}`} className="font-semibold text-ink underline decoration-gold underline-offset-4">{settings.telephone}</a>.
+              Appelez-nous au{' '}
+              <a
+                href={`tel:+${toInternational(settings.telephone)}`}
+                className="tabular-nums text-ink underline decoration-gold decoration-1 underline-offset-4 transition-[text-decoration-thickness] hover:decoration-2"
+              >
+                {formatPhone(settings.telephone)}
+              </a>
+              .
             </p>
             <p>
-              Écrivez sur WhatsApp : <Link to="/contact" className="font-semibold text-ink underline decoration-gold underline-offset-4">{settings.whatsapp ? `+${settings.whatsapp}` : 'Contactez-nous'}</Link>
+              Ou écrivez-nous depuis la{' '}
+              <Link
+                to="/contact"
+                className="text-ink underline decoration-gold decoration-1 underline-offset-4 transition-[text-decoration-thickness] hover:decoration-2"
+              >
+                page contact
+              </Link>
+              .
             </p>
           </div>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button to="/showroom" variant="secondary" size="md">
+
+          <div className="mt-7 flex flex-col gap-3">
+            <Button to="/showroom" variant="secondary" size="md" full>
               Voir le showroom
             </Button>
-            <Button to="/catalogue" variant="secondary" size="md">
+            <Button to="/catalogue" variant="primary" size="md" full>
               Explorer le catalogue
             </Button>
           </div>
-        </aside>
+        </motion.aside>
       </div>
     </div>
   );

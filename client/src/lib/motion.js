@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { useReducedMotion, useScroll, useTransform } from 'framer-motion';
 
 /**
  * Shared motion vocabulary. Every animation on the storefront comes from here,
@@ -40,6 +40,30 @@ export const gridItem = {
   visible: { opacity: 1, transform: 'translateY(0px)', transition: { duration: 0.4, ease: EASE_OUT } },
 };
 
+/**
+ * Word-by-word heading reveal.
+ *
+ * Each word rises out of a clipped line rather than fading in place, which is
+ * what makes it read as typesetting rather than as a web animation. Kept to the
+ * home page's one display heading: used on every heading it would become the
+ * thing the customer notices about the site.
+ *
+ * 60ms between words is slower than the 50ms grid stagger on purpose. There are
+ * only three or four words, so the cascade has to be visible across a much
+ * shorter run.
+ */
+export const wordContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.06 } },
+};
+
+export const wordItem = {
+  // 110% rather than 100%: Cinzel's descenders sit below the baseline and at
+  // exactly 100% the tail of a "p" stays visible above the mask edge.
+  hidden: { transform: 'translateY(110%)' },
+  visible: { transform: 'translateY(0%)', transition: { duration: 0.6, ease: EASE_OUT } },
+};
+
 /** Page transition. A clean fade, well under the 400ms ceiling. */
 export const pageVariants = {
   initial: { opacity: 0 },
@@ -66,17 +90,65 @@ export function useRevealProps(reduced) {
 }
 
 /**
+ * Scroll parallax for an image inside a fixed frame.
+ *
+ * Returns a ref for the frame and a `y` to hand to a `motion.img` inside it.
+ * The image drifts by `distance` across the whole time it is on screen, which
+ * at the default 24px is small enough that nobody consciously sees it move and
+ * large enough that the grid stops feeling like flat paper.
+ *
+ * The image must be taller than its frame or the drift would expose an edge.
+ * Callers scale it; `ProductImage` already crops with object-cover.
+ *
+ * `enabled` exists because hooks cannot be called conditionally but the effect
+ * is opt-in per page. Passing a `target` ref that the caller never attaches
+ * makes Framer throw "Target ref is defined but not hydrated" on every card, so
+ * when the effect is off we hand it no target at all and ignore the result.
+ *
+ * Returns a null `y` when disabled or under reduced motion, which is the
+ * caller's signal to render a plain image.
+ */
+export function useScrollParallax(distance = 24, enabled = true) {
+  const reduced = useReducedMotion();
+  const ref = useRef(null);
+  const active = enabled && !reduced;
+
+  const { scrollYProgress } = useScroll(
+    active
+      ? {
+          target: ref,
+          // From the frame's top edge hitting the bottom of the viewport, to
+          // its bottom edge leaving the top: the full pass, so the drift is
+          // linear in how far the customer has actually scrolled.
+          offset: ['start end', 'end start'],
+        }
+      : undefined
+  );
+
+  const y = useTransform(scrollYProgress, [0, 1], [-distance, distance]);
+
+  return { ref: active ? ref : undefined, y: active ? y : null };
+}
+
+/**
  * Lenis smooth scroll.
  *
  * Disabled entirely under prefers-reduced-motion, where hijacking the scroll is
  * exactly the thing the setting asks us not to do. Also skipped on coarse
  * pointers: mobile browsers already have momentum scrolling, and layering
  * Lenis on top of it costs frames on the mid-range Android this audience uses.
+ *
+ * `enabled` turns it off wholesale for the admin. Lenis takes over the wheel
+ * and drives `window`, but the admin scrolls an inner <main> element instead,
+ * so with Lenis running the wheel was captured and nothing moved: the admin
+ * simply could not be scrolled. Smooth scrolling is storefront presentation
+ * anyway, and the admin is a tool the client uses all day.
  */
-export function useSmoothScroll() {
+export function useSmoothScroll(enabled = true) {
   const reduced = useReducedMotion();
 
   useEffect(() => {
+    if (!enabled) return undefined;
     if (reduced) return undefined;
     if (window.matchMedia('(pointer: coarse)').matches) return undefined;
 
@@ -108,7 +180,7 @@ export function useSmoothScroll() {
       if (frame) cancelAnimationFrame(frame);
       lenis?.destroy();
     };
-  }, [reduced]);
+  }, [reduced, enabled]);
 }
 
 export { useReducedMotion };

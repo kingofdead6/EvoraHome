@@ -6,6 +6,8 @@ import { useSettings } from '../../lib/settings';
 import { formatPhone, toInternational } from '../../lib/format';
 import { brand } from '../../brand';
 
+import LogoCard from '../../assets/Logo.png';
+
 /**
  * The footer.
  *
@@ -26,11 +28,22 @@ const CATEGORIES = [
 
 function FooterHeading({ children, ...props }) {
   return (
-    <h2 {...props} className="mb-4 font-sans text-[12px] uppercase tracking-[0.2em] text-sand">
+    <h2 {...props} className="mb-3 font-sans text-[12px] uppercase tracking-[0.2em] text-sand">
       {children}
     </h2>
   );
 }
+
+/**
+ * A footer nav link.
+ *
+ * The 44px tap target is kept on touch, where it is a real accessibility floor,
+ * and dropped to a tight 32px on a mouse, where it was only ever padding and
+ * left the columns looking twice as tall as they needed to be.
+ */
+const FOOTER_LINK =
+  'flex min-h-[44px] items-center text-sm text-sand transition-colors duration-200 ' +
+  'hover:text-cream [@media(hover:hover)]:min-h-8';
 
 export default function Footer() {
   const settings = useSettings();
@@ -46,32 +59,44 @@ export default function Footer() {
         <EvoraTree size={520} />
       </div>
 
-      <div className="mx-auto max-w-[1400px] px-4 py-14 sm:px-6 lg:px-10 lg:py-20">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+      <div className="mx-auto max-w-[1400px] px-4 py-12 sm:px-6 lg:px-10 lg:py-16">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {/* Brand */}
           <div className="lg:pr-8">
+            {/*
+              The logo card itself rather than the SVG mark. The source photo is
+              gold foil on olive stock and its wordmark is cropped off both
+              edges, so only the tree is shown here: the name is set in Cinzel
+              underneath, where it is real text a screen reader can read and
+              stays sharp at any size. The photo's olive ground is within a
+              hair of --color-olive, so it sits on the footer without a plate.
+            */}
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-sm border border-sand/25 bg-olive/20 text-gold">
-                <EvoraTree size={22} />
-              </span>
+              <img
+                src={LogoCard}
+                alt=""
+                aria-hidden="true"
+                width="56"
+                height="56"
+                loading="lazy"
+                decoding="async"
+                className="h-18 w-18 shrink-0 rounded-full  object-cover object-[50%_33%]"
+              />
               <div>
                 <p className="font-display text-lg tracking-[0.18em] text-cream">Evora Home</p>
                 <p className="text-sm text-sand">{brand.descriptor}</p>
               </div>
             </div>
-            <p className="mt-4 text-sm leading-relaxed text-sand">{brand.tagline}</p>
+            <p className="mt-3 text-sm leading-snug text-sand">{brand.tagline}</p>
           </div>
 
           {/* Catalogue */}
           <nav aria-labelledby="footer-catalogue">
             <FooterHeading id="footer-catalogue">Catalogue</FooterHeading>
-            <ul className="flex flex-col gap-2.5">
+            <ul className="flex flex-col gap-0.5">
               {CATEGORIES.map((c) => (
                 <li key={c.slug}>
-                  <Link
-                    to={`/catalogue/${c.slug}`}
-                    className="inline-flex min-h-[44px] items-center text-sm text-sand transition-colors duration-200 hover:text-cream"
-                  >
+                  <Link to={`/catalogue/${c.slug}`} className={FOOTER_LINK}>
                     {c.nom}
                   </Link>
                 </li>
@@ -82,19 +107,15 @@ export default function Footer() {
           {/* Shop */}
           <nav aria-labelledby="footer-maison">
             <FooterHeading id="footer-maison">La maison</FooterHeading>
-            <ul className="flex flex-col gap-2.5">
+            <ul className="flex flex-col gap-0.5">
               {[
-                    { to: '/showroom', label: 'Notre showroom' },
+                { to: '/showroom', label: 'Notre showroom' },
                 { to: '/faq', label: 'FAQ' },
                 { to: '/contact', label: 'Nous contacter' },
                 { to: '/compte/commandes', label: 'Suivre ma commande' },
-                { to: '/livraison', label: 'Livraison et paiement' },
               ].map((l) => (
                 <li key={l.to}>
-                  <Link
-                    to={l.to}
-                    className="inline-flex min-h-[44px] items-center text-sm text-sand transition-colors duration-200 hover:text-cream"
-                  >
+                  <Link to={l.to} className={FOOTER_LINK}>
                     {l.label}
                   </Link>
                 </li>
@@ -105,11 +126,11 @@ export default function Footer() {
           {/* Contact */}
           <div>
             <FooterHeading>Nous joindre</FooterHeading>
-            <ul className="flex flex-col gap-3.5">
+            <ul className="flex flex-col gap-1">
               <li>
                 <a
                   href={`tel:+${toInternational(settings.telephone)}`}
-                  className="inline-flex min-h-[44px] items-center gap-2.5 text-sm text-sand transition-colors duration-200 hover:text-cream"
+                  className={`${FOOTER_LINK} gap-2.5`}
                 >
                   <Phone size={15} strokeWidth={1.5} className="shrink-0 text-gold" />
                   <span className="tabular-nums">{formatPhone(settings.telephone)}</span>
@@ -120,7 +141,7 @@ export default function Footer() {
                 <li>
                   <a
                     href={`tel:+${toInternational(settings.telephone2)}`}
-                    className="inline-flex min-h-[44px] items-center gap-2.5 text-sm text-sand transition-colors duration-200 hover:text-cream"
+                    className={`${FOOTER_LINK} gap-2.5`}
                   >
                     <Phone size={15} strokeWidth={1.5} className="shrink-0 text-gold" />
                     <span className="tabular-nums">{formatPhone(settings.telephone2)}</span>
@@ -128,17 +149,19 @@ export default function Footer() {
                 </li>
               ) : null}
 
-              <li className="flex items-start gap-2.5 text-sm text-sand">
-                <MapPin size={15} strokeWidth={1.5} className="mt-1 shrink-0 text-gold" />
+              {/* Not a link, so it keeps its own tight spacing rather than the
+                  tap-target height the phone numbers need. */}
+              <li className="mt-1 flex items-start gap-2.5 text-sm leading-snug text-sand">
+                <MapPin size={15} strokeWidth={1.5} className="mt-0.5 shrink-0 text-gold" />
                 <span>{settings.adresse}</span>
               </li>
 
               {settings.horaires ? (
-                <li className="text-sm leading-relaxed text-sand">{settings.horaires}</li>
+                <li className="text-sm leading-snug text-sand">{settings.horaires}</li>
               ) : null}
             </ul>
 
-            <div className="mt-5 flex items-center gap-2">
+            <div className="mt-4 flex items-center gap-2">
               {settings.instagram ? (
                 <a
                   href={`https://instagram.com/${settings.instagram}`}
@@ -178,10 +201,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-sand/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-sand">
-            {year} Evora Home. El Khroub, Constantine.
-          </p>
+        <div className="mt-10 flex flex-col gap-1.5 border-t border-sand/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-sand">{year} Evora Home. El Khroub, Constantine.</p>
           <p className="text-sm text-sand">Paiement à la livraison dans les 58 wilayas.</p>
         </div>
       </div>
