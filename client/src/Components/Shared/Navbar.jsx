@@ -110,7 +110,7 @@ export default function Navbar({ onOpenCart }) {
 
         {/* Right: language, account and cart */}
         <div className="flex flex-1 items-center justify-end gap-1 sm:gap-2">
-          <LangSwitch tone="onOlive" className="me-1 hidden sm:inline-flex" />
+          <LangSwitch tone="onOlive" className="me-1 hidden lg:inline-flex" />
 
           <Link
             to="/catalogue"
@@ -213,13 +213,13 @@ export default function Navbar({ onOpenCart }) {
                 </motion.li>
               </ul>
 
-              {/* The switcher is hidden in the desktop bar below sm, so the
-                  sheet is where a phone user finds it. */}
-              <div className="mt-8 flex items-center gap-3 sm:hidden">
+              {/* The switcher lives only in the top bar at lg and up, so the
+                  sheet is where mobile and tablet users find it. */}
+              <div className="mt-8 flex items-center gap-3 lg:hidden">
                 <span className="text-[12px] uppercase tracking-[0.15em] text-sand/70">
                   {t('lang.switch')}
                 </span>
-                <LangSwitch tone="onOlive" />
+                <LangSwitch tone="onOlive" className="inline-flex" />
               </div>
             </nav>
           </motion.div>

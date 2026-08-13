@@ -24,7 +24,7 @@ export default function LangSwitch({ className = '', tone = 'light' }) {
     <div
       role="group"
       aria-label={t('lang.switch')}
-      className={`inline-flex overflow-hidden rounded-sm border ${base.ring} ${className}`}
+      className={`overflow-hidden rounded-sm border ${base.ring} ${className}`}
     >
       {LANGS.map((l) => {
         const active = lang === l.code;
